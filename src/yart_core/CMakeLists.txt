@@ -18,6 +18,7 @@ set(DEP_LIBS_RELEASE
 set(CORE_FILES
 	pch.h
 	prerequisites.h
+	rt_main.cpp
 	)
 set(FILM_FILES		
 	film_image.h

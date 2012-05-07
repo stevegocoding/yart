@@ -8,6 +8,7 @@
 #include <map>
 #include <string>
 #include <sstream>
+#include <limits>
 
 #define BOOST_MEM_FN_ENABLE_STDCALL 
 #include <boost/assign.hpp>
