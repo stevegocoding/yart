@@ -11,7 +11,7 @@ public:
 	{
 	}
 	
-	virtual ~c_camera();
+	virtual ~c_camera() {} 
 
 	virtual float generate_ray(const c_camera_sample& cam_sample, c_ray& ray) = 0;
 

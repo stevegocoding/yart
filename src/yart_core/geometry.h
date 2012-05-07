@@ -4,7 +4,7 @@
 #include "cml/cml.h"
 
 using namespace cml;
-:
+
 class c_ray
 {
 public:

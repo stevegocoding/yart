@@ -9,7 +9,7 @@ c_projective_camera::c_projective_camera(const c_transform& proj, const float sc
 {
 	m_screen_to_raster = make_scale((float)(m_film->res_x()), 
 									(float)(m_film->res_y()), 
-									1.0f) * ; 
+									1.0f);
 	
 	
 }
