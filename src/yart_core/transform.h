@@ -31,6 +31,13 @@ public:
 		m_inv_mat = temp.inverse();
 	}
 	
+	// ---------------------------------------------------------------------
+	/*
+		Transformation concatenation 
+	*/ 
+	// ---------------------------------------------------------------------
+	c_transform operator*(const c_transform& tr) const;
+	
 	const matrix44f& get_matrix() const { return m_mat; }
 	const matrix44f& get_inv_matrix() const { return m_inv_mat; }
 
@@ -46,3 +53,5 @@ private:
 
 c_transform make_translate(const vector3f& trans);
 c_transform make_scale(float sx, float sy, float sz);
+c_transform inverse_transform(const c_transform& t); 
+c_transform make_perspective_proj(float fov, float near, float far); 
