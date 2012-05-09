@@ -1,6 +1,7 @@
 #pragma once
 
 #include "boost/shared_ptr.hpp"
+#include "boost/shared_array.hpp"
 
 using namespace boost;
 
@@ -10,8 +11,6 @@ using namespace boost;
 
 // Geometry Classes
 class c_ray;
-
-
 
 //
 class c_film;

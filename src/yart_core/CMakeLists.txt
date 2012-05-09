@@ -19,6 +19,14 @@ set(CORE_FILES
 	pch.h
 	prerequisites.h
 	rt_main.cpp
+	camera.h
+	camera.cpp
+	film.h
+	geometry.h
+	geometry.cpp
+	transform.h
+	transform.cpp
+	sampler.h
 	)
 set(FILM_FILES		
 	film_image.h
@@ -42,6 +50,9 @@ set(RENDERER_FILES
 	)
 set(TEST_FILES 
 	test/test_rt_app.cpp
+	test/rt_test_fixture.h
+	test/rt_test_fixture.cpp
+	test/test_win32_draw.cpp
 	)
 
 add_definitions(-DUNICODE)

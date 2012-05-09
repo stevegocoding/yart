@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 2.8)
 
 project(ya-rt)
 
-SET(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} "E:/develop/libs/boost_1_49_0/")
-SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "E:/develop/libs/boost_1_49_0/lib")
+SET(BOOST_ROOT_DIR "" CACHE VARIABLE "")
+
+SET(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} ${BOOST_ROOT_DIR})
+SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} ${BOOST_ROOT_DIR}/lib)
 
 # Find dependencies
 find_package(BOOST)
