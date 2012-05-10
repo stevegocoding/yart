@@ -25,7 +25,6 @@ c_projective_camera::c_projective_camera(
 	m_raster_to_camera = inverse_transform(m_camera_to_world) * m_raster_to_screen;	
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 
 /*

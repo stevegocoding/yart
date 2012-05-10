@@ -23,7 +23,10 @@ bool c_sphere::intersects(const c_ray& ray, float& t_hit, float& ray_epsilon) co
     if (!quadratic(A, B, C, &t0, &t1))
         return false;
 
-    if (t0 > ray.t_max || t1 < ray.
+    if (t0 > ray_obj.t_max || t1 < ray_obj.t_min)
+        return false; 
+
+    if 
     
     return true; 
 }
