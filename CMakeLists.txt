@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 2.8)
 project(ya-rt)
 
 SET(BOOST_ROOT_DIR "" CACHE VARIABLE "")
+SET(wxWidgets_ROOT_DIR "" CACHE VARIABLE "")
+set(wxWidgets_CONFIGURATION "mswu" CACHE VARIABLE "mswu")
 
 SET(CMAKE_INCLUDE_PATH ${CMAKE_INCLUDE_PATH} ${BOOST_ROOT_DIR})
 SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} ${BOOST_ROOT_DIR}/lib)
@@ -12,6 +14,12 @@ find_package(BOOST)
 if (Boost_FOUND)
 	include_directories(${Boost_INCLUDE_DIR})
 	add_definitions("-DHAS_BOOST")
+endif()
+
+find_package(wxWidgets COMPONENTS core base)
+if (wxWidgets_FOUND)
+	include_directories(${wxWidgets_INCLUDE_DIRS})
+	SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} ${wxWidgets_LIB_DIR})
 endif()
 
 set(DEP_DLL_DEBUG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deps/bin/debug/)
