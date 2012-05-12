@@ -11,6 +11,8 @@ add_definitions(-DUNICODE)
 
 include(${wxWidgets_USE_FILE})
 
+#include_directories(${CMAKE_SOURCE_DIR/src})
+
 add_executable(${TARGET} WIN32 ${SRCS})
 set_target_properties(${TARGET} PROPERTIES DEBUG_POSTFIX "_debug")
 target_link_libraries(${TARGET} ${wxWidgets_LIBRARIES})
