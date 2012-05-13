@@ -11,6 +11,7 @@ class c_transform
 {
 public:
 	c_transform() {}
+
 	c_transform(const matrix44f& mat, const matrix44f& inv_mat)
 		: m_mat(mat)
 		, m_inv_mat(inv_mat)

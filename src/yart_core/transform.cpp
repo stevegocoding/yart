@@ -46,11 +46,11 @@ c_transform make_perspective_proj(float fov, float near, float far)
 { 
 	matrix44f m 
 		= matrix44f(
-			1, 0, 0, 9,
+			1, 0, 0, 0,
 			0, 1, 0, 0, 
 			0, 0, far / (far - near), -far * near / (far - near),
 			0, 0, 1, 0); 
 
 	float inv_tan_angle = 1.0f / tanf(cml::rad(fov)/2);
-	return make_scale(inv_tan_angle, inv_tan_angle, 1) * c_transform(m);
+	return  make_scale(inv_tan_angle, inv_tan_angle, 1) * c_transform(m);
 }
