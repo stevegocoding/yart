@@ -10,6 +10,7 @@ class c_stratified_sampler : public c_sampler
 public:
 	c_stratified_sampler(int x_start, int x_end, int y_start, int y_end, int xs, int ys, bool jitter, float sopen, float sclose);
 	virtual int get_current_pixel_samples(samples_array_ptr& samples, c_rng& rng); 
+	virtual int get_max_num_samples() const { return m_x_pixel_samples * m_y_pixel_samples; }
 	
 private:
 	bool m_jitter_samples; 

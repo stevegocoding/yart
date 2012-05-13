@@ -18,7 +18,7 @@ c_projective_camera::c_projective_camera(
 	m_screen_to_raster = make_scale((float)(m_film->res_x()), 
 									(float)(m_film->res_y()), 
 									1.0f) * 
-						 make_scale(1.0f / (screen_wnd[1]-screen_wnd[0]), 1.0f / (screen_wnd[2] - screen_wnd[3]), 1.0f) * 
+						 make_scale(1.0f / (screen_wnd[1] - screen_wnd[0]), 1.0f / (screen_wnd[2] - screen_wnd[3]), 1.0f) * 
 						 make_translate(vector3f(-screen_wnd[0], -screen_wnd[3], 0)); 
 	
 	m_raster_to_screen = inverse_transform(m_screen_to_raster);
@@ -34,5 +34,10 @@ c_perspective_camera::c_perspective_camera(
 	float lensr, 
 	float focal_d, 
 	float fov, 
-	film_ptr& film);
-	*/
+	film_ptr& film)
+{
+	c_transform proj = jia  
+	
+}
+
+*/ 

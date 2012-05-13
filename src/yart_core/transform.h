@@ -59,4 +59,4 @@ private:
 c_transform make_translate(const vector3f& trans);
 c_transform make_scale(float sx, float sy, float sz);
 c_transform inverse_transform(const c_transform& t); 
-// c_transform make_perspective_proj(float fov, float near, float far); 
+c_transform make_perspective_proj(float fov, float near, float far); 

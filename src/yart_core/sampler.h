@@ -9,6 +9,7 @@ public:
     c_sampler(int x_start, int x_end, int y_start, int y_end, int spp, float sopen, float sclose);
 	
 	virtual int get_current_pixel_samples(samples_array_ptr& sample, c_rng& rng) = 0;
+	virtual int get_max_num_samples() const = 0; 
 
 protected: 
 	int m_x_pixel_start, m_x_pixel_end; 
@@ -80,5 +81,4 @@ private:
 	
 	std::vector<samples_buf_ptr> m_1D_samples;
 	std::vector<samples_buf_ptr> m_2D_samples; 
-};
-
+}; 

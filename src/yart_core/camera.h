@@ -26,7 +26,6 @@ class c_projective_camera : public c_camera
 	typedef c_camera super;
 public:
 	c_projective_camera(const c_transform& cam_to_world, const c_transform& proj, const float screen_wnd[4], float lensr, float focal_d, film_ptr& film);
-	virtual float generate_ray(const c_camera_sample& cam_sample, c_ray& ray) const { return 1.0f; }
 	
 protected:
 	// Projection Transformation
@@ -36,6 +35,7 @@ protected:
 	float m_focal_distance; 
 };
 
+/*
 class c_perspective_camera : public c_projective_camera
 {
 	typedef c_projective_camera super; 
@@ -46,3 +46,4 @@ public:
 private:
 	vector3f m_dx, m_dy;
 };
+*/
