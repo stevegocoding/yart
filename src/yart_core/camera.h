@@ -35,7 +35,6 @@ protected:
 	float m_focal_distance; 
 };
 
-/*
 class c_perspective_camera : public c_projective_camera
 {
 	typedef c_projective_camera super; 
@@ -46,4 +45,3 @@ public:
 private:
 	vector3f m_dx, m_dy;
 };
-*/

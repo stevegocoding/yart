@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ostream>
+#include <assert.h>
 #include "cml/cml.h"
 
 #include "geometry.h"
@@ -40,6 +41,9 @@ public:
 	*/ 
 	// ---------------------------------------------------------------------
 	c_transform operator*(const c_transform& tr) const;
+	inline vector3f transform_pt(const vector3f& pt) const;
+	inline vector3f transform_vec3(const vector3f& vec) const; 
+
     c_ray operator*(const c_ray& r) const;
 
     c_ray transform_ray(const c_ray& r) const; 
@@ -56,6 +60,24 @@ private:
 	matrix44f m_mat; 
 	matrix44f m_inv_mat; 
 };
+
+inline vector3f c_transform::transform_pt(const vector3f& pt) const 
+{
+	vector4f _p = vector4f(pt, 1.0f); 
+	vector4f new_p = transform_vector_4D(m_mat, _p);
+	float w = new_p[3]; 
+	assert(w != 0); 
+	if (w == 1.)
+		return vector3f(new_p[0], new_p[1], new_p[2]); 
+	else 
+		return vector3f(new_p[0]/w, new_p[1]/w, new_p[2]/w);
+}
+
+inline vector3f c_transform::transform_vec3(const vector3f& vec) const 
+{
+	vector3f v = transform_vector(m_mat, vec); 
+	return v; 
+}
 
 c_transform make_translate(const vector3f& trans);
 c_transform make_scale(float sx, float sy, float sz);

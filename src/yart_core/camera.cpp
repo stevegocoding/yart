@@ -27,7 +27,6 @@ c_projective_camera::c_projective_camera(
 
 //////////////////////////////////////////////////////////////////////////
 
-/*
 c_perspective_camera::c_perspective_camera(
 	const c_transform& cam_to_world, 
 	const float screen_wnd[4], 
@@ -35,9 +34,10 @@ c_perspective_camera::c_perspective_camera(
 	float focal_d, 
 	float fov, 
 	film_ptr& film)
+	: super(cam_to_world, make_perspective_proj(fov, 0.1f, 1000.0f), screen_wnd, lensr, focal_d, film)
 {
-	c_transform proj = jia  
-	
-}
+	//vector3f right = m_raster_to_camera;
 
-*/ 
+
+	
+} 

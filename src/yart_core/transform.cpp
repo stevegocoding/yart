@@ -16,8 +16,11 @@ c_ray c_transform::operator*(const c_ray& r) const
 c_ray c_transform::transform_ray(const c_ray& r) const 
 {
     c_ray ret = r; 
-    ret.o = transform_point(m_mat, r.o);
-    ret.d = transform_vector(m_mat, r.d); 
+    ret.o = transform_pt(r.o);
+    ret.d = transform_vec3(r.d); 
+	
+	ret.d.normalize();
+	
     return ret; 
 }
 

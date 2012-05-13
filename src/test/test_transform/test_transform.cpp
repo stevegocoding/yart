@@ -10,6 +10,7 @@ void print_matrix(std::ostream& os, const cml::matrix44f& mat, int prec = 4, int
 	std::ios::fmtflags old_flags = os.flags(); 
 	os.setf(ios::left, ios::adjustfield); 
 
+	// row #1
 	os << std::setprecision(prec) << std::setw(width) << std::setfill(' ') 
 		<< mat(0, 0) << ' ' 
 		<< std::setprecision(prec) << std::setw(width) << std::setfill(' ')
@@ -19,6 +20,7 @@ void print_matrix(std::ostream& os, const cml::matrix44f& mat, int prec = 4, int
 		<< std::setprecision(prec) << std::setw(width) << std::setfill(' ')
 		<< mat(0, 3) << endl; 
 
+	// row #2
 	os << std::setprecision(prec) << std::setw(width) << std::setfill(' ') 
 		<< mat(1, 0) << ' ' 
 		<< std::setprecision(prec) << std::setw(width) << std::setfill(' ')
@@ -28,6 +30,7 @@ void print_matrix(std::ostream& os, const cml::matrix44f& mat, int prec = 4, int
 		<< std::setprecision(prec) << std::setw(width) << std::setfill(' ')
 		<< mat(1, 3) << endl; 
 	
+	// row #3  
 	os << std::setprecision(prec) << std::setw(width) << std::setfill(' ') 
 		<< mat(2, 0) << ' ' 
 		<< std::setprecision(prec) << std::setw(width) << std::setfill(' ')
@@ -37,6 +40,7 @@ void print_matrix(std::ostream& os, const cml::matrix44f& mat, int prec = 4, int
 		<< std::setprecision(prec) << std::setw(width) << std::setfill(' ')
 		<< mat(2, 3) << endl; 
 
+	// row #4
 	os << std::setprecision(prec) << std::setw(width) << std::setfill(' ') 
 		<< mat(3, 0) << ' ' 
 		<< std::setprecision(prec) << std::setw(width) << std::setfill(' ')
@@ -96,6 +100,7 @@ int main(int argc, char **argv)
 		make_scale(1.0f / (screen_wnd[1] - screen_wnd[0]), 1.0f / (screen_wnd[2] - screen_wnd[3]), 1.0f) * 
 		make_translate(vector3f(-screen_wnd[0], -screen_wnd[3], 0)); 
 	c_transform camera_to_raster = camera_to_screen * screen_to_raster;
+	c_transform raster_to_camera = inverse_transform(camera_to_raster);
 
 	print_matrix(cout, camera_to_screen.get_matrix());
 
@@ -109,16 +114,15 @@ int main(int argc, char **argv)
 
 	cout << endl; 
 	
-	vector4f p(0.0f, 0.0f, 1.0f, 1.0f); 
-	vector4f proj_p = cml::transform_vector_4D(camera_to_raster.get_matrix(), p); 
-	print_vector4f_col(cout, proj_p); 
+	vector3f p(0.0f, 0.0f, 1.0f); 
+	vector3f proj_p = camera_to_raster.transform_pt(p); 
+	print_vector3f_col(cout, proj_p); 
 
 	cout << endl; 
 
-	vector4f p2(320.0f, 240.0f, 0.0f, 1.0f); 
-	vector4f proj_p2 = cml::transform_vector_4D(camera_to_raster.get_inv_matrix(), p2); 
-	print_vector4f_col(cout, proj_p2); 
+	vector3f p2(320.0f, 240.0f, 0.0f); 
+	vector3f proj_p2 = raster_to_camera.transform_pt(p2); 
+	print_vector3f_col(cout, proj_p2); 
 	
 	return 0;
 }
-
