@@ -29,9 +29,13 @@ include_directories(${PROJECT_SOURCE_DIR}/deps/include/)
 link_directories(${PROJECT_SOURCE_DIR}/deps/lib/debug)
 link_directories(${PROJECT_SOURCE_DIR}/deps/lib/release)
 
+
+SET(YART_CORE_TARGET "")
+
 # Subdirectories
 add_subdirectory(data)
 add_subdirectory(src)
+
 
 # ------------------------- Begin Generic CMake Variable Logging ------------------
 # /*	C++ comment style not allowed	*/

@@ -16,7 +16,7 @@ c_sampler::c_sampler(int x_start, int x_end, int y_start, int y_end, int spp, fl
 
 //////////////////////////////////////////////////////////////////////////
 
-c_sample::c_sample(sampler_ptr& sampler, surface_integrator_ptr& surface_itegrator, volume_integrator_ptr& vol_integrator, scene_ptr& scene)
+c_sample::c_sample(sampler_ptr sampler, surface_integrator_ptr surface_itegrator, volume_integrator_ptr vol_integrator, scene_ptr& scene)
 {
 	if (surface_itegrator)
 		surface_itegrator->request_samples(sampler, this, scene);
@@ -38,7 +38,7 @@ void c_sample::alloc_samples_memory()
 	uint32_t total_2D = 0; 
 	BOOST_FOREACH(uint32_t n, m_2D)
 	{
-		total_2D += n; 
+		total_2D += 2 * n;			// two-dimension sampling  
 	}
 	
 	// Allocate memory

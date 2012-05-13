@@ -1,5 +1,6 @@
 set(TARGET yart)
 set(LIB_TARGET libyart)
+set(${YART_CORE_TARGET} ${LIB_TARGET})
 
 set(FILM_DIR film)
 set(GEO_DIR geometry)

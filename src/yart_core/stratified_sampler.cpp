@@ -16,7 +16,7 @@ c_stratified_sampler::c_stratified_sampler(int x_start, int x_end, int y_start, 
 	
 }
 
-int c_stratified_sampler::get_more_samples(samples_array_ptr& samples, c_rng& rng)
+int c_stratified_sampler::get_current_pixel_samples(samples_array_ptr& samples, c_rng& rng)
 {
 	if (m_ypos == m_y_pixel_end)
 		return 0; 
@@ -42,21 +42,22 @@ int c_stratified_sampler::get_more_samples(samples_array_ptr& samples, c_rng& rn
 	// Initialize stratified _samples_ with sample values
 	for (int i = 0; i < spp; ++i)
 	{
+		// Initialize the camera samples 
 		samples[i].image_x = m_img_sample_buf[2*i];
 		samples[i].image_y = m_img_sample_buf[2*i+1]; 
 		samples[i].lens_u = m_lens_sample_buf[2*i]; 
 		samples[i].lens_v = m_lens_sample_buf[2*i+1];
 		samples[i].time = lerp(m_time_sample_buf[i], m_shutter_open, m_shutter_close); 
 
-		// Generate stratified samples for integrators
+		// Generate additional stratified samples for integrators
 		for (uint32_t j = 0; j < samples[i].num_1D(); ++j)
 		{
-			
+			latin_hypercube(samples[i].get_1D_samples_buf(j), samples[i].get_1D_samples_size(j), 1, rng);			
 		}
 		
 		for (uint32_t j = 0; j < samples[i].num_2D(); ++j)
 		{
-			
+			latin_hypercube(samples[i].get_2D_samples_buf(j), samples[i].get_2D_samples_size(j), 2, rng); 
 		}
 	}
 

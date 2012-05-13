@@ -27,8 +27,6 @@ void stratified_sample_1D(samples_buf_ptr& sample_buf, int num_samples, c_rng& r
 
 void stratified_sample_2D(samples_buf_ptr& sample_buf, int num_samples_x, int num_samples_y, c_rng& rng, bool jitter)
 {
-	assert(sample_buf && (num_samples_x % 2 == 0) );
-
 	float dx = 1.0f / num_samples_x; 
 	float dy = 1.0f / num_samples_y; 
 	
