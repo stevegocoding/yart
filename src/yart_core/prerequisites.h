@@ -14,6 +14,7 @@ class c_ray;
 
 class c_film;
 class c_camera;
+class c_perspective_camera;
 
 class c_rng;
 struct c_camera_sample;
@@ -28,6 +29,7 @@ class c_volume_integrator;
 
 class c_scene;
 
+typedef shared_ptr<c_perspective_camera> perspective_camera_ptr;
 typedef shared_ptr<c_rng> rng_ptr;
 typedef shared_ptr<c_sample> sample_ptr;
 
@@ -56,3 +58,15 @@ typedef unsigned int uint32_t;
 //////////////////////////////////////////////////////////////////////////
 // Platform 
 //////////////////////////////////////////////////////////////////////////
+#if defined(_WIN32) || defined(_WIN64)
+#define YART_WIN
+#endif 
+
+#if defined(YART_WIN)
+#include <float.h>
+#define isnan _isnan; 
+
+#pragma warning (disable : 4305) // double constant assigned to float
+#pragma warning (disable : 4244) // int -> float conversion
+#pragma warning (disable : 4267) // size_t -> unsigned int conversion
+#endif 

@@ -29,14 +29,14 @@ void stratified_sample_2D(samples_buf_ptr& sample_buf, int num_samples_x, int nu
 {
 	float dx = 1.0f / num_samples_x; 
 	float dy = 1.0f / num_samples_y; 
-	
+	float *p = &(sample_buf[0]);
 	for (int y = 0; y < num_samples_y; ++y)
-		for (int x = 0; x < num_samples_x; x+=2)
+		for (int x = 0; x < num_samples_x; ++x)
 		{
 			float jx = jitter ? rng.random_float() : 0.5f;
 			float jy = jitter ? rng.random_float() : 0.5f; 
-			sample_buf[y * num_samples_x + x] = std::min( (x + jx) * dx, OneMinusEpsilon ); 
-			sample_buf[y * num_samples_x + x + 1] = std::min( (y + jy) * dy, OneMinusEpsilon ); 
+			*p++ = std::min( (x + jx) * dx, OneMinusEpsilon ); 
+			*p++ = std::min( (y + jy) * dy, OneMinusEpsilon ); 
 		} 
 }
 

@@ -67,23 +67,24 @@ END_EVENT_TABLE()
 c_draw_panel::c_draw_panel(wxFrame *parent)
 :wxPanel(parent) 
 {
-	m_num_pixels = 16; 
-	m_spp = 16; 
-	m_sampler = boost::make_shared<c_stratified_sampler>(0, m_num_pixels, 0, m_num_pixels, m_spp, m_spp, true, 0.0f, 0.0f);
+	int res_x = 32; 
+	int res_y = 16; 
+	int sppx = 24; 
+	int sppy = 24; 
+	m_sampler = boost::make_shared<c_stratified_sampler>(0, res_x, 0, res_y, sppx, sppy, true, 0.0f, 0.0f);
 	m_dummy_integrator = boost::make_shared<c_surface_integrator>();
 	// original sample 
 	sample_ptr orig_sample = sample_ptr(new c_sample(m_sampler, m_dummy_integrator, volume_integrator_ptr(), scene_ptr()));
 
 	int sc = 0; 
-	for (unsigned int i = 0; i < m_num_pixels; ++i)
+	c_rng rng(2047); 
+	samples_array_ptr samples_array = orig_sample->duplicate(sppx*sppy); 
+	while ((sc = m_sampler->get_current_pixel_samples(samples_array, rng)) > 0)
 	{
-		samples_array_ptr samples_array = orig_sample->duplicate(m_spp*m_spp); 
-		while ((sc = m_sampler->get_current_pixel_samples(samples_array, m_rng)) > 0)
-		{
-			for (uint32_t j = 0; j < m_spp * m_spp; ++j)
-				m_samples_vec.push_back(samples_array[j]);
-		}
+		for (uint32_t j = 0; j < sppx * sppy; ++j)
+			m_samples_vec.push_back(samples_array[j]);
 	}
+	
 }
 
 void c_draw_panel::paint_event(wxPaintEvent& evt)

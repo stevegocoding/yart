@@ -62,7 +62,7 @@ int c_stratified_sampler::get_current_pixel_samples(samples_array_ptr& samples, 
 	}
 
 	// Advance to next pixel for stratified sampling
-	if (++m_xpos == m_y_pixel_end)
+	if (++m_xpos == m_x_pixel_end)
 	{
 		m_xpos = m_x_pixel_start; 
 		++m_ypos; 
