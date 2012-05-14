@@ -138,7 +138,7 @@ int main(int argc, char **argv)
 {
 	uint32_t res_x = 2; 
 	uint32_t res_y = 2; 
-	uint32_t sppx = 3;
+	uint32_t sppx = 2;
 	uint32_t sppy = 2; 
 	c_rng rng(2047); 
 	std::vector<c_sample> samples_vec;
@@ -152,8 +152,10 @@ int main(int argc, char **argv)
 		
 	// Create the camera 
 	film_ptr film = film_ptr(new c_film(res_x, res_y));
-	matrix44f m = cml::identity_4x4();
-	c_transform cam_to_world(m); 
+	matrix44f m;
+	cml::matrix_translation(m, vector3f(1,1,0));
+	c_transform world_to_cam(m); 
+	c_transform cam_to_world(m);
 	float wnd[4] = {-1.0f, 1.0f, -1.0f, 1.0f};
 	perspective_camera_ptr cam = perspective_camera_ptr(new c_perspective_camera(cam_to_world, wnd, 0, 0, 90, film));
 	

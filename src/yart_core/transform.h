@@ -20,7 +20,7 @@ public:
 
 	explicit c_transform(matrix44f& mat)
 		: m_mat(mat)
-		, m_inv_mat(mat.inverse())
+		, m_inv_mat(inverse(mat))
 	{}
 
 	explicit c_transform(const float mat[4][4])
