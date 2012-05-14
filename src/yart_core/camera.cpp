@@ -1,4 +1,5 @@
 #include "camera.h"
+#include "sampler.h"
 #include "film.h"
 
 #include "cml/matrix/inverse.h"
@@ -36,8 +37,22 @@ c_perspective_camera::c_perspective_camera(
 	film_ptr& film)
 	: super(cam_to_world, make_perspective_proj(fov, 0.1f, 1000.0f), screen_wnd, lensr, focal_d, film)
 {
-	//vector3f right = m_raster_to_camera;
-
-
-	
+	//vector3f right = m_raster_to_camera.transform_pt(vector3f(1,0,0));
+	//vector3f left = m_raster_to_camera.transform_pt(vector3f());
 } 
+
+float c_perspective_camera::generate_ray(const c_camera_sample& cam_sample, c_ray *ray) const 
+{
+	vector3f pt_sample(cam_sample.image_x, cam_sample.image_y, 0); 
+	vector3f pt_sample_cam = m_raster_to_camera.transform_pt(pt_sample); 
+	
+	// Create the ray according to the sample
+	*ray = c_ray(vector3f(0,0,0), normalize(pt_sample_cam)); 
+
+	// @TODO: Modify the ray for depth of field
+	
+	// Transform the ray from camera space to world space
+	*ray = m_camera_to_world.transform_ray(*ray); 
+
+	return 1.0f;
+}
