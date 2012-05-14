@@ -26,6 +26,8 @@ set(CORE_FILES
 	camera.h
 	camera.cpp
 	film.h
+    color.h
+    color.cpp
 	geometry.h
 	geometry.cpp
 	transform.h
@@ -36,6 +38,8 @@ set(CORE_FILES
 	rng.cpp
 	monte_carlo.h
 	monte_carlo.cpp
+    shape.h
+    shape.cpp
 	)
 set(FILM_FILES		
 	film_image.h

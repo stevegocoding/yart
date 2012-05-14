@@ -8,6 +8,17 @@
 
 using namespace cml;
 
+namespace 
+{
+    enum e_vec_component
+    {
+        x = 0, 
+        y = 1, 
+        z = 2,
+        w = 3
+    };
+}
+
 class c_transform
 {
 public:

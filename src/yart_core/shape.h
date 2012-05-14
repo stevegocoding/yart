@@ -13,7 +13,7 @@ public:
     
     virtual ~c_shape() {}
 
-    virtual bool intersects(const c_ray& ray, float& t_hit, float& ray_epsilon) const { return false; }
+    virtual bool intersects(const c_ray& ray, float *t_hit, float *ray_epsilon) const { return false; }
 
 protected:
     c_transform m_obj_to_world;

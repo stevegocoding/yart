@@ -67,10 +67,10 @@ END_EVENT_TABLE()
 c_draw_panel::c_draw_panel(wxFrame *parent)
 :wxPanel(parent) 
 {
-	int res_x = 32; 
-	int res_y = 32; 
-	int sppx = 24; 
-	int sppy = 24; 
+	uint32_t res_x = 16; 
+	uint32_t res_y = 8; 
+	uint32_t sppx = 16; 
+	uint32_t sppy = 16; 
 	m_sampler = boost::make_shared<c_stratified_sampler>(0, res_x, 0, res_y, sppx, sppy, true, 0.0f, 0.0f);
 	m_dummy_integrator = boost::make_shared<c_surface_integrator>();
 	// original sample 

@@ -32,3 +32,22 @@ inline float lerp(float t, float v1, float v2)
 	return (1.0f - t) * v1 + t * v2; 
 }
 
+inline int clamp(int val, int low, int high)
+{
+    if (val < low) return low; 
+    else 
+        if (val > high) 
+            return high; 
+        else
+            return val;
+}
+
+inline float clamp(float val, float low, float high)
+{
+    if (val < low) return low; 
+    else 
+        if (val > high) 
+            return high; 
+        else
+            return val;
+}

@@ -29,6 +29,11 @@ public:
 		return ( is_nan_vec(0) || is_nan_vec(d) || _isnan(t_min) || _isnan(t_max) ); 
 	}
 
+    vector3f evaluate_t(const float t) const 
+    {
+        return o + d * t;
+    }
+
 	vector3f o;
 	vector3f d;
 	mutable float t_min, t_max;
