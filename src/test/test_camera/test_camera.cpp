@@ -153,7 +153,7 @@ int main(int argc, char **argv)
 	// Create the camera 
 	film_ptr film = film_ptr(new c_film(res_x, res_y));
 	matrix44f m;
-	cml::matrix_translation(m, vector3f(1,1,0));
+	cml::matrix_translation(m, vector3f(0,0,0));
 	c_transform world_to_cam(m); 
 	c_transform cam_to_world(m);
 	float wnd[4] = {-1.0f, 1.0f, -1.0f, 1.0f};

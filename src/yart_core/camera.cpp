@@ -23,7 +23,7 @@ c_projective_camera::c_projective_camera(
 						 make_translate(vector3f(-screen_wnd[0], -screen_wnd[3], 0)); 
 	
 	m_raster_to_screen = inverse_transform(m_screen_to_raster);
-	m_raster_to_camera = inverse_transform(m_camera_to_world) * m_raster_to_screen;	
+	m_raster_to_camera = inverse_transform(m_cam_to_screen) * m_raster_to_screen;	
 }
 
 //////////////////////////////////////////////////////////////////////////
