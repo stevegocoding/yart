@@ -1,5 +1,5 @@
 #include "monte_carlo.h"
-
+#include "transform.h"
 
 void shuffle(samples_buf_ptr& sample_buf, uint32_t num_samples, uint32_t num_dims, c_rng& rng)
 {
@@ -50,11 +50,61 @@ void latin_hypercube(samples_buf_ptr& sample_buf, uint32_t num_samples, uint32_t
 
 	// Permute LHS samples in each dimension
 	for (uint32_t i = 0; i < num_dims; ++i)
-	{
+    {
 		for (uint32_t j = 0; j < num_samples; ++j)
 		{
 			uint32_t other = j + (rng.random_uint() % (num_samples-j)); 
 			std::swap(sample_buf[num_dims*j+i], sample_buf[num_dims*other+i]);
 		}
 	}
+}
+
+void concentric_sample_disk(float u1, float u2, float *dx, float *dy)
+{
+    float r, theta; 
+    
+    // Map uniform random numbers to [-1, 1]^2 
+    float sx = 2 * u1 - 1; 
+    float sy = 2 * u2 - 1; 
+    
+    // Map square to (r, theta) 
+    
+    // Hanlde origin point 
+    if (sx == 0.0f && sy == 0.0f)
+    {
+        *dx = 0.0f; 
+        *dy = 0.0f; 
+        return ; 
+    }
+    
+    if (sx >= -sy) {
+        if (sx > sy) {
+            // Handle first region of disk
+            r = sx;
+            if (sy > 0.0) theta = sy/r;
+            else          theta = 8.0f + sy/r;
+        }
+        else {
+            // Handle second region of disk
+            r = sy;
+            theta = 2.0f - sx/r;
+        }
+    }
+    else {
+        if (sx <= sy) {
+            // Handle third region of disk
+            r = -sx;
+            theta = 4.0f - sy/r;
+        }
+        else {
+            // Handle fourth region of disk
+            r = -sy;
+            theta = 6.0f + sx/r;
+        }
+    }
+
+    theta *= M_PI / 4.f;
+    *dx = r * cosf(theta);
+    *dy = r * sinf(theta);
+    
 }

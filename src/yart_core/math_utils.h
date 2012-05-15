@@ -6,6 +6,8 @@
 using std::swap;
 using std::sqrt;
 
+static const float INV_PI = 0.31830988618379067154f; 
+
 inline bool quadratic(float A, float B, float C, float *t0, float *t1)
 {
     // Find quadratic discriminant

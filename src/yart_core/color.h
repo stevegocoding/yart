@@ -29,7 +29,7 @@ public:
 		}
 	}
 
-	explicit c_coeff_spectrum(const c_coeff_spectrum& other)
+	c_coeff_spectrum(const c_coeff_spectrum& other)
 	{
 		assert(!other.has_nan()); 
 		for (int i = 0; i < num_samples; ++i)
@@ -114,7 +114,7 @@ public:
 
 	c_coeff_spectrum operator * (float scalar) const
 	{
-		assert(!other.has_nan());
+		assert(!has_nan() && !_isnan(scalar));
 		c_coeff_spectrum ret = *this;
 		for (int i = 0; i < num_samples; ++i)
 		{
@@ -144,7 +144,7 @@ public:
 	{
 	}
 	
-	explicit c_rbg_spectrum(const super& other)
+	c_rbg_spectrum(const c_coeff_spectrum<3>& other)
 		: super(other) 
 	{}
 	

@@ -3,6 +3,7 @@
 #include "prerequisites.h"
 #include "transform.h"
 #include "color.h"
+#include "math_utils.h" 
 
 namespace 
 {
@@ -41,8 +42,13 @@ public:
 		: super (e_bxdf_type(bsdf_relection | bsdf_diffuse))
 		, m_reflectance(reflectance) {}
 	
-	//virtual c_spectrum f(const vector3f& wo, const vector3f& wi) const;
-	//virtual c_spectrum rho(const vector3f& wo, const vector3f& wi)
+	virtual c_spectrum f(const vector3f& wo, const vector3f& wi) const 
+    {
+        return m_reflectance * INV_PI;
+    }
+    virtual c_spectrum rho(const vector3f& wo, int num_samples, const samples_array_ptr& samples) const { return m_reflectance; }
+
+
 private: 
 	c_spectrum m_reflectance; 
 };

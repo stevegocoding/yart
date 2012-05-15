@@ -5,6 +5,8 @@ c_spectrum c_bxdf_base::sample_f(const vector3f& wo, vector3f& wi, float u1, flo
 {
 	// Cosine-sample the hemisphere, flipping the direction if necessary
 	// wi = cosine_sample_hemisphere(u1, u2); 
+
+    return c_spectrum(); 
 }
 
 c_spectrum c_bxdf_base::rho(const vector3f& wo, int num_samples, const samples_array_ptr& samples) const 
@@ -15,6 +17,4 @@ c_spectrum c_bxdf_base::rho(const vector3f& wo, int num_samples, const samples_a
 c_spectrum c_bxdf_base::rho(int num_samples, const samples_array_ptr& samples1, const samples_array_ptr& samples2) const
 {
 	return c_spectrum(); 
-
-}
-
+} 
