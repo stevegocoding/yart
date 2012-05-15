@@ -41,4 +41,6 @@ public:
 
 class c_ray_differential : public c_ray
 {
+
+	
 };

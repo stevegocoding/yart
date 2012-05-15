@@ -23,6 +23,9 @@ struct c_sample;
 class c_sampler; 
 class c_stratified_sampler; 
 
+class c_rbg_spectrum; 
+typedef c_rbg_spectrum c_spectrum; 
+
 class c_integrator;
 class c_surface_integrator; 
 class c_volume_integrator;
