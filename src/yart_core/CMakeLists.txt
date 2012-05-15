@@ -40,6 +40,8 @@ set(CORE_FILES
 	monte_carlo.cpp
     shape.h
     shape.cpp
+	reflection.h
+	reflection.cpp
 	)
 set(FILM_FILES		
 	film_image.h
