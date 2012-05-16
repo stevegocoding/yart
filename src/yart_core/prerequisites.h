@@ -31,6 +31,13 @@ class c_surface_integrator;
 class c_volume_integrator;
 
 class c_scene;
+class c_shape;
+class c_differential_geometry; 
+class c_triangle_mesh; 
+class c_triangle_face;
+// Assimp implementation 
+class c_assimp_mesh_impl; 
+class c_assimp_face_impl; 
 
 typedef shared_ptr<c_perspective_camera> perspective_camera_ptr;
 typedef shared_ptr<c_rng> rng_ptr;
@@ -44,6 +51,11 @@ typedef shared_ptr<c_surface_integrator> surface_integrator_ptr;
 typedef shared_ptr<c_volume_integrator> volume_integrator_ptr;
 
 typedef shared_ptr<c_scene> scene_ptr; 
+typedef shared_ptr<c_shape> shape_ptr;
+typedef shared_ptr<c_differential_geometry> diff_geom_ptr;
+typedef shared_ptr<c_triangle_mesh> triangle_mesh_ptr; 
+typedef shared_ptr<c_assimp_mesh_impl> assimp_mesh_impl_ptr;
+typedef shared_ptr<c_assimp_face_impl> assimp_face_impl_ptr;
 
 typedef shared_ptr<c_film> film_ptr;
 typedef shared_ptr<c_camera> camera_ptr;

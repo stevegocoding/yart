@@ -1,6 +1,7 @@
 #include "camera.h"
 #include "sampler.h"
 #include "film.h"
+#include "geometry.h"
 
 #include "cml/matrix/inverse.h"
 

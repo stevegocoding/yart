@@ -92,7 +92,7 @@ c_draw_panel::c_draw_panel(wxFrame *parent)
     while ((sc = m_sampler->get_current_pixel_samples(samples_array, rng)) > 0)
 	{
         count++; 
-        // map the samples to unit disk 
+        // map the samples to unit disk
         for (uint32_t j = 0; j < sppx * sppy; ++j)
         {
             float disk_sx = 0;

@@ -2,45 +2,21 @@
 
 #include <math.h>
 #include "prerequisites.h"
-#include "cml/cml.h"
+#include "transform.h"
 
-using namespace cml;
-
-inline bool is_nan_vec(const vector3f& v)
-{
-	return ( _isnan((double)v[0]) || _isnan((double)v[1]) || _isnan((double)v[2]) ); 
-}
-
-class c_ray
+class c_differential_geometry 
 {
 public:
-	c_ray(const vector3f& _o = vector3f(), const vector3f& _d = vector3f(), 
-		  float start = 0.0f, float end = std::numeric_limits<float>::infinity(), 
-		  float _t = 0.0f, 
-		  int _depth = 0)
-		: o(_o)
-		, d(_d)
-		, t_min(start) 
-		, t_max(end)
-	{}
-
-	bool has_nan() const 
-	{
-		return ( is_nan_vec(0) || is_nan_vec(d) || _isnan(t_min) || _isnan(t_max) ); 
-	}
-
-    vector3f evaluate_t(const float t) const 
-    {
-        return o + d * t;
-    }
-
-	vector3f o;
-	vector3f d;
-	mutable float t_min, t_max;
-};
-
-class c_ray_differential : public c_ray
-{
-
-	
+    c_differential_geometry()
+        : u(0), v(0), dudx(0), dudy(0), dvdx(0), dvdy(0) 
+    {} 
+    
+    point3f p;
+    vector3f nn; 
+    float u, v; 
+    shape_ptr shape; 
+    vector3f dpdu, dpdv; 
+    vector3f dndu, dndv; 
+    vector3f dpdx, dpdy; 
+    float dudx, dudy, dvdx, dvdy;    
 };

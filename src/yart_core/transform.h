@@ -1,10 +1,11 @@
 #pragma once
 
+#include <math.h>
 #include <ostream>
 #include <assert.h>
-#include "cml/cml.h"
+#include "cml/cml.h" 
 
-#include "geometry.h"
+#include "ray.h" 
 
 using namespace cml;
 
@@ -90,6 +91,11 @@ inline vector3f c_transform::transform_vec3(const vector3f& vec) const
 {
 	vector3f v = transform_vector(m_mat, vec); 
 	return v; 
+}
+
+inline bool is_nan_vec(const vector3f& v)
+{
+	return ( _isnan((double)v[0]) || _isnan((double)v[1]) || _isnan((double)v[2]) ); 
 }
 
 c_transform make_translate(const vector3f& trans);
