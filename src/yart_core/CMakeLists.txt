@@ -42,6 +42,8 @@ set(CORE_FILES
     shape.cpp
 	reflection.h
 	reflection.cpp
+	light.h
+	light.cpp
 	)
 set(FILM_FILES		
 	film_image.h

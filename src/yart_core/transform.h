@@ -19,6 +19,8 @@ namespace
     };
 }
 
+typedef vector3f point3f; 
+
 class c_transform
 {
 public:

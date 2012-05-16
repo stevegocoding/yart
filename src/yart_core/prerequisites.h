@@ -73,3 +73,6 @@ typedef unsigned int uint32_t;
 #pragma warning (disable : 4244) // int -> float conversion
 #pragma warning (disable : 4267) // size_t -> unsigned int conversion
 #endif 
+
+#define PARAM_OUT
+#define PARAM_INOUT
