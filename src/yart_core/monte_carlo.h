@@ -16,4 +16,4 @@ void stratified_sample_2D(samples_buf_ptr& sample_buf, int num_samples_x, int nu
 // Latin-hypercube (n-rooks) sampling
 void latin_hypercube(samples_buf_ptr& sample_buf, uint32_t num_samples, uint32_t num_dims, c_rng& rng);
 
-void concentric_sample_disk(float u1, float u2, float *dx, float *dy); 
+void concentric_sample_disk(float u1, float u2, PARAM_OUT float *dx, PARAM_OUT float *dy); 

@@ -77,27 +77,23 @@ void concentric_sample_disk(float u1, float u2, float *dx, float *dy)
         return ; 
     }
     
-    if (sx >= -sy) {
-        if (sx > sy) {
-            // Handle first region of disk
+    if (sx >= -sy) {     // region 1 and 2
+        if (sx > sy) {   // region 1 
             r = sx;
             if (sy > 0.0) theta = sy/r;
             else          theta = 8.0f + sy/r;
         }
-        else {
-            // Handle second region of disk
+        else {           // region 2
             r = sy;
             theta = 2.0f - sx/r;
         }
     }
-    else {
-        if (sx <= sy) {
-            // Handle third region of disk
+    else {                  // region 3 and 4
+        if (sx <= sy) {     // region 3
             r = -sx;
             theta = 4.0f - sy/r;
         }
-        else {
-            // Handle fourth region of disk
+        else {              // region 4 
             r = -sy;
             theta = 6.0f + sx/r;
         }
@@ -105,6 +101,5 @@ void concentric_sample_disk(float u1, float u2, float *dx, float *dy)
 
     theta *= M_PI / 4.f;
     *dx = r * cosf(theta);
-    *dy = r * sinf(theta);
-    
+    *dy = r * sinf(theta);   
 }

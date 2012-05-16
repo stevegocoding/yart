@@ -7,10 +7,8 @@
 #include "../../yart_core/rng.h"
 #include "../../yart_core/integrator.h"
 #include "../../yart_core/stratified_sampler.h"
-
-
-
-
+#include "../../yart_core/monte_carlo.h"
+ 
 class c_draw_panel : public wxPanel
 {
 public:
@@ -67,10 +65,10 @@ END_EVENT_TABLE()
 c_draw_panel::c_draw_panel(wxFrame *parent)
 :wxPanel(parent) 
 {
-	uint32_t res_x = 16; 
-	uint32_t res_y = 8; 
-	uint32_t sppx = 16; 
-	uint32_t sppy = 16; 
+	uint32_t res_x = 32; 
+	uint32_t res_y = 32; 
+	uint32_t sppx = 3; 
+	uint32_t sppy = 3; 
 	m_sampler = boost::make_shared<c_stratified_sampler>(0, res_x, 0, res_y, sppx, sppy, true, 0.0f, 0.0f);
 	m_dummy_integrator = boost::make_shared<c_surface_integrator>();
 	// original sample 
@@ -79,11 +77,37 @@ c_draw_panel::c_draw_panel(wxFrame *parent)
 	int sc = 0; 
 	c_rng rng(2047); 
 	samples_array_ptr samples_array = orig_sample->duplicate(sppx*sppy); 
+    
+    /*
 	while ((sc = m_sampler->get_current_pixel_samples(samples_array, rng)) > 0)
 	{
 		for (uint32_t j = 0; j < sppx * sppy; ++j)
 			m_samples_vec.push_back(samples_array[j]);
 	}
+    */ 
+    
+    
+    // Unit Disk Sampling
+    int count = 0; 
+    while ((sc = m_sampler->get_current_pixel_samples(samples_array, rng)) > 0)
+	{
+        count++; 
+        // map the samples to unit disk 
+        for (uint32_t j = 0; j < sppx * sppy; ++j)
+        {
+            float disk_sx = 0;
+            float disk_sy = 0; 
+            float sx = samples_array[j].image_x / res_x; 
+            float sy = samples_array[j].image_y / res_y; 
+            concentric_sample_disk(sx, sy, &disk_sx, &disk_sy); 
+
+            samples_array[j].image_x = disk_sx; 
+            samples_array[j].image_y = disk_sy; 
+           
+			m_samples_vec.push_back(samples_array[j]);
+        }
+	}
+    
 	
 }
 
@@ -107,8 +131,8 @@ void c_draw_panel::render(wxDC& dc)
 
 	for (unsigned int i = 0; i < m_samples_vec.size(); ++i)
 	{
-		wxCoord x = m_samples_vec[i].image_x * 30 + 100;
-		wxCoord y = m_samples_vec[i].image_y * 30 + 100;
+		wxCoord x = m_samples_vec[i].image_x * 100 + 400;
+		wxCoord y = m_samples_vec[i].image_y * 100 + 200;
 		dc.DrawPoint(x, y);
 	}
 } 
