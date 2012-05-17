@@ -2,70 +2,11 @@
 #include "triangle_mesh.h" 
 #include "assimp_api_wrap.h"
 
-class c_assimp_mesh_impl : public c_triangle_mesh_impl
-{
-public: 
-    c_assimp_mesh_impl(aiMesh *mesh) 
-        : m_ai_mesh(mesh)
-    {}
-
-    bool has_normal() const 
-    {
-        assert(m_ai_mesh); 
-        return m_ai_mesh->HasNormals(); 
-    }
-
-    uint32_t get_num_faces() const 
-    {
-        assert(m_ai_mesh); 
-        m_ai_mesh->mNumFaces; 
-    }
-    
-    uint32_t get_num_verts() const 
-    {
-        assert(m_ai_mesh); 
-        m_ai_mesh->mNumVertices;
-    }
-    
-    triangle_face get_face(uint32_t idx) const 
-    {
-        assert(m_ai_mesh); 
-        assert(idx < m_ai_mesh->mNumFaces); 
-        aiFace *face = &m_ai_mesh->mFaces[idx];
-        assert(face->mNumIndices == 3);
-        
-        return triangle_face(face->mIndices[0], face->mIndices[1], face->mIndices[2]); 
-    }
-
-    point3f get_vert(uint32_t idx) const 
-    {
-        assert(m_ai_mesh);
-        assert(idx < m_ai_mesh->mNumVertices);
-        
-        return aivec3_to_cmlvec3(m_ai_mesh->mVertices[idx]); 
-    }
-
-    aiMesh *m_ai_mesh; 
-};
 
 
 //////////////////////////////////////////////////////////////////////////
 
-class c_assimp_face_impl : public c_triangle_face_impl
-{
-public:
-    c_assimp_face_impl(assimp_mesh_impl_ptr& assimp_mesh, uint32_t face_idx)
-        : m_mesh(assimp_mesh)
-        , m_face_idx(face_idx)
-    {
-    }
-    
 
-    
-private:
-    assimp_mesh_impl_ptr m_mesh;
-    uint32_t m_face_idx; 
-}; 
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -108,6 +49,7 @@ bool c_triangle_face::intersects(const c_ray& ray,
         return false; 
     
     // Compute the triangle partial derivatives 
+	/* 
     vector3f dpdu, dpdv; 
     float uvs[3][2];
     get_uv(uvs);
@@ -123,12 +65,18 @@ bool c_triangle_face::intersects(const c_ray& ray,
     if (determinant == 0.0f)
     {
         // Handle zero determinant for triangle partial derivative matrix
-        
+		build_coord_system(normalize(cross(e2, e1)), &dpdu, &dpdv); 
     }
-
-
-
-
+	else 
+	{
+		float inv_det = 1.0f / determinant; 
+		dpdu = (dv2 * dp1 - dv1 * dp2) * inv_det;
+		dpdv = (-du2 * dp1 + du1 * dp2) * inv_det;
+	}
+	*/
+	
+	*t_hit = t; 
+	*ray_epsilon = 1e-3f * *t_hit; 
 
     return true; 
 }

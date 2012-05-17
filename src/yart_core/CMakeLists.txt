@@ -12,10 +12,12 @@ set(RENDERERS_DIR renderers)
 # Dependencies
 set(DEP_LIBS_DEBUG
 	gtestd_dll.lib
+	assimp_d.lib
 	)
 
 set(DEP_LIBS_RELEASE
 	gtest_dll.lib
+	assimp.lib
 	)
 
 set(CORE_FILES
@@ -44,6 +46,8 @@ set(CORE_FILES
 	reflection.cpp
 	light.h
 	light.cpp
+	ray.h
+	ray.cpp
 	)
 set(FILM_FILES		
 	film_image.h
@@ -96,11 +100,7 @@ set(SRC_FILES
 	)
 
 add_library(${LIB_TARGET} ${SRC_FILES})
-set_target_properties(${LIB_TARGET} PROPERTIES DEBUG_POSTFIX "_d")
-target_link_libraries(${LIB_TARGET} debug "${DEP_LIBS_DEBUG}" optimized "${DEP_LIBS_RELEASE}")
+set_target_properties(${LIB_TARGET} PROPERTIES DEBUG_POSTFIX "_d") 
+target_link_libraries(${LIB_TARGET} debug "${DEP_LIBS_DEBUG}")
+target_link_libraries(${LIB_TARGET} optimized "${DEP_LIBS_RELEASE}")
 install(TARGETS ${LIB_TARGET} ARCHIVE DESTINATION lib/)
-
-# add_executable(${TARGET} WIN32 ${SRC_FILES})
-# Installation
-#install(TARGETS ${TARGET} RUNTIME DESTINATION bin/${TARGET})
-#install(DIRECTORY ${DEP_DLL_DEBUG_DIR} ${DEP_DLL_REL_DIR} DESTINATION bin/${TARGET})

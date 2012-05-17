@@ -1,0 +1,1 @@
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/models DESTINATION bin/data)

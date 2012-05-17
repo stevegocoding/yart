@@ -3,24 +3,14 @@
 #include <math.h>
 #include <ostream>
 #include <assert.h>
-#include "cml/cml.h" 
 
+#include "prerequisites.h"
+#include "math_utils.h"
 #include "ray.h" 
 
 using namespace cml;
 
-namespace 
-{
-    enum e_vec_component
-    {
-        x = 0, 
-        y = 1, 
-        z = 2,
-        w = 3
-    };
-}
 
-typedef vector3f point3f; 
 
 class c_transform
 {
@@ -102,3 +92,4 @@ c_transform make_translate(const vector3f& trans);
 c_transform make_scale(float sx, float sy, float sz);
 c_transform inverse_transform(const c_transform& t); 
 c_transform make_perspective_proj(float fov, float near, float far); 
+void build_coord_system(const vector3f& v1, PARAM_OUT vector3f* v2, PARAM_OUT vector3f *v3);

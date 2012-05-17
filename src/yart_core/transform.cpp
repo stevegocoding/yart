@@ -57,3 +57,19 @@ c_transform make_perspective_proj(float fov, float near, float far)
 	float inv_tan_angle = 1.0f / tanf(cml::rad(fov)/2);
 	return  make_scale(inv_tan_angle, inv_tan_angle, 1) * c_transform(m);
 }
+
+void build_coord_system(const vector3f& v1, PARAM_OUT vector3f* v2, PARAM_OUT vector3f *v3)
+{
+	if (fabsf(v1[x]) > fabsf(v1[y]))
+	{
+		float inv_len = 1.0f / sqrtf(v1[x] * v1[x] + v1[z] * v1[z]); 
+		*v2 = vector3f(-v1[z] * inv_len, 0.0f, v1[x] * inv_len);		
+	}
+	else 
+	{
+		float inv_len = 1.0f / sqrtf(v1[y] * v1[y] + v1[z] * v1[z]);
+		*v2 = vector3f(0.0f, v1[z] * inv_len, -v1[y] * inv_len); 
+	}
+	
+	*v3 = cross(v1, *v2);
+}

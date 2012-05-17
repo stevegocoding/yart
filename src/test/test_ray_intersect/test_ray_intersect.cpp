@@ -1,7 +1,12 @@
 #include "../../yart_core/pch.h"
 #include "../../yart_core/transform.h"
+#include "../../yart_core/triangle_mesh_impl.h"
+
 #include "cml/cml.h"
 #include <iomanip>
+
+#include "assimp/assimp.h"
+#include "assimp/aiScene.h"
 
 using namespace std;
 
@@ -84,45 +89,34 @@ void print_vector4f_col(std::ostream& os, const cml::vector4f& vec, int prec = 4
 
 	os.setf(old_flags); 
 }
+
+void print_aiscene_info(std::ostream& os, const aiScene *scene)
+{
+	assert(scene); 
+
+	std::cout << 
+		"Mesh File Information: "<< std::endl;
+	std::cout << "Meshes: " << scene->mNumMeshes << std::endl; 
+	
+	for (unsigned int i = 0; i < scene->mNumMeshes; ++i)
+	{
+		std::cout << "Mesh #" << i << std::endl;
+		std::cout << "Vertices: " << scene->mMeshes[i]->mNumVertices << std::endl; 
+		std::cout << "Faces: " << scene->mMeshes[i]->mNumFaces << std::endl; 
+		std::cout << "---------------------------------------------------" << std::endl;
+	}
+}
 	
 int main(int argc, char **argv)
 {
-	int res_x = 640; 
-	int res_y = 480; 
-
-	float screen_wnd[4] = {-1.3333f, 1.3333f, -1.0f, 1.0f}; 
+	const aiScene *scene = aiImportFile("../data/models/cube.ply", 0); 
 	
-	c_transform camera_to_screen = make_perspective_proj(90.0f, 1.0f, 2.0f); 
-	c_transform screen_to_raster = 
-		make_scale((float)(res_x), 
-		(float)(res_y), 
-		1.0f) * 
-		make_scale(1.0f / (screen_wnd[1] - screen_wnd[0]), 1.0f / (screen_wnd[2] - screen_wnd[3]), 1.0f) * 
-		make_translate(vector3f(-screen_wnd[0], -screen_wnd[3], 0)); 
-	c_transform camera_to_raster = camera_to_screen * screen_to_raster;
-	c_transform raster_to_camera = inverse_transform(camera_to_raster);
+	print_aiscene_info(cout, scene);
 
-	print_matrix(cout, camera_to_screen.get_matrix());
-
-	cout << endl; 
+	// Create triangle mesh
+	triangle_mesh_impl_ptr mesh_impl = triangle_mesh_impl_ptr(new c_assimp_mesh_impl(scene->mMeshes[0])); 
 	
-	print_matrix(cout, screen_to_raster.get_matrix());
-	
-	cout << endl; 
-
-	print_matrix(cout, camera_to_raster.get_matrix());
-
-	cout << endl; 
-	
-	vector3f p(0.0f, 0.0f, 1.0f); 
-	vector3f proj_p = camera_to_raster.transform_pt(p); 
-	print_vector3f_col(cout, proj_p); 
-
-	cout << endl; 
-
-	vector3f p2(320.0f, 240.0f, 0.0f); 
-	vector3f proj_p2 = raster_to_camera.transform_pt(p2); 
-	print_vector3f_col(cout, proj_p2); 
+	aiReleaseImport(scene);
 	
 	return 0;
 }

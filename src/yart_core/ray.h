@@ -1,6 +1,6 @@
 #pragma once
 
-#include "cml/cml.h"
+#include "math_utils.h"
 
 using namespace cml;
 
@@ -31,6 +31,9 @@ public:
 
 class c_ray_differential : public c_ray
 {
+public:
+	c_ray_differential() {} 
 
-	
+	point3f rx_o, ry_o; 
+	vector3f rx_d, ry_d;
 };
