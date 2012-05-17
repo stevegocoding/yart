@@ -52,6 +52,10 @@ set(FILM_FILES
 set(GEO_FILES
 	sphere.h
 	sphere.cpp
+	triangle_mesh.h
+	triangle_mesh.cpp
+	assimp_api_wrap.h
+	assimp_api_wrap.cpp
 	)
 set(INTEGRATORS_FILES
 	whitted.h
