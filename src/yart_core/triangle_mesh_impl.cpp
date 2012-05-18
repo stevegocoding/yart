@@ -40,6 +40,19 @@ point3f c_assimp_mesh_impl::get_vert(uint32_t idx) const
 	return aivec3_to_cmlvec3(m_ai_mesh->mVertices[idx]); 
 }
 
+void c_assimp_mesh_impl::apply_transform(const c_transform& t)
+{
+	assert(m_ai_mesh); 
+	
+	aiMatrix4x4 aim = cmlmat4x4_to_aimat4x4(t.get_matrix()); 
+	
+	for (uint32_t i = 0; i < m_ai_mesh->mNumVertices; ++i)
+	{
+		m_ai_mesh->mVertices[i] = aim * m_ai_mesh->mVertices[i]; 
+	}
+	
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 c_assimp_face_impl::c_assimp_face_impl(assimp_mesh_impl_ptr& assimp_mesh, uint32_t face_idx)

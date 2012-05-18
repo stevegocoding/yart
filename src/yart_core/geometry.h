@@ -35,3 +35,29 @@ public:
     vector3f dndu, dndv;				// partial derivatives of the normal 
     float dudx, dudy, dvdx, dvdy;		// partial derivatives of (u, v) 
 };
+
+
+class c_aabb
+{
+public:
+	c_aabb()
+		: pt_min(point3f(-INFINITY, -INFINITY, -INFINITY))
+		, pt_max(point3f(INFINITY, INFINITY, INFINITY))
+	{}
+
+	c_aabb(const point3f& pmin, const point3f& pmax) 
+	{
+		pt_min = point3f(min(pmin[x], pmax[x]), min(pmin[y], pmax[y]), min(pmin[z], pmax[z]));
+		pt_max = point3f(max(pmin[x], pmax[x]), max(pmin[y], pmax[y]), max(pmin[z], pmax[z]));
+	}
+
+	bool contains_point(const point3f& pt) const
+	{        
+		return (pt[x] >= pt_min[x] && pt[x] <= pt_max[x] &&
+				pt[y] >= pt_min[y] && pt[y] <= pt_max[y] &&
+				pt[z] >= pt_min[z] && pt[z] <= pt_max[z]);
+	}
+	
+private:
+	point3f pt_min, pt_max; 
+};

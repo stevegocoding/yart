@@ -16,5 +16,4 @@ c_differential_geometry::c_differential_geometry(const point3f& _p,
 	nn = normalize(cross(dpdu, dpdv)); 
 	
 	// Adjust normal based on orientation and handedness
-}
-
+} 

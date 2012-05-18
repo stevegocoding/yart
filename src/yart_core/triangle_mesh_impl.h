@@ -14,6 +14,7 @@ public:
 	uint32_t get_num_verts() const;
 	triangle_face get_face(uint32_t idx) const;
 	point3f get_vert(uint32_t idx) const;
+	void apply_transform(const c_transform& t); 
 
 	aiMesh *m_ai_mesh; 
 };

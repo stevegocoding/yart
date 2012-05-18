@@ -1,10 +1,13 @@
-#include "../../yart_core/pch.h"
+
+#include "boost/make_shared.hpp"
+
+#include "glut/glut.h"
+#include "cml/cml.h"
+#include <iomanip>
+#include "../../yart_core/ray.h"
 #include "../../yart_core/transform.h"
 #include "../../yart_core/triangle_mesh_impl.h"
 #include "../../yart_core/scene_obj.h"
-
-#include "cml/cml.h"
-#include <iomanip>
 
 #include "assimp/assimp.h"
 #include "assimp/aiScene.h"
@@ -36,7 +39,7 @@ void print_matrix(std::ostream& os, const cml::matrix44f& mat, int prec = 4, int
 		<< mat(1, 2) << ' ' 
 		<< std::setprecision(prec) << std::setw(width) << std::setfill(' ')
 		<< mat(1, 3) << endl; 
-	
+
 	// row #3  
 	os << std::setprecision(prec) << std::setw(width) << std::setfill(' ') 
 		<< mat(2, 0) << ' ' 
@@ -130,7 +133,7 @@ void print_aiscene_info(std::ostream& os, const aiScene *scene)
 	std::cout << 
 		"Mesh File Information: "<< std::endl;
 	std::cout << "Meshes: " << scene->mNumMeshes << std::endl; 
-	
+
 	for (unsigned int i = 0; i < scene->mNumMeshes; ++i)
 	{
 		std::cout << "Mesh #" << i << std::endl;
@@ -145,13 +148,13 @@ void print_aiscene_info(std::ostream& os, const aiScene *scene)
 		}
 
 		std::cout << "Triangles:" << std::endl;
-		
+
 		for (unsigned int f = 0; f < scene->mMeshes[i]->mNumFaces; ++f)
 		{
 			unsigned int i0 = scene->mMeshes[i]->mFaces[f].mIndices[0]; 
 			unsigned int i1 = scene->mMeshes[i]->mFaces[f].mIndices[1]; 
 			unsigned int i2 = scene->mMeshes[i]->mFaces[f].mIndices[2]; 
-			
+
 			std::cout << "Triangle #" << f;
 			std::cout << " | "; 
 			print_vector3d_row(cout, vector3d(i0, i1, i2), 2, 2);  
@@ -166,10 +169,15 @@ void print_aiscene_info(std::ostream& os, const aiScene *scene)
 		}
 	}
 }
-	
-int main(int argc, char **argv)
+
+c_ray ray; 
+triangle_face_ptr tri; 
+triangle_mesh_ptr mesh; 
+const aiScene *scene = NULL;
+uint32_t face_idx = 0; 
+void setup()
 {
-	const aiScene *scene = aiImportFile("../data/models/cube.ply", aiProcess_Triangulate | aiProcess_MakeLeftHanded); 
+	scene = aiImportFile("../data/models/cube.ply", aiProcess_Triangulate | aiProcess_MakeLeftHanded); 
 
 	aiLogStream stream; 
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, NULL);
@@ -177,24 +185,81 @@ int main(int argc, char **argv)
 
 	// Create triangle mesh
 	triangle_mesh_impl_ptr mesh_impl = triangle_mesh_impl_ptr(new c_assimp_mesh_impl(scene->mMeshes[0])); 
-	shape_ptr mesh = triangle_mesh_ptr(new c_triangle_mesh(mesh_impl)); 
-	
+	mesh = triangle_mesh_ptr(new c_triangle_mesh(mesh_impl)); 
+
 	// create the scene object 
-	c_transform o2w = make_translate(vector3f(0.0f, 0.0f,1.0f)); 
+	c_transform o2w = make_translate(vector3f(0.0f, 0.0f,-5.0f)); 
 	c_transform w2o = inverse_transform(o2w); 
 	scene_object_ptr mesh_obj = make_simple_scene_obj(w2o, o2w, mesh); 
 
 	print_aiscene_info(cout, scene);
-	
-	c_ray ray; 
+
 	ray.o = vector3f(0, 0, 0); 
-	ray.d = normalize(vector3f(0.8, -0.8, 0.1)); 
-	
+	ray.d = normalize(vector3f(0.2, -0.05, -1.0)); 
+
 	triangle_mesh_ptr tri_mesh = boost::dynamic_pointer_cast<c_triangle_mesh>(mesh_obj->get_geometry_shape()); 
 	assert(tri_mesh); 
+
+	tri = tri_mesh->get_triangle_face(3); 
+}
+
+void cleanup()
+{
+	aiReleaseImport(scene);
+	aiDetachAllLogStreams();
+}
+
+void draw_ray()
+{
+	glBegin(GL_LINES);
+	glColor3f(1.0f, 0.0f, 0.0f); 
+
+	glVertex3f(ray.o[x], ray.o[y], ray.o[z]);
+	glVertex3f(ray.d[x]*100, ray.d[y]*100, ray.d[z]*100);
+
+	glEnd(); 
+}
+
+void draw_triangle()
+{
+	glBegin(GL_TRIANGLES);
 	
-	triangle_face_ptr tri = tri_mesh->get_triangle_face(3); 
-	
+	triangle_face face = mesh->get_face(face_idx);
+
+	point3f p1 = mesh->get_vert(face[0]);
+	point3f p2 = mesh->get_vert(face[1]);
+	point3f p3 = mesh->get_vert(face[2]);
+
+	glColor3f(1.0f, 1.0f, 1.0f); 
+	glVertex3f(p1[x], p1[y], p1[z]);
+	glColor3f(1.0f, 1.0f, 1.0f); 
+	glVertex3f(p2[x], p2[y], p2[z]);
+	glColor3f(1.0f, 1.0f, 1.0f); 
+	glVertex3f(p3[x], p3[y], p3[z]);
+
+	//glColor3f(1.0f, 1.0f, 1.0f); 
+	//glVertex3f(1, 1, 0);
+	//glColor3f(1.0f, 1.0f, 1.0f); 
+	//glVertex3f(-2, 2, 0);
+	//glColor3f(1.0f, 1.0f, 1.0f); 
+	//glVertex3f(3, 4, 0);
+
+	glEnd(); 
+}
+
+void render_scene()
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//glPushMatrix();       //saves the current matrix on the top of the matrix stack
+	//glTranslatef(0,0,-5); //translates the current matrix 0 in x, 0 in y and -100 in z
+
+	glDisable(GL_CULL_FACE);
+	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
+	draw_ray(); 
+	draw_triangle(); 
+
 	float t_hit = 0.0f;
 	float ray_eps = 0.0f; 
 	bool is_hit = tri->intersects(ray, &t_hit, &ray_eps, diff_geom_ptr());
@@ -210,9 +275,35 @@ int main(int argc, char **argv)
 	{
 		std::cout << "Missed!" << endl; 
 	}
+
+	glPopMatrix();          //retrieves our saved matrix from the top of the matrix stack
+	glutSwapBuffers();      //swaps the front and back buffers
 	
-	aiReleaseImport(scene);
-	aiDetachAllLogStreams();
+}
+
+int main(int argc, char** argv)
+{
+	glutInit(&argc, argv); 
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+	glutCreateWindow("Test Ray Intersection");
+	glutDisplayFunc(render_scene);    
+
+	glMatrixMode(GL_PROJECTION);   //changes the current matrix to the projection matrix
+
+	//sets up the projection matrix for a perspective transform
+	gluPerspective(
+		45,    //view angle
+		1.0,    //aspect ratio
+		0.5f,   //near clip
+		200.0); //far clip
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(10,0,10,0,0,0,0,1,0);
 	
-	return 0;
+	setup();
+
+	glutMainLoop(); 
+	
+	return 0; 
 }

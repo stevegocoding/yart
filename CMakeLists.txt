@@ -16,7 +16,7 @@ if (Boost_FOUND)
 	add_definitions("-DHAS_BOOST")
 endif()
 
-find_package(wxWidgets COMPONENTS core base)
+find_package(wxWidgets COMPONENTS core base gl)
 if (wxWidgets_FOUND)
 	include_directories(${wxWidgets_INCLUDE_DIRS})
 	SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} ${wxWidgets_LIB_DIR})

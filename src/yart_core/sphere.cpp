@@ -2,8 +2,8 @@
 #include "geometry.h"
 #include "math_utils.h"
 
-c_sphere::c_sphere(const c_transform& o2w, const c_transform& w2o, float radius, float z_min, float z_max, float phi_max_deg) 
-    : super(o2w, w2o)
+c_sphere::c_sphere(float radius, float z_min, float z_max, float phi_max_deg) 
+    : super()
     , m_radius(radius)
 {
     m_z_min = clamp(min(z_min, z_max), -radius, radius); 
@@ -15,6 +15,7 @@ c_sphere::c_sphere(const c_transform& o2w, const c_transform& w2o, float radius,
     m_phi_max = cml::rad(clamp(phi_max_deg, 0.0f, 360.0f)); 
 }
 
+/*
 bool c_sphere::intersects(const c_ray& ray, float *t_hit, float *ray_epsilon) const 
 {
     float phi = 0; 
@@ -44,12 +45,12 @@ bool c_sphere::intersects(const c_ray& ray, float *t_hit, float *ray_epsilon) co
     }
    
     // Compute sphere hit position
-    /* 
-        According the definition of sphere equation 
-        tan(phi) = y / x = (r * sin(theta) * sin(phi)) / (r * sin(theta) * cos(phi))
-        so phi = arctan(y/x)
-        The atan2f function in C std lib returns value in [-PI, PI], need to shift it to [0, 2*PI]
-    */
+    
+        //According the definition of sphere equation 
+        //tan(phi) = y / x = (r * sin(theta) * sin(phi)) / (r * sin(theta) * cos(phi))
+        //so phi = arctan(y/x)
+        //The atan2f function in C std lib returns value in [-PI, PI], need to shift it to [0, 2*PI]
+  
     hit_sphr = ray.evaluate_t(_t_hit); 
     if (hit_sphr[x] == 0.0f && hit_sphr[y] == 0.0f)
         hit_sphr[x] = 1e-5f * m_radius;
@@ -82,11 +83,11 @@ bool c_sphere::intersects(const c_ray& ray, float *t_hit, float *ray_epsilon) co
     }
 
     // Find parametric representation of sphere hit
-    /*
-    float u = phi / m_phi_max; 
-    float theta = acosf(clamp(hit_sphr[z] / m_radius, -1.0f, 1.0f));
-    float v = (theta - m_theta_min) / (m_theta_max - m_theta_min);
-    */
+    
+    //float u = phi / m_phi_max; 
+    //float theta = acosf(clamp(hit_sphr[z] / m_radius, -1.0f, 1.0f));
+    //float v = (theta - m_theta_min) / (m_theta_max - m_theta_min);
+    
     
      // Update _tHit_ for quadric intersection
     *t_hit = _t_hit;
@@ -96,3 +97,4 @@ bool c_sphere::intersects(const c_ray& ray, float *t_hit, float *ray_epsilon) co
     
     return true;
 }
+*/ 

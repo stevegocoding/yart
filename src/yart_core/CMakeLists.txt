@@ -48,6 +48,8 @@ set(CORE_FILES
 	light.cpp
 	ray.h
 	ray.cpp
+	scene_obj.h
+	scene_obj.cpp
 	)
 set(FILM_FILES		
 	film_image.h
@@ -58,6 +60,8 @@ set(GEO_FILES
 	sphere.cpp
 	triangle_mesh.h
 	triangle_mesh.cpp
+	triangle_mesh_impl.h
+	triangle_mesh_impl.cpp
 	assimp_api_wrap.h
 	assimp_api_wrap.cpp
 	)

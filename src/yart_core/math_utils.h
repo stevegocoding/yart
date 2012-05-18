@@ -9,8 +9,6 @@ using std::swap;
 using std::sqrt;
 using namespace cml;
 
-static const float INV_PI = 0.31830988618379067154f; 
-
 typedef vector3f point3f; 
 
 namespace 
@@ -22,6 +20,9 @@ namespace
 		z = 2,
 		w = 3
 	};
+
+	static const float INV_PI = 0.31830988618379067154f; 
+	static const float INFINITY = std::numeric_limits<float>::infinity();
 }
 
 inline bool quadratic(float A, float B, float C, float *t0, float *t1)

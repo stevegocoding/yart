@@ -2,11 +2,17 @@
 #include "triangle_mesh.h" 
 #include "assimp_api_wrap.h"
 
-
-
-//////////////////////////////////////////////////////////////////////////
-
-
+void c_triangle_mesh::alloc_triangles_array()
+{
+	assert(m_impl);
+	std::vector<triangle_face_ptr>().swap(m_triangles);
+	m_triangles.reserve(m_impl->get_num_faces()); 
+	
+	for (uint32_t i = 0; i < m_impl->get_num_faces(); ++i)
+	{
+		m_triangles.push_back(triangle_face_ptr(new c_triangle_face(this, i)));
+	}
+}
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -80,3 +86,4 @@ bool c_triangle_face::intersects(const c_ray& ray,
 
     return true; 
 }
+
