@@ -4,6 +4,7 @@
 #include "glut/glut.h"
 #include "cml/cml.h"
 #include <iomanip>
+#include <algorithm>
 #include "../../yart_core/ray.h"
 #include "../../yart_core/transform.h"
 #include "../../yart_core/triangle_mesh_impl.h"
@@ -175,6 +176,8 @@ triangle_face_ptr tri;
 triangle_mesh_ptr mesh; 
 const aiScene *scene = NULL;
 uint32_t face_idx = 0; 
+float view_angle = 0.0f;
+
 void setup()
 {
 	scene = aiImportFile("../data/models/cube.ply", aiProcess_Triangulate | aiProcess_MakeLeftHanded); 
@@ -195,7 +198,7 @@ void setup()
 	print_aiscene_info(cout, scene);
 
 	ray.o = vector3f(0, 0, 0); 
-	ray.d = normalize(vector3f(0.2, -0.05, -1.0)); 
+	ray.d = normalize(vector3f(1, -0.05, -1.0)); 
 
 	triangle_mesh_ptr tri_mesh = boost::dynamic_pointer_cast<c_triangle_mesh>(mesh_obj->get_geometry_shape()); 
 	assert(tri_mesh); 
@@ -207,6 +210,30 @@ void cleanup()
 {
 	aiReleaseImport(scene);
 	aiDetachAllLogStreams();
+}
+
+void update_view()
+{
+	glMatrixMode(GL_PROJECTION);   //changes the current matrix to the projection matrix
+
+	//sets up the projection matrix for a perspective transform
+	gluPerspective(
+		45,    //view angle
+		1.0,    //aspect ratio
+		0.5f,   //near clip
+		200.0); //far clip
+
+	float r = 50.0f;
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	float eyex = r*cosf(rad(view_angle));
+	float eyey = 0.0f; 
+	float eyez = r*sinf(rad(view_angle)); 
+	gluLookAt(eyex,0,eyez 
+		,0,0,0,0,1,0);
+ 
+	cout << eyex << ' ' << eyey << ' ' << eyez << std::endl; 
 }
 
 void draw_ray()
@@ -255,20 +282,26 @@ void render_scene()
 	//glTranslatef(0,0,-5); //translates the current matrix 0 in x, 0 in y and -100 in z
 
 	glDisable(GL_CULL_FACE);
-	glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+	// glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
+	update_view(); 
+	
+	glPushMatrix(); 
+	glTranslatef(0,0,-5); //translates the current matrix 0 in x, 0 in y and -100 in z
 
 	draw_ray(); 
 	draw_triangle(); 
+	glPopMatrix(); 
 
 	float t_hit = 0.0f;
 	float ray_eps = 0.0f; 
-	bool is_hit = tri->intersects(ray, &t_hit, &ray_eps, diff_geom_ptr());
+	bool is_hit = tri->intersects(ray, &t_hit, &ray_eps, diff_geom_ptr()); 
 
 	if (is_hit) 
 	{
 		vector3f hit_pt = ray.o + ray.d * t_hit;
 		std::cout << "Hit point: " << std::endl; 
-
+		
 		print_vector3f_row(cout, hit_pt); 
 	} 
 	else 
@@ -276,10 +309,27 @@ void render_scene()
 		std::cout << "Missed!" << endl; 
 	}
 
-	glPopMatrix();          //retrieves our saved matrix from the top of the matrix stack
+	// glPopMatrix();          //retrieves our saved matrix from the top of the matrix stack
 	glutSwapBuffers();      //swaps the front and back buffers
 	
 }
+
+void on_key(unsigned char key, int x, int y)
+{
+	if (key == 'a')
+	{
+		view_angle -= 5.0f;
+		view_angle = view_angle < 0 ? 360 : view_angle; 
+	}
+	else if (key == 'd')
+	{
+		view_angle += 5.0f; 
+		view_angle = view_angle > 360 ? 0 : view_angle;  
+	}
+
+	glutPostRedisplay(); 
+}
+
 
 int main(int argc, char** argv)
 {
@@ -287,19 +337,7 @@ int main(int argc, char** argv)
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutCreateWindow("Test Ray Intersection");
 	glutDisplayFunc(render_scene);    
-
-	glMatrixMode(GL_PROJECTION);   //changes the current matrix to the projection matrix
-
-	//sets up the projection matrix for a perspective transform
-	gluPerspective(
-		45,    //view angle
-		1.0,    //aspect ratio
-		0.5f,   //near clip
-		200.0); //far clip
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(10,0,10,0,0,0,0,1,0);
+	glutKeyboardFunc(on_key); 
 	
 	setup();
 
