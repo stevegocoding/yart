@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 2.8)
 
-project(ya-rt)
+project(yart)
 
 SET(BOOST_ROOT_DIR "" CACHE VARIABLE "")
 SET(wxWidgets_ROOT_DIR "" CACHE VARIABLE "")
@@ -16,7 +16,7 @@ if (Boost_FOUND)
 	add_definitions("-DHAS_BOOST")
 endif()
 
-find_package(wxWidgets COMPONENTS core base gl)
+find_package(wxWidgets COMPONENTS core base)
 if (wxWidgets_FOUND)
 	include_directories(${wxWidgets_INCLUDE_DIRS})
 	SET(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} ${wxWidgets_LIB_DIR})
@@ -35,6 +35,8 @@ SET(YART_CORE_TARGET "")
 # Subdirectories
 add_subdirectory(data)
 add_subdirectory(src)
+
+message("wwwwww" ${wxWidgets_ROOT_DIR})
 
 
 # ------------------------- Begin Generic CMake Variable Logging ------------------
