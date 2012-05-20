@@ -24,6 +24,8 @@ struct c_sample;
 class c_sampler; 
 class c_stratified_sampler; 
 
+class c_filter; 
+
 class c_rbg_spectrum; 
 typedef c_rbg_spectrum c_spectrum; 
 
@@ -51,6 +53,8 @@ typedef shared_ptr<c_sample> sample_ptr;
 typedef shared_ptr<c_sampler> sampler_ptr;
 typedef shared_ptr<c_stratified_sampler> stratified_sampler_ptr; 
 
+typedef shared_ptr<c_filter> filter_ptr; 
+
 typedef shared_ptr<c_integrator> integrator_ptr; 
 typedef shared_ptr<c_surface_integrator> surface_integrator_ptr; 
 typedef shared_ptr<c_volume_integrator> volume_integrator_ptr;
@@ -70,6 +74,8 @@ typedef shared_ptr<c_camera> camera_ptr;
 
 typedef shared_array<c_sample> samples_array_ptr; 
 typedef shared_array<float> samples_buf_ptr; 
+
+typedef shared_array<float> filter_table_ptr; 
 
 using std::min;
 using std::max; 

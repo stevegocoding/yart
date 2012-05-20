@@ -28,8 +28,8 @@ set(CORE_FILES
 	camera.h
 	camera.cpp
 	film.h
-    color.h
-    color.cpp
+	color.h
+	color.cpp
 	geometry.h
 	geometry.cpp
 	transform.h
@@ -40,8 +40,8 @@ set(CORE_FILES
 	rng.cpp
 	monte_carlo.h
 	monte_carlo.cpp
-    shape.h
-    shape.cpp
+	shape.h
+	shape.cpp
 	reflection.h
 	reflection.cpp
 	light.h
@@ -50,6 +50,9 @@ set(CORE_FILES
 	ray.cpp
 	scene_obj.h
 	scene_obj.cpp
+	render_target.h
+	render_target.cpp
+	
 	)
 set(FILM_FILES		
 	film_image.h
@@ -83,6 +86,13 @@ set(SAMPLER_FILES
 	stratified_sampler.cpp
 	)
 
+set(FILTER_FILES
+	box_filter.h
+	box_filter.cpp
+	gaussian_filter.h
+	gaussian_filter.cpp
+	)
+
 add_definitions(-DUNICODE)
 
 source_group("core" FILES ${CORE_FILES})
@@ -92,6 +102,7 @@ source_group("integrators" FILES ${INTEGRATORS_FILES})
 source_group("lights" FILES ${LIGHT_FILES})
 source_group("renderers" FILES ${RENDERER_FILES})
 source_group("samplers" FILES ${SAMPLER_FILES})
+source_group("filters" FILES ${FILTER_FILES})
 
 set(SRC_FILES 
 	${CORE_FILES} 
@@ -101,6 +112,7 @@ set(SRC_FILES
 	${LIGHT_FILES} 
 	${RENDERER_FILES} 
 	${SAMPLER_FILES}
+	${FILTER_FILES}
 	)
 
 add_library(${LIB_TARGET} ${SRC_FILES})

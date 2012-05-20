@@ -16,6 +16,15 @@ inline void rgb_to_xyz(const float rgb[3], float xyz[3])
 	xyz[2] = 0.019334f*rgb[0] + 0.119193f*rgb[1] + 0.950227f*rgb[2];
 }
 
+namespace 
+{
+	enum e_rgb_spectrum_component
+	{
+		r = 0,
+		g = 1, 
+		b = 2
+	}; 
+}
 
 template <int num_samples> 
 class c_coeff_spectrum
@@ -121,6 +130,12 @@ public:
 			ret.c[i] *= scalar; 
 		}
 		return ret; 
+	}
+
+	float operator [] (uint32_t idx) const 
+	{
+		assert(!has_nan() && (idx < num_samples));
+		return c[idx]; 
 	}
 	
 	friend inline c_coeff_spectrum operator * (float scalar, const c_coeff_spectrum& s) 
