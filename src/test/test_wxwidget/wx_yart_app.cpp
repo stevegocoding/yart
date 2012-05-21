@@ -1,5 +1,6 @@
 #include "wx_yart_app.h"
 #include "pch.h"
+#include "color.h"
 #include "camera.h"
 #include "rng.h"
 #include "integrator.h"
@@ -9,6 +10,7 @@
 
 #include "bg.xpm"
 
+typedef boost::scoped_array<c_spectrum> spectrum_array;
 
 void c_render_thread::set_pixel(int x, int y, int red, int green, int blue)
 {
@@ -19,24 +21,29 @@ void c_render_thread::set_pixel(int x, int y, int red, int green, int blue)
 void *c_render_thread::Entry()
 {
 	//////////////////////////////////////////////////////////////////////////
-	// Generate the rays
+	// Ray Tracing and Rendering
 	//////////////////////////////////////////////////////////////////////////
-	/*
-	int sc = 0; 
-	samples_array_ptr samples_array = orig_sample->duplicate(sppx*sppy); 
-	while ((sc = sampler->get_current_pixel_samples(samples_array, rng)) > 0)
+	c_rng rng(2047); 
+	
+	int num_pixel_samples = 0; 
+	int max_samples = m_main_sampler->get_max_num_samples(); 
+	samples_array_ptr samples_array = m_origin_sample->duplicate(max_samples); 
+	spectrum_array ls(new c_spectrum[max_samples]); 
+	while ((num_pixel_samples = m_main_sampler->get_current_pixel_samples(samples_array, rng)) > 0)
 	{
-		for (uint32_t j = 0; j < sppx * sppy; ++j)
+		for (int j = 0; j < num_pixel_samples; ++j)
 		{
 			c_ray r; 
-			cam->generate_ray(samples_array[j], &r); 
+			m_camera->generate_ray(samples_array[j], &r); 
+			ls[j] = c_spectrum(0, 0, 0); 
+			m_camera->get_render_target()->add_sample(samples_array[j], ls[j]);
 		}
-	}
-	*/ 
+	} 
 
-	static int a = 0;
-	a++; 
-	
+	//////////////////////////////////////////////////////////////////////////
+	// Update the window 
+	////////////////////////////////////////////////////////////////////////// 
+	window->update_display(m_render_target);
 	
 	return NULL; 
 }
@@ -281,4 +288,31 @@ void c_wx_render_window::start_render()
 	m_render_thread->Create();
 	m_render_thread->SetPriority(20); 
 	m_render_thread->Run(); 
+}
+
+void c_wx_render_window::update_display(render_target_ptr& render_target)
+{
+	pixels_buf_ptr pixels = render_target->get_pixels(); 
+	
+	wxClientDC cdc(this);
+	DoPrepareDC(cdc); 
+	wxBufferedDC bufferedDC(&cdc, *m_bitmap);
+	
+	// Draw all the pixels
+	int res_x = render_target->res_x(); 
+	int res_y = render_target->res_y(); 
+	for (int y = 0; y < res_y; ++y)
+	{
+		for (int x = 0; x < res_x; ++x)
+		{
+			c_pixel pixel = pixels[y * res_x + x];
+			unsigned char r = pixel.l_rgb[0] * 255; 
+			unsigned char g = pixel.l_rgb[1] * 255; 
+			unsigned char b = pixel.l_rgb[2] * 255;
+
+			wxPen pen(wxColour(r, g, b));
+			bufferedDC.SetPen(pen); 
+			bufferedDC.DrawPoint(x, y); 
+		}
+	}
 }

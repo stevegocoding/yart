@@ -100,6 +100,14 @@ void c_bitmap_render_target::get_sample_extent(int *x_start, int *x_end, int *y_
 	*y_end = (int)std::floorf(m_y_pixel_start + 0.5f + m_y_pixel_count + m_filter->y_width);	
 }
 
+void c_bitmap_render_target::get_pixel_extent(int *x_start, int *x_end, int *y_start, int *y_end) const 
+{
+	*x_start = m_x_pixel_start; 
+	*x_end = m_x_pixel_start + m_x_pixel_count; 
+	*y_start = m_y_pixel_start; 
+	*y_end = m_y_pixel_start + m_y_pixel_count; 
+}
+
 //////////////////////////////////////////////////////////////////////////
 
 render_target_ptr make_bitmap_render_target(int res_x, int res_y, filter_ptr filter)

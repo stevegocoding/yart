@@ -70,7 +70,6 @@ private:
 	c_wx_render_window *render_window; 
 
 	DECLARE_EVENT_TABLE(); 
-	
 };
 
 class c_wx_render_window : public wxScrolledWindow
@@ -85,11 +84,13 @@ public:
 	void start_render();
 	void pause_render(); 
 	void resume_render(); 
+	void update_display(render_target_ptr& render_target); 
 
 	virtual void OnDraw(wxDC& dc);
 	void OnRenderCompleted( wxCommandEvent& event );
 	void OnTimerUpdate( wxTimerEvent& event );
-	void OnNewPixel( wxCommandEvent& event );
+	// void OnNewPixel( wxCommandEvent& event );
+	
 
 protected:
 	wxBitmap *m_bitmap; 
@@ -98,7 +99,6 @@ protected:
 	c_render_thread *m_render_thread; 
 	
 	// DECLARE_EVENT_TABLE()
-
 
 	//////////////////////////////////////////////////////////////////////////
 	// Renderer Objects 

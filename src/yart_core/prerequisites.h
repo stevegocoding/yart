@@ -26,8 +26,8 @@ class c_stratified_sampler;
 
 class c_filter; 
 
-class c_rbg_spectrum; 
-typedef c_rbg_spectrum c_spectrum; 
+class c_rgb_spectrum; 
+typedef c_rgb_spectrum c_spectrum; 
 
 class c_integrator;
 class c_surface_integrator; 

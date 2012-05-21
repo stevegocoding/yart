@@ -148,20 +148,27 @@ protected:
 	float c[num_samples];
 };
 
-class c_rbg_spectrum : public c_coeff_spectrum<3> 
+class c_rgb_spectrum : public c_coeff_spectrum<3> 
 {
 	using c_coeff_spectrum<3>::c; 
 	typedef c_coeff_spectrum<3> super;
 	
 public:
-	explicit c_rbg_spectrum(float v = 0.0f) 
+	explicit c_rgb_spectrum(float v = 0.0f) 
 		: super(v)
 	{
 	}
 	
-	c_rbg_spectrum(const c_coeff_spectrum<3>& other)
+	c_rgb_spectrum(const c_coeff_spectrum<3>& other)
 		: super(other) 
 	{}
+
+	c_rgb_spectrum(float _r, float _g, float _b)
+	{
+		c[r] = _r; 
+		c[g] = _g; 
+		c[b] = _b;
+	}
 	
 	bool has_nan() const 
 	{

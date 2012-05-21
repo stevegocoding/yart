@@ -16,6 +16,8 @@ public:
 
 	virtual float generate_ray(const c_camera_sample& cam_sample, c_ray *ray) const = 0;
 
+	render_target_ptr get_render_target() const { return m_render_target; }
+
 protected:
 	render_target_ptr m_render_target; 
 	c_transform m_camera_to_world; 
