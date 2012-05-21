@@ -6,8 +6,8 @@
 class c_camera
 {
 public:
-	explicit c_camera(const c_transform& cam_to_world, const film_ptr& film)
-		: m_film(film)
+	explicit c_camera(const c_transform& cam_to_world, const render_target_ptr& film)
+		: m_render_target(film)
 		, m_camera_to_world(cam_to_world)
 	{
 	}
@@ -17,7 +17,7 @@ public:
 	virtual float generate_ray(const c_camera_sample& cam_sample, c_ray *ray) const = 0;
 
 protected:
-	film_ptr m_film; 
+	render_target_ptr m_render_target; 
 	c_transform m_camera_to_world; 
 };
 
@@ -25,7 +25,7 @@ class c_projective_camera : public c_camera
 {
 	typedef c_camera super;
 public:
-	c_projective_camera(const c_transform& cam_to_world, const c_transform& proj, const float screen_wnd[4], float lensr, float focal_d, film_ptr& film);
+	c_projective_camera(const c_transform& cam_to_world, const c_transform& proj, const float screen_wnd[4], float lensr, float focal_d, render_target_ptr& film);
 	
 protected:
 	// Projection Transformation
@@ -39,7 +39,7 @@ class c_perspective_camera : public c_projective_camera
 {
 	typedef c_projective_camera super; 
 public:
-	c_perspective_camera(const c_transform& cam_to_world, const float screen_wnd[4], float lensr, float focal_d, float fov, film_ptr& film);
+	c_perspective_camera(const c_transform& cam_to_world, const float screen_wnd[4], float lensr, float focal_d, float fov, render_target_ptr& film);
 	virtual float generate_ray(const c_camera_sample& cam_sample, c_ray *ray) const; 
 
 private:

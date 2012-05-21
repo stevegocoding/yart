@@ -13,7 +13,7 @@ using namespace boost;
 class c_ray;
 class c_transform;
 
-class c_film;
+class c_render_target;
 class c_camera;
 class c_perspective_camera;
 
@@ -69,7 +69,7 @@ typedef shared_ptr<c_assimp_mesh_impl> assimp_mesh_impl_ptr;
 typedef shared_ptr<c_assimp_face_impl> assimp_face_impl_ptr;
 typedef shared_ptr<c_scene_object> scene_object_ptr;
 
-typedef shared_ptr<c_film> film_ptr;
+typedef shared_ptr<c_render_target> render_target_ptr;
 typedef shared_ptr<c_camera> camera_ptr;
 
 typedef shared_array<c_sample> samples_array_ptr; 

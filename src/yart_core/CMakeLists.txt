@@ -27,7 +27,6 @@ set(CORE_FILES
 	rt_main.cpp
 	camera.h
 	camera.cpp
-	film.h
 	color.h
 	color.cpp
 	geometry.h
@@ -52,11 +51,8 @@ set(CORE_FILES
 	scene_obj.cpp
 	render_target.h
 	render_target.cpp
-	
-	)
-set(FILM_FILES		
-	film_image.h
-	film_image.cpp
+	filter.h
+	filter.cpp
 	)
 set(GEO_FILES
 	sphere.h
@@ -96,7 +92,6 @@ set(FILTER_FILES
 add_definitions(-DUNICODE)
 
 source_group("core" FILES ${CORE_FILES})
-source_group("film" FILES ${FILM_FILES})
 source_group("geometry" FILES ${GEO_FILES})
 source_group("integrators" FILES ${INTEGRATORS_FILES})
 source_group("lights" FILES ${LIGHT_FILES})
@@ -106,7 +101,6 @@ source_group("filters" FILES ${FILTER_FILES})
 
 set(SRC_FILES 
 	${CORE_FILES} 
-	${FILM_FILES} 
 	${GEO_FILES} 
 	${INTEGRATORS_FILES} 
 	${LIGHT_FILES} 

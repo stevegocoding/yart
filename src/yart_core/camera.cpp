@@ -1,6 +1,6 @@
 #include "camera.h"
 #include "sampler.h"
-#include "film.h"
+#include "render_target.h"
 #include "geometry.h"
 
 #include "cml/matrix/inverse.h"
@@ -11,14 +11,14 @@ c_projective_camera::c_projective_camera(
 	const float screen_wnd[4], 
 	float lensr, 
 	float focal_d, 
-	film_ptr& film)
+	render_target_ptr& film)
 	: super(cam_to_world, film)
 	, m_cam_to_screen(proj)
 	, m_lens_radius(lensr)
 	, m_focal_distance(focal_d)
 {
-	m_screen_to_raster = make_scale((float)(m_film->res_x()), 
-									(float)(m_film->res_y()), 
+	m_screen_to_raster = make_scale((float)(m_render_target->res_x()), 
+									(float)(m_render_target->res_y()), 
 									1.0f) * 
 						 make_scale(1.0f / (screen_wnd[1] - screen_wnd[0]), 1.0f / (screen_wnd[2] - screen_wnd[3]), 1.0f) * 
 						 make_translate(vector3f(-screen_wnd[0], -screen_wnd[3], 0)); 
@@ -35,7 +35,7 @@ c_perspective_camera::c_perspective_camera(
 	float lensr, 
 	float focal_d, 
 	float fov, 
-	film_ptr& film)
+	render_target_ptr& film)
 	: super(cam_to_world, make_perspective_proj(fov, 0.1f, 1000.0f), screen_wnd, lensr, focal_d, film)
 {
 	//vector3f right = m_raster_to_camera.transform_pt(vector3f(1,0,0));

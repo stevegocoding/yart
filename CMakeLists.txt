@@ -25,10 +25,10 @@ endif()
 set(DEP_DLL_DEBUG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deps/bin/debug/)
 set(DEP_DLL_REL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/deps/bin/release/)
 
+include_directories(${CMAKE_SOURCE_DIR}/src/yart_core/)
 include_directories(${PROJECT_SOURCE_DIR}/deps/include/)
 link_directories(${PROJECT_SOURCE_DIR}/deps/lib/debug)
 link_directories(${PROJECT_SOURCE_DIR}/deps/lib/release)
-
 
 SET(YART_CORE_TARGET "")
 

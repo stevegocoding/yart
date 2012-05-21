@@ -1,9 +1,10 @@
-#include "../../yart_core/pch.h"
-#include "../../yart_core/camera.h"
-#include "../../yart_core/rng.h"
-#include "../../yart_core/integrator.h"
-#include "../../yart_core/stratified_sampler.h"
-#include "../../yart_core/film.h"
+#include "pch.h"
+#include "camera.h"
+#include "rng.h"
+#include "integrator.h"
+#include "stratified_sampler.h"
+#include "render_target.h"
+#include "filter.h"
 
 #include "cml/cml.h"
 #include <iomanip>
@@ -151,7 +152,8 @@ int main(int argc, char **argv)
 	sample_ptr orig_sample = sample_ptr(new c_sample(sampler, surface_integrator_ptr(), volume_integrator_ptr(), scene_ptr()));
 		
 	// Create the camera 
-	film_ptr film = film_ptr(new c_film(res_x, res_y));
+	filter_ptr filter = make_box_filter(0.5f, 0.5f);
+	render_target_ptr film = make_bitmap_render_target(res_x, res_y, filter);
 	matrix44f m;
 	cml::matrix_translation(m, vector3f(0,0,0));
 	c_transform world_to_cam(m); 
@@ -173,8 +175,6 @@ int main(int argc, char **argv)
 			print_ray(cout, r); 
 		}
 	}
-
 	
-
 	return 0;
 }

@@ -1,21 +1,25 @@
 set(TARGET test_wxwidget)
 project(test_wxwidget)
 
-set(SRCS minimal.cpp)
+set(SRC_FILES
+	wx_yart_app.h 
+	wx_yart_app.cpp)
 
 if(WIN32)
-  set(SRCS ${SRCS} minimal.rc)
+  set(SRC_FILES ${SRC_FILES} minimal.rc)
 endif(WIN32)
 
 add_definitions(-DUNICODE)
 
 include(${wxWidgets_USE_FILE})
 
-#include_directories(${CMAKE_SOURCE_DIR/src})
+link_directories(${CMAKE_BINARY_DIR}/lib)
 
-add_executable(${TARGET} WIN32 ${SRCS})
+add_executable(${TARGET} WIN32 ${SRC_FILES})
 set_target_properties(${TARGET} PROPERTIES DEBUG_POSTFIX "_debug")
-target_link_libraries(${TARGET} ${wxWidgets_LIBRARIES})
+
+target_link_libraries(${TARGET} debug libyart_d.lib ${wxWidgets_LIBRARIES})
+target_link_libraries(${TARGET} optimized libyart.lib ${wxWidgets_LIBRARIES})
 	
 # Installation
 install(TARGETS ${TARGET} RUNTIME DESTINATION bin/${TARGET})

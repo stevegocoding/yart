@@ -18,6 +18,7 @@ struct c_pixel
 	float splat_rgb[3]; 
 	float unused;
 };
+typedef boost::shared_array<c_pixel> pixels_buf_ptr; 
 
 class c_render_target
 {
@@ -28,6 +29,10 @@ public:
 	{}
 	
 	virtual void add_sample(const c_camera_sample& sample, const c_spectrum& radiance) = 0; 
+	virtual void get_sample_extent(int *x_start, int *x_end, int *y_start, int *y_end) const = 0; 
+
+	int res_x() const { return m_resolution_x; }
+	int res_y() const { return m_resolution_y; }
 
 protected:
 	int m_resolution_x; 
@@ -38,28 +43,21 @@ class c_bitmap_render_target : public c_render_target
 {
 	typedef c_render_target super; 
 
-public:
-	class c_bitmap_impl
-	{
-		virtual void plot_pixel(int x, int y, int rgb) {}		
-	};
-	typedef boost::shared_ptr<c_bitmap_impl> bitmap_impl_ptr; 
-	
 public: 
-	c_bitmap_render_target(int res_x, int res_y, filter_ptr filter, const float window[4], bitmap_impl_ptr bitmap_impl); 
+	c_bitmap_render_target(int res_x, int res_y, filter_ptr filter, const float window[4]); 
 	virtual void add_sample(const c_camera_sample& sample, const c_spectrum& radiance);
-	
-	
+	virtual void get_sample_extent(int *x_start, int *x_end, int *y_start, int *y_end) const;
+
 protected: 
-	filter_ptr m_filter; 
+	filter_ptr m_filter;
 	int m_x_pixel_start, m_y_pixel_start, m_x_pixel_count, m_y_pixel_count; 
 
 	filter_table_ptr m_filter_table; 
-	
-	float m_window[4]; 
-	bitmap_impl_ptr m_bitmap_impl; 
 
-	typedef boost::shared_array<c_pixel> pixels_buf_ptr; 
+	float m_window[4]; 
+
 	pixels_buf_ptr m_pixels_buf; 
-	
+
 };
+
+render_target_ptr make_bitmap_render_target(int res_x, int res_y, filter_ptr filter); 

@@ -4,10 +4,10 @@
 #include "filter.h"
 
 static const int FILTER_KERNEL_SIZE = 16; 
-c_bitmap_render_target::c_bitmap_render_target(int res_x, int res_y, filter_ptr filter, const float window[4], bitmap_impl_ptr bitmap_impl)
+c_bitmap_render_target::c_bitmap_render_target(int res_x, int res_y, filter_ptr filter, const float window[4])
 	: super(res_x, res_y)
 	, m_filter(filter)
-{
+{	
 	memcpy_s(m_window, 4*sizeof(float), window, 4*sizeof(float));
 	
 	// Compute image extent with the window 
@@ -18,7 +18,6 @@ c_bitmap_render_target::c_bitmap_render_target(int res_x, int res_y, filter_ptr 
 	
 	// Allocate the memory for pixels 
 	m_pixels_buf = pixels_buf_ptr(new c_pixel[m_x_pixel_count, m_y_pixel_count]);
-	
 
 	// Pre-compute the filter weight table
 	m_filter_table = filter_table_ptr(new float[FILTER_KERNEL_SIZE * FILTER_KERNEL_SIZE]);
@@ -64,13 +63,13 @@ void c_bitmap_render_target::add_sample(const c_camera_sample& sample, const c_s
 	for (int x = 0; x <= x1; ++x)
 	{
 		float fx = fabsf((x - d_img_x) * m_filter->inv_x_width * FILTER_KERNEL_SIZE);
-		ifx[x-x0] = min((int)std::floorf(fx), FILTER_KERNEL_SIZE);
+		ifx[x-x0] = min((int)std::floorf(fx), FILTER_KERNEL_SIZE-1);
 	}
 
 	for (int y = y0; y <= y1; ++y)
 	{
 		float fy = fabsf((y - d_img_y) * m_filter->inv_y_width * FILTER_KERNEL_SIZE);
-		ify[y-y0] = min((int)std::floorf(fy), FILTER_KERNEL_SIZE);
+		ify[y-y0] = min((int)std::floorf(fy), FILTER_KERNEL_SIZE-1);
 	}
 
 	for (int y = y0; y <= y1; ++y)
@@ -90,4 +89,22 @@ void c_bitmap_render_target::add_sample(const c_camera_sample& sample, const c_s
 			pixel.weighted_sum += filter_weight;
 		}
 	}
+}
+
+void c_bitmap_render_target::get_sample_extent(int *x_start, int *x_end, int *y_start, int *y_end) const 
+{
+	*x_start = (int)std::floorf(m_x_pixel_start + 0.5f - m_filter->x_width);
+	*x_end = (int)std::floorf(m_x_pixel_start + 0.5f + m_x_pixel_count + m_filter->x_width);
+
+	*y_start = (int)std::floorf(m_y_pixel_start + 0.5f - m_filter->y_width);
+	*y_end = (int)std::floorf(m_y_pixel_start + 0.5f + m_y_pixel_count + m_filter->y_width);	
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+render_target_ptr make_bitmap_render_target(int res_x, int res_y, filter_ptr filter)
+{
+	float wnd[4] = {0.0, 1.0f, 0.0f, 1.0f}; 
+	render_target_ptr ret = render_target_ptr(new c_bitmap_render_target(res_x, res_y, filter, wnd)); 
+	return ret; 
 }
