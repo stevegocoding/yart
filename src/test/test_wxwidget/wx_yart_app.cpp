@@ -35,7 +35,7 @@ void *c_render_thread::Entry()
 		{
 			c_ray r; 
 			m_camera->generate_ray(samples_array[j], &r); 
-			ls[j] = c_spectrum(0, 0, 0); 
+			ls[j] = c_spectrum(0.5f, 0.5f, 0.5f); 
 			m_camera->get_render_target()->add_sample(samples_array[j], ls[j]);
 		}
 	} 
@@ -43,14 +43,14 @@ void *c_render_thread::Entry()
 	//////////////////////////////////////////////////////////////////////////
 	// Update the window 
 	////////////////////////////////////////////////////////////////////////// 
-	window->update_display(m_render_target);
+	m_render_window->update_display(m_render_target);
 	
 	return NULL; 
 }
 
 void c_render_thread::OnExit()
 {
-	
+	int a = 0; 
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -284,7 +284,7 @@ void c_wx_render_window::start_render()
 	m_update_timer.Start(250); 
 	m_timer = new wxStopWatch(); 
 	
-	m_render_thread = new c_render_thread(m_main_sampler, m_origin_sample, m_camera, m_render_target); 
+	m_render_thread = new c_render_thread(this, m_main_sampler, m_origin_sample, m_camera, m_render_target); 
 	m_render_thread->Create();
 	m_render_thread->SetPriority(20); 
 	m_render_thread->Run(); 
@@ -305,11 +305,11 @@ void c_wx_render_window::update_display(render_target_ptr& render_target)
 	{
 		for (int x = 0; x < res_x; ++x)
 		{
-			c_pixel pixel = pixels[y * res_x + x];
+			c_render_pixel pixel = pixels[y * res_x + x];
 			unsigned char r = pixel.l_rgb[0] * 255; 
 			unsigned char g = pixel.l_rgb[1] * 255; 
 			unsigned char b = pixel.l_rgb[2] * 255;
-
+			
 			wxPen pen(wxColour(r, g, b));
 			bufferedDC.SetPen(pen); 
 			bufferedDC.DrawPoint(x, y); 

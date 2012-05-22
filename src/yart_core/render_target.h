@@ -3,9 +3,9 @@
 #include "boost/array.hpp"
 #include "prerequisites.h"
 
-struct c_pixel
+struct c_render_pixel
 {
-	c_pixel()
+	c_render_pixel()
 	{
 		::memset(l_rgb, 0, 3*sizeof(float));
 		::memset(splat_rgb, 0, 3*sizeof(float));
@@ -18,7 +18,7 @@ struct c_pixel
 	float splat_rgb[3]; 
 	float unused;
 };
-typedef boost::shared_array<c_pixel> pixels_buf_ptr; 
+typedef boost::shared_array<c_render_pixel> pixels_buf_ptr; 
 
 class c_render_target
 {
@@ -53,6 +53,7 @@ public:
 	virtual void get_sample_extent(int *x_start, int *x_end, int *y_start, int *y_end) const;
 	virtual void get_pixel_extent(int *x_start, int *x_end, int *y_start, int *y_end) const;
 	virtual pixels_buf_ptr get_pixels() { return m_pixels_buf; }
+	filter_table_ptr get_filter_table() { return m_filter_table; }
 
 protected: 
 	filter_ptr m_filter;

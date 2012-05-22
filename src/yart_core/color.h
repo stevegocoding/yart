@@ -165,9 +165,9 @@ public:
 
 	c_rgb_spectrum(float _r, float _g, float _b)
 	{
-		c[r] = _r; 
-		c[g] = _g; 
-		c[b] = _b;
+		c[0] = _r; 
+		c[1] = _g; 
+		c[2] = _b;
 	}
 	
 	bool has_nan() const 

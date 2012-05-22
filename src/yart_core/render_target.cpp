@@ -17,7 +17,7 @@ c_bitmap_render_target::c_bitmap_render_target(int res_x, int res_y, filter_ptr 
 	m_y_pixel_count = max(1, (int)ceilf(m_resolution_y * m_window[3] - m_y_pixel_start));
 	
 	// Allocate the memory for pixels 
-	m_pixels_buf = pixels_buf_ptr(new c_pixel[m_x_pixel_count, m_y_pixel_count]);
+	m_pixels_buf = pixels_buf_ptr(new c_render_pixel[m_x_pixel_count * m_y_pixel_count]);
 
 	// Pre-compute the filter weight table
 	m_filter_table = filter_table_ptr(new float[FILTER_KERNEL_SIZE * FILTER_KERNEL_SIZE]);
@@ -31,11 +31,13 @@ c_bitmap_render_target::c_bitmap_render_target(int res_x, int res_y, filter_ptr 
 			*fp++ = m_filter->evaluate(fx, fy);
 		}
 	} 
+
+	
 }
 
 void c_bitmap_render_target::add_sample(const c_camera_sample& sample, const c_spectrum& radiance)
 {
-	// Convert the continuous image (x, y) to descrete image (x, y)
+	// Convert the continuous image (x, y) to discrete image (x, y)
 	float d_img_x = sample.image_x - 0.5f; 
 	float d_img_y = sample.image_y - 0.5f; 
   
@@ -45,7 +47,7 @@ void c_bitmap_render_target::add_sample(const c_camera_sample& sample, const c_s
 	int y1 = (int)std::floorf(d_img_y + m_filter->y_width); 
 
 	x0 = max(x0, m_x_pixel_start); 
-	x1 = min(x1,m_x_pixel_start + m_x_pixel_count - 1);
+	x1 = min(x1, m_x_pixel_start + m_x_pixel_count - 1);
 	y0 = max(y0, m_y_pixel_start); 
 	y1 = min(y1, m_y_pixel_start + m_y_pixel_count - 1); 
 
@@ -57,10 +59,13 @@ void c_bitmap_render_target::add_sample(const c_camera_sample& sample, const c_s
 	
 	// Precompute filter table offsets 
 
-	int *ifx = (int*)_alloca(sizeof(int) * (x1-x0+1)); 
-	int *ify = (int*)_alloca(sizeof(int) * (y1-y0+1));  
+	//int *ifx = (int*)_alloca(sizeof(int) * (x1-x0+1)); 
+	//int *ify = (int*)_alloca(sizeof(int) * (y1-y0+1));  
 
-	for (int x = 0; x <= x1; ++x)
+	int *ifx = new int[x1-x0+1];
+	int *ify = new int[y1-y0+1];
+
+	for (int x = x0; x <= x1; ++x)
 	{
 		float fx = fabsf((x - d_img_x) * m_filter->inv_x_width * FILTER_KERNEL_SIZE);
 		ifx[x-x0] = min((int)std::floorf(fx), FILTER_KERNEL_SIZE-1);
@@ -71,7 +76,7 @@ void c_bitmap_render_target::add_sample(const c_camera_sample& sample, const c_s
 		float fy = fabsf((y - d_img_y) * m_filter->inv_y_width * FILTER_KERNEL_SIZE);
 		ify[y-y0] = min((int)std::floorf(fy), FILTER_KERNEL_SIZE-1);
 	}
-
+ 
 	for (int y = y0; y <= y1; ++y)
 	{
 		for (int x = x0; x <= x1; ++x)
@@ -82,13 +87,16 @@ void c_bitmap_render_target::add_sample(const c_camera_sample& sample, const c_s
 			
 			// Update pixel values with filtered sample contribution
 			int pixel_idx = m_x_pixel_count * (y - m_y_pixel_start) + (x - m_x_pixel_start); 
-			c_pixel& pixel = m_pixels_buf[pixel_idx];
+			c_render_pixel& pixel = m_pixels_buf[pixel_idx];
 			pixel.l_rgb[0] += filter_weight * radiance[r];
 			pixel.l_rgb[1] += filter_weight * radiance[g];
 			pixel.l_rgb[2] += filter_weight * radiance[b];
 			pixel.weighted_sum += filter_weight;
 		}
 	}
+
+ 	delete[] ifx; 
+	delete[] ify; 
 }
 
 void c_bitmap_render_target::get_sample_extent(int *x_start, int *x_end, int *y_start, int *y_end) const 

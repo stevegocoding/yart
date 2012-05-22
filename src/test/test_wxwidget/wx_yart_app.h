@@ -13,8 +13,9 @@ class c_wx_yart_app;
 class c_render_thread : public wxThread
 {
 public: 
-	c_render_thread(sampler_ptr main_sampler, sample_ptr origin_sample, camera_ptr cam, render_target_ptr render_target)
-		: m_main_sampler(main_sampler)
+	c_render_thread(c_wx_render_window *render_window, sampler_ptr main_sampler, sample_ptr origin_sample, camera_ptr cam, render_target_ptr render_target)
+		: m_render_window(render_window)
+		, m_main_sampler(main_sampler)
 		, m_origin_sample(origin_sample)
 		, m_camera(cam)
 		, m_render_target(render_target)
@@ -27,7 +28,7 @@ public:
 	virtual void set_pixel(int x, int y, int red, int green, int blue);
 
 private:
-	c_wx_render_window *window;
+	c_wx_render_window *m_render_window;
 
 	wxStopWatch *m_timer; 
 	long m_last_update_time; 
