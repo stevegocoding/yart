@@ -24,6 +24,7 @@ void *c_render_thread::Entry()
 	// Ray Tracing and Rendering
 	//////////////////////////////////////////////////////////////////////////
 	c_rng rng(2047); 
+	c_rng rng2(1024); 
 	
 	int num_pixel_samples = 0; 
 	int max_samples = m_main_sampler->get_max_num_samples(); 
@@ -35,15 +36,21 @@ void *c_render_thread::Entry()
 		{
 			c_ray r; 
 			m_camera->generate_ray(samples_array[j], &r); 
-			ls[j] = c_spectrum(0.5f, 0.5f, 0.5f); 
+			float red = rng2.random_float(); 
+			float green = rng2.random_float(); 
+			float blue = rng2.random_float();
+			ls[j] = c_spectrum(red, green, blue); 
 			m_camera->get_render_target()->add_sample(samples_array[j], ls[j]);
 		}
-	} 
 
-	//////////////////////////////////////////////////////////////////////////
-	// Update the window 
-	////////////////////////////////////////////////////////////////////////// 
-	m_render_window->update_display(m_render_target);
+		//////////////////////////////////////////////////////////////////////////
+		// Update the window 
+		////////////////////////////////////////////////////////////////////////// 
+		m_render_window->update_display(m_render_target);
+		
+	} 
+	
+
 	
 	return NULL; 
 }
@@ -178,8 +185,8 @@ c_wx_render_window::c_wx_render_window(wxWindow *parent)
 	: wxScrolledWindow(parent)
 	, m_res_x(64)
 	, m_res_y(64)
-	, m_sppx(4)
-	, m_sppy(4)
+	, m_sppx(1)
+	, m_sppy(1)
 	, m_bitmap(NULL)
 	, m_timer(NULL)
 	, m_render_thread(NULL)
@@ -306,9 +313,10 @@ void c_wx_render_window::update_display(render_target_ptr& render_target)
 		for (int x = 0; x < res_x; ++x)
 		{
 			c_render_pixel pixel = pixels[y * res_x + x];
-			unsigned char r = pixel.l_rgb[0] * 255; 
-			unsigned char g = pixel.l_rgb[1] * 255; 
-			unsigned char b = pixel.l_rgb[2] * 255;
+			float inv_w = 1.0f / pixel.weighted_sum; 
+			unsigned char r = pixel.l_rgb[0] * inv_w * 255; 
+			unsigned char g = pixel.l_rgb[1] * inv_w * 255; 
+			unsigned char b = pixel.l_rgb[2] * inv_w * 255;
 			
 			wxPen pen(wxColour(r, g, b));
 			bufferedDC.SetPen(pen); 
