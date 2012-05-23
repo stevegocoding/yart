@@ -16,6 +16,25 @@ void c_triangle_mesh::alloc_triangles_array()
 
 //////////////////////////////////////////////////////////////////////////
 
+void c_triangle_face::get_uv(float uv[3][2]) const 
+{
+	if (m_mesh->has_uvs()) 
+	{
+		triangle_face face = m_mesh->get_face(m_face_idx);
+		uv[0][0] = m_mesh->get_vert_uv(face[0])[0];
+		uv[0][1] = m_mesh->get_vert_uv(face[0])[1];
+		uv[1][0] = m_mesh->get_vert_uv(face[1])[0]; 
+		uv[1][1] = m_mesh->get_vert_uv(face[1])[1];
+		uv[2][0] = m_mesh->get_vert_uv(face[2])[0]; 
+		uv[2][1] = m_mesh->get_vert_uv(face[2])[1];
+	}
+	else 
+	{
+		uv[0][0] = 0.f;	uv[0][1] = 0.f; 
+		uv[1][0] = 1.f; uv[1][1] = 0.f; 
+		uv[2][0] = 1.f; uv[2][1] = 1.f; 
+	}
+}
 
 bool c_triangle_face::intersects(const c_ray& ray, 
     PARAM_OUT float *t_hit, PARAM_OUT float *ray_epsilon, PARAM_OUT diff_geom_ptr& diff_geom) const 
@@ -55,12 +74,12 @@ bool c_triangle_face::intersects(const c_ray& ray,
         return false; 
     
     // Compute the triangle partial derivatives 
-	/* 
+	
     vector3f dpdu, dpdv; 
     float uvs[3][2];
     get_uv(uvs);
     
-    // Compute deltas for triangle partial derivatives 
+    // Compute deltas for triangle partial derivatives (dpdu, dpdv)
     float du1 = uvs[0][0] - uvs[2][0]; 
     float du2 = uvs[1][0] - uvs[2][0]; 
     float dv1 = uvs[0][1] - uvs[2][1]; 
@@ -79,7 +98,19 @@ bool c_triangle_face::intersects(const c_ray& ray,
 		dpdu = (dv2 * dp1 - dv1 * dp2) * inv_det;
 		dpdv = (-du2 * dp1 + du1 * dp2) * inv_det;
 	}
-	*/
+	
+	// Interpolate $(u,v)$ triangle parametric coordinates
+	float b0 = 1 - b1 - b2; 
+	float tu = b0 * uvs[0][0] + b1 * uvs[1][0] + b2 * uvs[2][0]; 
+	float tv = b0 * uvs[0][1] + b1 * uvs[1][1] + b2 * uvs[2][1]; 
+
+	// Test intersection against alpha texture, if present
+	// @TODO
+
+	
+	// Fill in _DifferentialGeometry_ from triangle hit
+	point3f hit_p = ray.evaluate_t(t);
+	*diff_geom = c_differential_geometry(hit_p, dpdu, dpdv, vector3f(0,0,0), vector3f(0,0,0), tu, tv, this);
 	
 	*t_hit = t; 
 	*ray_epsilon = 1e-3f * *t_hit; 
@@ -87,3 +118,101 @@ bool c_triangle_face::intersects(const c_ray& ray,
     return true; 
 }
 
+void c_triangle_face::get_shading_geometry(const c_transform& o2w, 
+	const c_differential_geometry& diff_geom, 
+	PARAM_OUT c_differential_geometry *shading_dg) const 
+{
+	if (!m_mesh->has_normals() && !m_mesh->has_tengent())
+	{
+		*shading_dg = diff_geom;
+		return;
+	}
+	
+	// Compute barycentric coordinates for point
+	float b[3]; 
+	
+	// Initialize _A_ and _C_ matrices for barycentrics
+	float uv[3][2]; 
+	get_uv(uv); 
+	float A[2][2] =
+	{ { uv[1][0] - uv[0][0], uv[2][0] - uv[0][0] },
+	{ uv[1][1] - uv[0][1], uv[2][1] - uv[0][1] } };
+
+	float C[2] = { diff_geom.u - uv[0][0], diff_geom.v - uv[0][1] };
+	if (!solve_linear_system2x2(A, C, &b[1], &b[2])) {
+		// Handle degenerate parametric mapping
+		b[0] = b[1] = b[2] = 1.f/3.f;
+	}
+	else 
+		b[0] = 1.f - b[1] - b[2];
+	
+	// Use _n_ and _s_ to compute shading tangents for triangle, _ss_ and _ts_
+	triangle_face face = m_mesh->get_face(m_face_idx);
+	
+	vector3f ns; 
+	vector3f ss, ts; 
+	vector3f n1 = m_mesh->get_vert_normal(face[0]); 
+	vector3f n2 = m_mesh->get_vert_normal(face[1]); 
+	vector3f n3 = m_mesh->get_vert_normal(face[2]); 
+	vector3f s1 = m_mesh->get_vert_tengent(face[0]);
+	vector3f s2 = m_mesh->get_vert_tengent(face[1]);
+	vector3f s3 = m_mesh->get_vert_tengent(face[2]);
+	
+	if (m_mesh->has_normals())
+	{
+		ns = o2w.transform_vec3(n1 * b[0] + n2 * b[1] + n3 * b[2]);
+		ns = normalize(ns); 
+	}
+	else 
+		ns = diff_geom.nn; 
+
+	if (m_mesh->has_tengent())
+	{
+		ss = o2w.transform_vec3(s1 * b[0] + s2 * b[1] + s3 * b[2]); 
+		ss = normalize(ss); 
+	}
+	else
+		ss = normalize(diff_geom.dpdu);
+	
+	ts = cross(ss, ns); 
+	if (ts.length_squared() > 0.0f)
+	{
+		ts = normalize(ts); 
+		ss = cross(ts, ns); 
+	}
+	else 
+		build_coord_system(ns, &ss, &ts); 
+
+	vector3f dndu, dndv; 
+	// Compute $\dndu$ and $\dndv$ for triangle shading geometry
+	if (m_mesh->has_normals())
+	{
+		// Compute deltas for triangle partial derivatives of normal
+		float du1 = uv[0][0] - uv[2][0];
+		float du2 = uv[1][0] - uv[2][0];
+		float dv1 = uv[0][1] - uv[2][1];
+		float dv2 = uv[1][1] - uv[2][1];
+		float determinant = du1 * dv2 - dv1 * du2;
+		if (determinant == 0.f)
+			dndu = dndv = vector3f(0,0,0);
+		else 
+		{
+			float inv_det = 1.f / determinant;
+			dndu = ( dv2 * n1 - dv1 * n2) * inv_det;
+			dndv = (-du2 * n1 + du1 * n2) * inv_det;
+		}
+	}
+	else 
+		dndu = dndv = vector3f(0,0,0);
+	
+	vector3f w_dndu = o2w.transform_vec3(dndu); 
+	vector3f w_dndv = o2w.transform_vec3(dndv); 
+	*shading_dg = c_differential_geometry(diff_geom.p, ss, ts, w_dndu, w_dndv, diff_geom.u, diff_geom.v, diff_geom.shape); 
+	
+	shading_dg->dudx = diff_geom.dudx; 
+	shading_dg->dvdx = diff_geom.dvdx; 
+	shading_dg->dudy = diff_geom.dudy; 
+	shading_dg->dvdy = diff_geom.dvdy; 
+	shading_dg->dpdx = diff_geom.dpdx; 
+	shading_dg->dpdy = diff_geom.dpdy;
+}

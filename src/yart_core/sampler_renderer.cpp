@@ -44,12 +44,8 @@ void c_sampler_renderer::render_scene(scene_ptr scene)
 			c_ray r; 
 			m_camera->generate_ray(samples_array[j], &r); 
 
-			scene->
-
 			// ls[j] = c_spectrum(red, green, blue); 
 			m_camera->get_render_target()->add_sample(samples_array[j], ls[j]);
 		}
-	} 
-	
-	
+	} 	
 }

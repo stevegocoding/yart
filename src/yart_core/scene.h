@@ -9,6 +9,8 @@ typedef std::vector<light_ptr> lights_list;
 
 struct c_intersection
 {
+	diff_geom_ptr dg;
+	scene_object_ptr scene_obj; 
 
 };
 

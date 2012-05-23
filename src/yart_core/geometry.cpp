@@ -3,8 +3,8 @@
 
 c_differential_geometry::c_differential_geometry(const point3f& _p, 
 	const vector3f& _dpdu, const vector3f& _dpdv, 
-	vector3f& _dndu, const vector3f& _dndv, 
-	float _u, float _v, shape_ptr& _shape)
+	const vector3f& _dndu, const vector3f& _dndv, 
+	float _u, float _v, const c_shape *_shape)
 	: p(_p)
 	, dpdu(_dpdu), dpdv(_dpdv)
 	, dndu(_dndu), dndv(_dndv)

@@ -3,11 +3,6 @@
 #include "prerequisites.h"
 #include "geometry.h"
 
-struct c_intersection 
-{
-	
-};
-
 class c_scene_object
 {
 public:

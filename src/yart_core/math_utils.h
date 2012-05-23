@@ -70,3 +70,6 @@ inline float clamp(float val, float low, float high)
         else
             return val;
 }
+
+bool solve_linear_system2x2(const float A[2][2], 
+	const float B[2], float *x0, float *x1);

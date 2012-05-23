@@ -18,4 +18,11 @@ public:
 	virtual aabb_ptr calc_local_aabb() const { return aabb_ptr(); }
 
 	virtual void apply_transform(const c_transform& t) {} 
+
+	virtual void get_shading_geometry(const c_transform& o2w, 
+		const c_differential_geometry& diff_geom, 
+		PARAM_OUT c_differential_geometry *shading_dg) const 
+	{
+		*shading_dg = diff_geom; 
+	} 
 };
