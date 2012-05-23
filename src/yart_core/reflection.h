@@ -14,7 +14,18 @@ namespace
 		bsdf_diffuse = 1<<2, 
 		bsdf_specular = 1<<3
 	};
+
+	static const uint32_t MAX_BxDFS = 8; 
 }
+
+class c_bsdf
+{
+public:
+	~c_bsdf() {}
+	
+private:
+	std::vector<bxdf_ptr> m_bxdf_vec; 
+};
 
 class c_bxdf_base
 {

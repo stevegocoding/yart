@@ -21,38 +21,45 @@ set(DEP_LIBS_RELEASE
 	)
 
 set(CORE_FILES
+	camera.cpp
+	camera.h
+	color.cpp
+	color.h
+	filter.cpp
+	filter.h
+	geometry.cpp
+	geometry.h
+	integrator.cpp
+	integrator.h
+	light.cpp
+	light.h
+	math_utils.cpp
+	math_utils.h
+	monte_carlo.cpp
+	monte_carlo.h
 	pch.h
 	prerequisites.h
-	math_utils.h
-	rt_main.cpp
-	camera.h
-	camera.cpp
-	color.h
-	color.cpp
-	geometry.h
-	geometry.cpp
-	transform.h
-	transform.cpp
-	sampler.h
-	sampler.cpp
-	rng.h
-	rng.cpp
-	monte_carlo.h
-	monte_carlo.cpp
-	shape.h
-	shape.cpp
-	reflection.h
-	reflection.cpp
-	light.h
-	light.cpp
-	ray.h
 	ray.cpp
-	scene_obj.h
-	scene_obj.cpp
-	render_target.h
+	ray.h
+	reflection.cpp
+	reflection.h
 	render_target.cpp
-	filter.h
-	filter.cpp
+	render_target.h
+	renderer.cpp
+	renderer.h
+	rng.cpp
+	rng.h
+	rt_main.cpp
+	sampler.cpp
+	sampler.h
+	scene.cpp
+	scene.h
+	scene_obj.cpp
+	scene_obj.h
+	shape.cpp
+	shape.h
+	transform.cpp
+	transform.h
 	)
 set(GEO_FILES
 	sphere.h

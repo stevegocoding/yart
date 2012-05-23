@@ -48,6 +48,9 @@ class c_scene_object;
 class c_instanced_scene_obj; 
 struct c_intersection; 
 
+class c_bsdf;
+class c_bxdf_base; 
+
 typedef shared_ptr<c_transform> transform_ptr; 
 typedef shared_ptr<c_perspective_camera> perspective_camera_ptr;
 typedef shared_ptr<c_rng> rng_ptr;
@@ -72,6 +75,9 @@ typedef shared_ptr<c_triangle_face> triangle_face_ptr;
 typedef shared_ptr<c_assimp_mesh_impl> assimp_mesh_impl_ptr;
 typedef shared_ptr<c_assimp_face_impl> assimp_face_impl_ptr;
 typedef shared_ptr<c_scene_object> scene_object_ptr;
+
+typedef shared_ptr<c_bxdf_base> bxdf_ptr; 
+typedef shared_ptr<c_bsdf> bsdf_ptr;
 
 typedef shared_ptr<c_render_target> render_target_ptr;
 typedef shared_ptr<c_camera> camera_ptr;
