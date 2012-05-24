@@ -103,3 +103,23 @@ void concentric_sample_disk(float u1, float u2, float *dx, float *dy)
     *dx = r * cosf(theta);
     *dy = r * sinf(theta);   
 }
+
+vector3f cosine_sample_hemisphere(float u1, float u2)
+{
+    // ret vector is in hemisphere shading coordinate space
+    vector3f ret; 
+    concentric_sample_disk(u1, u2, &ret[0], &ret[1]); 
+    ret[2] = sqrtf(max(0.0f, 1.0f - ret[0] * ret[0] - ret[1] * ret[1]));
+
+    return ret; 
+}
+
+vector3f uniform_sample_hemisphere(float u1, float u2)
+{
+    float z = u1; 
+    float r = sqrtf(max(0.0f, 1.0f-z*z)); 
+    float phi = 2 * M_PI * u2; 
+    float x = r * cosf(phi);
+    float y = r * sinf(phi);
+    return vector3f(x, y, z); 
+}

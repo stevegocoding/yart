@@ -16,9 +16,8 @@ struct c_intersection
 		
 	}
 
-	
-	
-	
+    bsdf_ptr get_bsdf(const c_ray& ray);
+
 	diff_geom_ptr dg;
 	scene_object_ptr scene_obj; 
 	c_transform world_to_obj;

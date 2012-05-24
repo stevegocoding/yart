@@ -22,6 +22,7 @@ namespace
 	};
 
 	static const float INV_PI = 0.31830988618379067154f; 
+    static const float INV_TWOPI = 0.15915494309189533577f; 
 	static const float INFINITY = std::numeric_limits<float>::infinity();
 }
 

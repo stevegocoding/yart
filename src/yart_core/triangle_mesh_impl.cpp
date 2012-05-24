@@ -55,7 +55,7 @@ point3f c_assimp_mesh_impl::get_vert(uint32_t idx) const
 uv c_assimp_mesh_impl::get_vert_uv(uint32_t vert_idx, uint32_t uv_set) const 
 {
 	assert(m_ai_mesh); 
-	assert(has_uv(idx));
+	assert(has_uv(vert_idx));
 	assert(vert_idx < m_ai_mesh->mNumVertices);
 
 	uv ret(m_ai_mesh->mTextureCoords[uv_set][vert_idx].x, m_ai_mesh->mTextureCoords[uv_set][vert_idx].y); 

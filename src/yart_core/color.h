@@ -100,6 +100,18 @@ public:
 		return ret; 
 	}
 
+    c_coeff_spectrum operator / (float a) const 
+    {
+        assert(!_isnan(a)); 
+        c_coeff_spectrum ret = *this; 
+        for (int i = 0; i < num_samples; ++i)
+        {
+            ret.c[i] /= a; 
+        }
+        assert(!ret.has_nan());
+        return ret; 
+    }
+
 	c_coeff_spectrum operator * (const c_coeff_spectrum& other) const
 	{
 		assert(!other.has_nan());

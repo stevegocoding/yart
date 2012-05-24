@@ -85,6 +85,7 @@ typedef shared_ptr<c_camera> camera_ptr;
 typedef boost::scoped_array<c_spectrum> spectrum_array_ptr; 
 typedef shared_array<c_sample> samples_array_ptr; 
 typedef shared_array<float> samples_buf_ptr; 
+typedef scoped_array<float> samples_buf_temp_ptr;
 
 typedef shared_array<float> filter_table_ptr; 
 
