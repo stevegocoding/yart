@@ -214,6 +214,7 @@ c_spectrum c_bsdf::rho(const vector3f& wo, c_rng& rng, e_bxdf_type flags, int sq
         if (m_bxdf_vec[i]->match_flags(flags))
             ret += m_bxdf_vec[i]->rho(wo, num_samples, samples1); 
     }
+    return ret; 
 }
 
 int c_bsdf::num_bxdf_by_type(e_bxdf_type type) const 
