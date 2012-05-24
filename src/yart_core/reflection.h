@@ -35,10 +35,14 @@ namespace
 
 struct c_bsdf_sample
 {
-    c_bsdf_sample(float u_comp)
-        : u_component(u_comp)
+    c_bsdf_sample(float _u_dir[2], float u_comp)
     {
-        ::memset(u_dir, 0.0f, 2*sizeof(float));
+        assert(_u_dir[0] >= 0.0f && _u_dir[0] < 1.0f);
+        assert(_u_dir[1] >= 0.0f && _u_dir[1] < 1.0f); 
+        assert(u_comp >= 0.0f && u_comp < 1.0f); 
+        u_dir[0] = _u_dir[0]; 
+        u_dir[1] = _u_dir[1];
+        u_component = u_comp; 
     }
     float u_component; 
     float u_dir[2];

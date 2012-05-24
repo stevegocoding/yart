@@ -33,8 +33,12 @@ set(CORE_FILES
 	integrator.h
 	light.cpp
 	light.h
+	material.cpp
+	material.h
 	math_utils.cpp
 	math_utils.h
+	memory.cpp
+	memory.h
 	monte_carlo.cpp
 	monte_carlo.h
 	pch.h
@@ -95,6 +99,11 @@ set(FILTER_FILES
 	gaussian_filter.h
 	gaussian_filter.cpp
 	)
+	
+set(MATERIAL_FILES
+	matte_material.cpp
+	matte_material.h
+	)
 
 add_definitions(-DUNICODE)
 
@@ -105,6 +114,7 @@ source_group("lights" FILES ${LIGHT_FILES})
 source_group("renderers" FILES ${RENDERER_FILES})
 source_group("samplers" FILES ${SAMPLER_FILES})
 source_group("filters" FILES ${FILTER_FILES})
+source_group("materials" FILES ${MATERIAL_FILES})
 
 set(SRC_FILES 
 	${CORE_FILES} 
@@ -114,6 +124,7 @@ set(SRC_FILES
 	${RENDERER_FILES} 
 	${SAMPLER_FILES}
 	${FILTER_FILES}
+	${MATERIAL_FILES}
 	)
 
 add_library(${LIB_TARGET} ${SRC_FILES})
