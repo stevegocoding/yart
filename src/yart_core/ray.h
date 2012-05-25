@@ -10,7 +10,8 @@ public:
 	c_ray(const vector3f& _o = vector3f(), const vector3f& _d = vector3f(), 
 		  float start = 0.0f, float end = std::numeric_limits<float>::infinity(), 
 		  float _t = 0.0f, 
-		  int _depth = 0)
+		  int _depth = 0,
+		  float time = 0.0f)
 		: o(_o)
 		, d(_d)
 		, t_min(start) 

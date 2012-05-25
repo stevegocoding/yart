@@ -11,10 +11,9 @@ public:
 
 	virtual void render_scene(scene_ptr scene); 
 
-	virtual c_spectrum compute_li(scene_ptr scene, const c_ray& ray, sample_ptr sample, const c_rng& rng, c_intersection *isect) const;
+	virtual c_spectrum render_ray(scene_ptr scene, const c_ray& ray, sample_ptr sample, const c_rng& rng, 
+		PARAM_OUT c_intersection *isect) const;
 	
-
-
 private:
 	
 	sampler_ptr m_sampler;

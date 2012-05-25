@@ -7,6 +7,11 @@ c_scene::c_scene()
 
 }
 
+bool c_scene::query_intersection(const c_ray& ray) const 
+{
+	return query_intersection(ray, NULL); 
+}
+
 bool c_scene::query_intersection(const c_ray& ray, PARAM_OUT c_intersection *isect) const 
 {
 	// Brute force search 
@@ -20,12 +25,11 @@ bool c_scene::query_intersection(const c_ray& ray, PARAM_OUT c_intersection *ise
 		shape_ptr shape = (*obj_it)->get_geometry_shape();
 		is_hit = shape->intersects(ray, &t_hit, &ray_eps, diff_geom_ptr()); 
 		
+		if (!isect)
+			return is_hit; 
+		
 		isect->scene_obj = (*obj_it); 
-		
-		
 	}
 
-	
-	
 	return is_hit; 
 }

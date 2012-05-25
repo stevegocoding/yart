@@ -33,6 +33,7 @@ class c_scene
 public:
 	c_scene(); 
 
+	bool query_intersection(const c_ray& ray) const; 
 	bool query_intersection(const c_ray& ray, PARAM_OUT c_intersection *isect) const; 
 	
 private:

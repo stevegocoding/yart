@@ -3,6 +3,7 @@
 #include "boost/shared_ptr.hpp"
 #include "boost/shared_array.hpp"
 #include "boost/scoped_array.hpp"
+#include "boost/pool/object_pool.hpp"
 
 using namespace boost;
 
@@ -30,6 +31,7 @@ class c_filter;
 class c_rgb_spectrum; 
 typedef c_rgb_spectrum c_spectrum; 
 
+class c_renderer; 
 class c_integrator;
 class c_surface_integrator; 
 class c_volume_integrator;
@@ -62,6 +64,7 @@ typedef shared_ptr<c_stratified_sampler> stratified_sampler_ptr;
 
 typedef shared_ptr<c_filter> filter_ptr; 
 
+typedef shared_ptr<c_renderer> renderer_ptr;
 typedef shared_ptr<c_integrator> integrator_ptr; 
 typedef shared_ptr<c_surface_integrator> surface_integrator_ptr; 
 typedef shared_ptr<c_volume_integrator> volume_integrator_ptr;
@@ -90,6 +93,8 @@ typedef shared_array<float> samples_buf_ptr;
 typedef scoped_array<float> samples_buf_temp_ptr;
 
 typedef shared_array<float> filter_table_ptr; 
+
+typedef boost::shared_ptr<boost::pool<> > pool_ptr; 
 
 using std::min;
 using std::max; 
