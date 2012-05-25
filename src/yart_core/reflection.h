@@ -1,6 +1,7 @@
 #pragma once 
 
 #include "prerequisites.h"
+#include "memory.h"
 #include "transform.h"
 #include "color.h"
 #include "math_utils.h" 
@@ -48,10 +49,10 @@ struct c_bsdf_sample
     float u_dir[2];
 }; 
 
-class c_bsdf
+class c_bsdf 
 {
 public:
-    c_bsdf(const diff_geom_ptr& shading_dg, const vector3f& ngeom, float eta); 
+    c_bsdf(const diff_geom_ptr& shading_dg, const vector3f& ngeom, float eta = 1.0f); 
 	~c_bsdf() {}
 
     float eval_pdf(const vector3f& world_wo, const vector3f& world_wi, e_bxdf_type flags = bsdf_all) const; 
@@ -64,6 +65,9 @@ public:
     
     c_spectrum rho(c_rng& rng, e_bxdf_type flags = bsdf_all, int sqrt_samples = 6) const; 
     c_spectrum rho(const vector3f& wo, c_rng& rng, e_bxdf_type flags, int sqrt_samples) const;
+
+	void add_bxdf(c_bxdf_base *bxdf);
+	
     /** 
         Transform vector from world space to local shading space
     */ 
@@ -86,7 +90,7 @@ private:
 
     int num_bxdf_by_type(e_bxdf_type type) const; 
 
-	std::vector<bxdf_ptr> m_bxdf_vec; 
+	std::vector<c_bxdf_base*> m_bxdf_vec; 
 
     // Shading differential geometry
     diff_geom_ptr m_shading_dg; 
@@ -99,7 +103,7 @@ private:
     float m_eta; 
 };
 
-class c_bxdf_base
+class c_bxdf_base  
 {
 public:
 	virtual ~c_bxdf_base() {}
@@ -142,13 +146,16 @@ protected:
 	e_bxdf_type m_type; 
 };
 
-class c_lambertian : public c_bxdf_base
+////////////////////////////////////////////////////////////////////////// 
+
+class c_lambertian : public c_bxdf_base 
 {
 	typedef c_bxdf_base super;
 public:
 	c_lambertian(const c_spectrum& reflectance)
 		: super (e_bxdf_type(bsdf_reflection | bsdf_diffuse))
-		, m_reflectance(reflectance) {}
+		, m_reflectance(reflectance) 
+	{}
 	
 	virtual c_spectrum f(const vector3f& wo, const vector3f& wi) const 
     {

@@ -124,7 +124,7 @@ c_spectrum c_bsdf::sample_f(const vector3f& world_wo, PARAM_OUT vector3f *world_
     }
     int matched_idx = min((int)std::floorf(bsdf_sample.u_component * num_bxdf_matched), num_bxdf_matched-1);
     
-    bxdf_ptr bxdf;
+    c_bxdf_base *bxdf;
     for (uint32_t i = 0; i < m_bxdf_vec.size(); ++i)
     {
         if (m_bxdf_vec[i]->match_flags(flags) && matched_idx-- == 0) 
@@ -226,4 +226,10 @@ int c_bsdf::num_bxdf_by_type(e_bxdf_type type) const
             ++num; 
     }
     return num;
+}
+
+void c_bsdf::add_bxdf(c_bxdf_base *bxdf) 
+{
+	assert(bxdf); 
+	m_bxdf_vec.push_back(bxdf); 
 }

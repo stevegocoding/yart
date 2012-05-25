@@ -35,6 +35,7 @@ class c_surface_integrator;
 class c_volume_integrator;
 
 class c_light; 
+class c_material; 
 class c_aabb; 
 class c_scene;
 class c_shape;
@@ -66,6 +67,7 @@ typedef shared_ptr<c_surface_integrator> surface_integrator_ptr;
 typedef shared_ptr<c_volume_integrator> volume_integrator_ptr;
 
 typedef shared_ptr<c_light> light_ptr;
+typedef shared_ptr<c_material> material_ptr; 
 typedef shared_ptr<c_aabb> aabb_ptr;
 typedef shared_ptr<c_scene> scene_ptr; 
 typedef shared_ptr<c_shape> shape_ptr;
@@ -76,8 +78,8 @@ typedef shared_ptr<c_assimp_mesh_impl> assimp_mesh_impl_ptr;
 typedef shared_ptr<c_assimp_face_impl> assimp_face_impl_ptr;
 typedef shared_ptr<c_scene_object> scene_object_ptr;
 
-typedef shared_ptr<c_bxdf_base> bxdf_ptr; 
-typedef shared_ptr<c_bsdf> bsdf_ptr;
+// typedef shared_ptr<c_bxdf_base> bxdf_ptr; 
+// typedef shared_ptr<c_bsdf> bsdf_ptr;
 
 typedef shared_ptr<c_render_target> render_target_ptr;
 typedef shared_ptr<c_camera> camera_ptr;

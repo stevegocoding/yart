@@ -11,24 +11,42 @@ typedef size_pool_map::iterator size_pool_map_it;
 
 extern size_pool_map g_pools_map; 
 
+char *yart_pool_alloc(size_t size, pool_ptr pool);
+pool_ptr get_pool(size_t size);
+
+#define NEW_BSDF(type, pool) new (yart_pool_alloc(sizeof(type),pool)) type
+#define DELETE_BSDF(type, pool) delete_pooled(type, pool)
+
 template <typename T>
-T *yart_alloc_pool()
+void delete_pooled(T *p, pool_ptr pool)
 {
-    size_pool_map_it it = g_pools_map.find(sizeof(T)); 
-    if (it != g_pools_map.end())
-    {
-        pool_ptr pool = it->second;
-        char *buf = (char*)pool->malloc(); 
-        T *obj = new (buf) T(); 
-        return obj; 
-    }
-
-    // register a pool with a new size
-    size_t new_size = sizeof(T);
-    pool_ptr new_pool = make_shared<boost::pool<> >(new_size);
-    g_pools_map.insert(std::pair<size_t, pool_ptr>(new_size, new_pool)); 
-
-    char *buf = (char*)new_pool->malloc(); 
-    T *obj = new (buf) T(); 
-    return obj; 
+	assert(pool); 
+	p->~T(); 
+	pool->free(p); 
 }
+
+
+template <typename T>
+class c_pool_alloc
+{
+public: 
+	void *operator new (std::size_t size)
+	{
+		if (!size)
+			return NULL;
+		
+		char *buf = yart_pool_alloc(size); 
+		assert(buf); 
+		if (!buf)
+			return NULL; 
+
+		return buf; 
+	}
+	
+	void operator delete (void *p)
+	{
+		pool_ptr pool = get_pool(sizeof(T));
+		assert(pool); 
+		pool->free(p); 
+	}
+};
