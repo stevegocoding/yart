@@ -50,6 +50,8 @@ class c_assimp_face_impl;
 class c_scene_object; 
 class c_instanced_scene_obj; 
 struct c_intersection; 
+struct c_light_sample_record; 
+struct c_bsdf_sample_record; 
 
 class c_bsdf;
 class c_bxdf_base; 
@@ -61,8 +63,6 @@ typedef shared_ptr<c_sample> sample_ptr;
 
 typedef shared_ptr<c_sampler> sampler_ptr;
 typedef shared_ptr<c_stratified_sampler> stratified_sampler_ptr; 
-
-typedef shared_ptr<c_filter> filter_ptr; 
 
 typedef shared_ptr<c_renderer> renderer_ptr;
 typedef shared_ptr<c_integrator> integrator_ptr; 
@@ -80,12 +80,15 @@ typedef shared_ptr<c_triangle_face> triangle_face_ptr;
 typedef shared_ptr<c_assimp_mesh_impl> assimp_mesh_impl_ptr;
 typedef shared_ptr<c_assimp_face_impl> assimp_face_impl_ptr;
 typedef shared_ptr<c_scene_object> scene_object_ptr;
+typedef shared_array<c_light_sample_record> light_sample_record_array_ptr;
+typedef shared_array<c_bsdf_sample_record> bsdf_sample_record_array_ptr;
 
 // typedef shared_ptr<c_bxdf_base> bxdf_ptr; 
 // typedef shared_ptr<c_bsdf> bsdf_ptr;
 
 typedef shared_ptr<c_render_target> render_target_ptr;
 typedef shared_ptr<c_camera> camera_ptr;
+typedef shared_ptr<c_filter> filter_ptr; 
 
 typedef boost::scoped_array<c_spectrum> spectrum_array_ptr; 
 typedef shared_array<c_sample> samples_array_ptr; 

@@ -5,6 +5,7 @@
 #include "transform.h"
 #include "color.h"
 #include "math_utils.h" 
+#include "sampler.h"
 
 namespace 
 {
@@ -34,6 +35,26 @@ namespace
     }
 }
 
+struct c_bsdf_sample_record
+{ 
+	c_bsdf_sample_record()
+		: num_samples(0) 
+		, comp_sample_buf_idx(0)
+		, dir_sample_buf_idx(0)
+	{}
+	
+	c_bsdf_sample_record(uint32_t ns, c_sample *sample) 
+	{
+		num_samples = ns;
+		comp_sample_buf_idx = sample->add_1D(ns);
+		dir_sample_buf_idx = sample->add_2D(ns);
+	}
+	
+	uint32_t num_samples;
+	uint32_t comp_sample_buf_idx;
+	uint32_t dir_sample_buf_idx; 
+};
+
 struct c_bsdf_sample
 {
     c_bsdf_sample(float _u_dir[2], float u_comp)
@@ -45,6 +66,20 @@ struct c_bsdf_sample
         u_dir[1] = _u_dir[1];
         u_component = u_comp; 
     }
+	
+	c_bsdf_sample(const c_sample *sample, c_bsdf_sample_record& rec, uint32_t sample_idx)
+	{
+		assert(sample_idx < sample->get_2D_samples_size(rec.dir_sample_buf_idx));
+		assert(sample_idx < sample->get_1D_samples_size(rec.comp_sample_buf_idx)); 
+		
+		u_dir[0] = sample->get_2D_samples_buf(rec.dir_sample_buf_idx)[2*sample_idx];
+		u_dir[1] = sample->get_2D_samples_buf(rec.dir_sample_buf_idx)[2*sample_idx+1];
+		u_component = sample->get_1D_samples_buf(rec.comp_sample_buf_idx)[sample_idx]; 
+		
+		assert(u_dir[0] >= 0.0f && u_dir[0] < 1.0f);
+		assert(u_dir[1] >= 0.0f && u_dir[1] < 1.0f);
+	} 
+
     float u_component; 
     float u_dir[2];
 }; 

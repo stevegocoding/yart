@@ -36,6 +36,19 @@ public:
 	bool query_intersection(const c_ray& ray) const; 
 	bool query_intersection(const c_ray& ray, PARAM_OUT c_intersection *isect) const; 
 	
+	void add_light(const light_ptr light)
+	{
+		assert(light); 
+		m_lights.push_back(light);
+	}
+
+	uint32_t get_num_lights() const { return m_lights.size(); }
+	light_ptr get_light(uint32_t idx) const 
+	{
+		assert(idx < get_num_lights()); 
+		return m_lights[idx]; 
+	}
+	
 private:
 	
 	mutable scene_objects_list m_scene_objects; 

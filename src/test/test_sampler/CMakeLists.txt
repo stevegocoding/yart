@@ -1,7 +1,7 @@
 set(TARGET test_sampler)
 project(${TARGET})
 
-set(SRCS test_sampler.cpp)
+set(SRCS test_sampler.cpp dummy_integrator.h)
 
 if(WIN32)
   set(SRCS ${SRCS} minimal.rc)

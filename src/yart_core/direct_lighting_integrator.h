@@ -15,5 +15,10 @@ public:
 		const sample_ptr sample, 
 		c_rng& rng,
 		pool_ptr mem_pool) const; 
+
+
+private: 
+
+	
 	
 };

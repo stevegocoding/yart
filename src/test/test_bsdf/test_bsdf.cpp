@@ -42,7 +42,8 @@ void profile_bsdf_memory()
 	}
 	elapsed = clock() - time_start; 
 	time_start = clock(); 
-	cout << "Boost pool memory allocation: " << (float)elapsed << endl; 	
+	cout << "Boost pool memory allocation: " << (float)elapsed << endl; 
+	
 }
 
 int main(int argc, char **argv)

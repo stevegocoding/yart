@@ -27,30 +27,17 @@ c_sample::c_sample(sampler_ptr sampler, surface_integrator_ptr surface_itegrator
 }
 
 void c_sample::alloc_samples_memory()
-{
-	// Calculate the total samples for 1D and 2D samples
-	uint32_t total_1D = 0; 
-	BOOST_FOREACH(uint32_t n, m_1D)
-	{
-		total_1D += n; 
-	}
-	
-	uint32_t total_2D = 0; 
-	BOOST_FOREACH(uint32_t n, m_2D)
-	{
-		total_2D += 2 * n;			// two-dimension sampling  
-	}
-	
+{	
 	// Allocate memory
 	BOOST_FOREACH(uint32_t n, m_1D)
 	{
-		boost::shared_array<float> array = boost::shared_array<float>(new float[total_1D]);
+		boost::shared_array<float> array = boost::shared_array<float>(new float[n]);
 		m_1D_samples.push_back(array);
 	}
 	
 	BOOST_FOREACH(uint32_t n, m_2D)
 	{
-		boost::shared_array<float> array = boost::shared_array<float>(new float[total_2D]);
+		boost::shared_array<float> array = boost::shared_array<float>(new float[2*n]);
 		m_2D_samples.push_back(array);
 	}
 }
@@ -76,7 +63,7 @@ int c_sample::add_1D(uint32_t num_samples)
 
 int c_sample::add_2D(uint32_t num_samples)
 {
-	m_1D.push_back(num_samples); 
+	m_2D.push_back(num_samples); 
 	return m_2D.size() - 1; 
 }
 

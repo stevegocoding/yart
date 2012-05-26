@@ -5,10 +5,12 @@
 
 class c_point_light : public c_light
 {
+	typedef c_light super;
+
 public:
-	c_point_light(const c_transform& l2w, const c_spectrum& intensity); 
+	c_point_light(const c_transform& l2w, const c_spectrum& intensity, uint32_t num_samples = 1); 
 	
-	virtual c_spectrum compute_le(const c_ray& ray) const; 
+	//virtual c_spectrum compute_le(const c_ray& ray) const; 
 
 	virtual c_spectrum sample_l(const point3f& p, float p_eps, const c_light_sample& light_sample, 
 		PARAM_OUT vector3f *wi, PARAM_OUT float *pdf, PARAM_OUT c_occlusion_tester *visibility) const;
