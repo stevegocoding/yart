@@ -76,6 +76,8 @@ set(GEO_FILES
 	assimp_api_wrap.cpp
 	)
 set(INTEGRATORS_FILES
+	direct_lighting_integrator.cpp
+	direct_lighting_integrator.h
 	whitted.h
 	whitted.cpp
 	)

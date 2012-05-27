@@ -1,6 +1,7 @@
 #pragma once 
 
 #include "prerequisites.h" 
+#include "transform.h"
 #include "color.h"
 
 class c_integrator
@@ -18,7 +19,7 @@ public:
 		const renderer_ptr renderer, 
 		const c_ray& ray, 
 		const c_intersection& isect, 
-		const sample_ptr sample, 
+		const c_sample *sample, 
 		c_rng& rng,
 		pool_ptr mem_pool) const = 0; 
 };
@@ -27,3 +28,16 @@ class c_volume_integrator : public c_integrator
 {
 	
 };
+
+
+c_spectrum uniform_all_lights(const scene_ptr scene, 
+	const renderer_ptr renderer, 
+	const point3f& p, 
+	const vector3f& normal,
+	const vector3f& wo, 
+	float ray_eps,
+	const c_bsdf *bsdf,
+	const c_sample *sample,
+	c_rng& rng,
+	const light_sample_record_array_ptr light_samples_record,
+	const bsdf_sample_record_array_ptr bsdf_samples_record); 

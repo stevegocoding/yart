@@ -23,4 +23,12 @@ void concentric_sample_disk(float u1, float u2, PARAM_OUT float *dx, PARAM_OUT f
 vector3f cosine_sample_hemisphere(float u1, float u2);
 vector3f uniform_sample_hemisphere(float u1, float u2);
 
+inline float power_heuristic(int nf, float f_pdf, int ng, float g_pdf) 
+{
+	float f = nf * f_pdf; 
+	float g = ng * g_pdf;
+
+	return (f*f) / (f*f + g*g);
+}
+
 // class c_distribution_1d

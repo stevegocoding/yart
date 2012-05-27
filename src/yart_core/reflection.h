@@ -57,6 +57,13 @@ struct c_bsdf_sample_record
 
 struct c_bsdf_sample
 {
+	c_bsdf_sample() 
+		: u_component(0.0f)
+	{
+		u_dir[0] = 0.0f; 
+		u_dir[1] = 0.0f;
+	}
+	 
     c_bsdf_sample(float _u_dir[2], float u_comp)
     {
         assert(_u_dir[0] >= 0.0f && _u_dir[0] < 1.0f);
@@ -87,7 +94,7 @@ struct c_bsdf_sample
 class c_bsdf 
 {
 public:
-    c_bsdf(const diff_geom_ptr& shading_dg, const vector3f& ngeom, float eta = 1.0f); 
+    c_bsdf(const c_differential_geometry& shading_dg, const vector3f& ngeom, float eta = 1.0f); 
 	~c_bsdf() {}
 
     float eval_pdf(const vector3f& world_wo, const vector3f& world_wi, e_bxdf_type flags = bsdf_all) const; 
@@ -120,6 +127,11 @@ public:
                         m_sn[1] * world_v[0] + m_tn[1] * world_v[1] + m_nn[1] * world_v[2], 
                         m_sn[2] * world_v[0] + m_tn[2] * world_v[1] + m_nn[2] * world_v[2]);
     }
+
+	const c_differential_geometry *get_shading_dg() const
+	{
+		return m_shading_dg; 
+	}
 	
 private:
 
@@ -128,7 +140,7 @@ private:
 	std::vector<c_bxdf_base*> m_bxdf_vec; 
 
     // Shading differential geometry
-    diff_geom_ptr m_shading_dg; 
+    const c_differential_geometry *m_shading_dg; 
     
     vector3f m_ng;
     vector3f m_nn; 

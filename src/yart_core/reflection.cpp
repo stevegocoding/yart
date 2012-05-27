@@ -57,13 +57,13 @@ float c_bxdf_base::eval_pdf(const vector3f& wo, const vector3f& wi) const
 //////////////////////////////////////////////////////////////////////////
 
 
-c_bsdf::c_bsdf(const diff_geom_ptr& shading_dg, const vector3f& ngeom, float eta)
-    : m_shading_dg(shading_dg)
+c_bsdf::c_bsdf(const c_differential_geometry& shading_dg, const vector3f& ngeom, float eta)
+    : m_shading_dg(&shading_dg)
     , m_ng(ngeom)
 {
     // Build shading coordinates system
-    m_nn = shading_dg->nn; 
-    m_sn = normalize(shading_dg->dpdu); 
+    m_nn = shading_dg.nn; 
+    m_sn = normalize(shading_dg.dpdu); 
     m_tn = cross(m_nn, m_sn);
 }
 

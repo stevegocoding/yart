@@ -5,6 +5,8 @@
 #include "boost/scoped_array.hpp"
 #include "boost/pool/object_pool.hpp"
 
+#include "cml/cml.h"
+
 using namespace boost;
 
 //////////////////////////////////////////////////////////////////////////
@@ -69,6 +71,7 @@ typedef shared_ptr<c_integrator> integrator_ptr;
 typedef shared_ptr<c_surface_integrator> surface_integrator_ptr; 
 typedef shared_ptr<c_volume_integrator> volume_integrator_ptr;
 
+typedef shared_ptr<c_bsdf> bsdf_ptr;
 typedef shared_ptr<c_light> light_ptr;
 typedef shared_ptr<c_material> material_ptr; 
 typedef shared_ptr<c_aabb> aabb_ptr;
@@ -105,6 +108,7 @@ using std::swap;
 using std::sort;
 
 typedef unsigned int uint32_t;
+typedef cml::vector3f point3f; 
 
 //////////////////////////////////////////////////////////////////////////
 // Platform 

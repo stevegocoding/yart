@@ -26,3 +26,8 @@ c_spectrum c_point_light::compute_flux() const
 {
 	return m_intensity * 4 * M_PI; 
 }
+
+float c_point_light::eval_pdf(const point3f& p, const vector3f& v) const 
+{
+	return 0; 
+}

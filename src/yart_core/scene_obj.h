@@ -14,9 +14,12 @@ public:
 
 	shape_ptr get_geometry_shape() const { return m_shape; }
 	
+	c_bsdf *get_bsdf(const diff_geom_ptr dg, const c_transform& o2w, pool_ptr pool) const;
+	
 protected:
 	shape_ptr m_shape;
 	aabb_ptr m_aabb;
+	material_ptr m_material; 
 
 	c_transform m_world_to_obj;
 	c_transform m_obj_to_world;

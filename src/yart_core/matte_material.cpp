@@ -3,7 +3,7 @@
 #include "reflection.h"
 #include "geometry.h" 
 
-c_bsdf *c_matte_material::get_bsdf(const diff_geom_ptr& geom_dg, const diff_geom_ptr& shading_dg) const 
+c_bsdf *c_matte_material::get_bsdf(const diff_geom_ptr geom_dg, const c_differential_geometry& shading_dg) const 
 {
 	pool_ptr pool = get_pool(sizeof(c_bsdf)); 
 	c_bsdf *bsdf = NEW_BSDF(c_bsdf, pool)(shading_dg, geom_dg->nn); 

@@ -9,8 +9,6 @@ using std::swap;
 using std::sqrt;
 using namespace cml;
 
-typedef vector3f point3f; 
-
 namespace 
 {
 	enum e_vec_component

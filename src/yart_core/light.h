@@ -35,7 +35,7 @@ struct c_light_sample_record
 struct c_light_sample
 {
 	c_light_sample() {} 
-	c_light_sample(c_sample *sample, const c_light_sample_record& rec, uint32_t sample_idx)
+	c_light_sample(const c_sample *sample, const c_light_sample_record& rec, uint32_t sample_idx)
 	{
 		assert(sample_idx < sample->get_1D_samples_size(rec.comp_samples_buf_idx));
 		assert(sample_idx < sample->get_2D_samples_size(rec.pos_sample_buf_idx));
@@ -48,6 +48,10 @@ struct c_light_sample
 
 struct c_occlusion_tester
 {
+	c_occlusion_tester()
+	{
+	}
+	
 	c_occlusion_tester(const point3f& p1, float eps1, const point3f& p2, float eps2, float time = 0.0f)
 	{
 		float dist = length(p2 - p1);
@@ -83,7 +87,7 @@ public:
 	virtual c_spectrum sample_l(const point3f& p, float p_eps, const c_light_sample& light_sample, 
 		PARAM_OUT vector3f *wi, PARAM_OUT float *pdf, PARAM_OUT c_occlusion_tester *visibility) const = 0; 
 
-	float eval_pdf(const point3f& p, const vector3f& v) const; 
+	virtual float eval_pdf(const point3f& p, const vector3f& v) const = 0; 
 	
 	virtual bool is_delta() const = 0;
 	

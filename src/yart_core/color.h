@@ -192,6 +192,11 @@ public:
 		rgb_to_xyz(c, xyz); 
 	}
 
+	bool is_black() const 
+	{
+		return (c[0] == 0.0f && c[1] == 0.0f && c[2] == 0.0f); 
+	}
+
 private:
 
 };

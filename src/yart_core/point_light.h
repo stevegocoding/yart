@@ -19,6 +19,8 @@ public:
 
 	virtual c_spectrum compute_flux() const; 
 
+	virtual float eval_pdf(const point3f& p, const vector3f& v) const; 
+	
 private:
 
 	point3f m_light_pos; 

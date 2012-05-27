@@ -28,7 +28,7 @@ public:
 		const renderer_ptr renderer, 
 		const c_ray& ray, 
 		const c_intersection& isect, 
-		const sample_ptr sample, 
+		const c_sample *sample, 
 		c_rng& rng, 
 		pool_ptr mem_pool) const
 	{

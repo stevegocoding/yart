@@ -25,7 +25,7 @@ void profile_bsdf_memory()
 
 	for (int i = 0; i < 5000000; ++i)
 	{
-		c_bsdf *bsdf = new c_bsdf(dg, vec); 
+		c_bsdf *bsdf = new c_bsdf(*dg, vec); 
 		delete bsdf;
 	}
 
@@ -37,7 +37,7 @@ void profile_bsdf_memory()
 	pool_ptr pool = get_pool(sizeof(c_bsdf)); 
 	for (int i = 0; i < 5000000; ++i)
 	{
-		c_bsdf *bsdf = NEW_BSDF(c_bsdf, pool)(dg, vec); 
+		c_bsdf *bsdf = NEW_BSDF(c_bsdf, pool)(*dg, vec); 
 		DELETE_BSDF(bsdf, pool); 
 	}
 	elapsed = clock() - time_start; 
@@ -48,7 +48,7 @@ void profile_bsdf_memory()
 
 int main(int argc, char **argv)
 {
-
+	
 
 	return 0;
 }

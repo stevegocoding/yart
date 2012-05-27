@@ -10,8 +10,6 @@
 
 using namespace cml;
 
-
-
 class c_transform
 {
 public:
