@@ -26,7 +26,11 @@ public:
 	/** 
 		Compute the radiance brought back by ONE ray 
 	*/ 
-	virtual c_spectrum render_ray(scene_ptr scene, const c_ray& ray, sample_ptr sample, const c_rng& rng, 
-		PARAM_OUT c_intersection *isect) const = 0;
+	virtual c_spectrum render_ray(scene_ptr scene, 
+		const c_ray& ray, 
+		const c_sample *sample, 
+		const c_rng& rng, 
+		PARAM_OUT c_intersection *isect, 
+		PARAM_OUT c_spectrum *l) const = 0;
 	
 };  

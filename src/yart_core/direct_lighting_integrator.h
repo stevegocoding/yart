@@ -13,12 +13,11 @@ public:
 	virtual void request_samples(sampler_ptr sampler, c_sample *cam_sample, scene_ptr scene); 
 
 	virtual c_spectrum compute_li(const scene_ptr scene, 
-		const renderer_ptr renderer, 
+		const c_renderer *renderer, 
 		const c_ray& ray, 
 		const c_intersection& isect, 
 		const c_sample *sample, 
-		c_rng& rng,
-		pool_ptr mem_pool) const; 
+		c_rng& rng) const; 
 
 
 private: 

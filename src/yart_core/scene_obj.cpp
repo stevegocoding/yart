@@ -21,7 +21,7 @@ scene_object_ptr make_simple_scene_obj(const c_transform& w2o, const c_transform
 	return obj; 
 }
 
-c_bsdf *c_scene_object::get_bsdf(const diff_geom_ptr dg, const c_transform& o2w, pool_ptr pool) const
+c_bsdf *c_scene_object::get_bsdf(const diff_geom_ptr dg, const c_transform& o2w) const
 {
 	c_differential_geometry shading_dg;
 	m_shape->get_shading_geometry(o2w, *dg, &shading_dg); 

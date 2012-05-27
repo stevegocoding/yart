@@ -16,12 +16,11 @@ class c_surface_integrator : public c_integrator
 {
 public:
 	virtual c_spectrum compute_li(const scene_ptr scene, 
-		const renderer_ptr renderer, 
+		const c_renderer *renderer, 
 		const c_ray& ray, 
 		const c_intersection& isect, 
 		const c_sample *sample, 
-		c_rng& rng,
-		pool_ptr mem_pool) const = 0; 
+		c_rng& rng) const = 0; 
 };
 
 class c_volume_integrator : public c_integrator
@@ -31,7 +30,7 @@ class c_volume_integrator : public c_integrator
 
 
 c_spectrum uniform_all_lights(const scene_ptr scene, 
-	const renderer_ptr renderer, 
+	const c_renderer *renderer, 
 	const point3f& p, 
 	const vector3f& normal,
 	const vector3f& wo, 

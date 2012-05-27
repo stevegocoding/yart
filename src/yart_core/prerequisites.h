@@ -85,6 +85,7 @@ typedef shared_ptr<c_assimp_face_impl> assimp_face_impl_ptr;
 typedef shared_ptr<c_scene_object> scene_object_ptr;
 typedef shared_array<c_light_sample_record> light_sample_record_array_ptr;
 typedef shared_array<c_bsdf_sample_record> bsdf_sample_record_array_ptr;
+typedef shared_array<c_ray> ray_array_ptr;
 
 // typedef shared_ptr<c_bxdf_base> bxdf_ptr; 
 // typedef shared_ptr<c_bsdf> bsdf_ptr;

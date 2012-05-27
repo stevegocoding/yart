@@ -16,7 +16,7 @@ struct c_intersection
 		
 	}
 
-    c_bsdf *get_bsdf(const c_ray& ray, pool_ptr bsdf_pool) const;
+    c_bsdf *get_bsdf(const c_ray& ray) const;
 
 	diff_geom_ptr geom_dg;
 	scene_object_ptr scene_obj; 
@@ -25,7 +25,7 @@ struct c_intersection
 	uint32_t shape_id; 
 	float ray_eps; 
 };
-
+typedef boost::shared_array<c_intersection> isect_array_ptr; 
 
 class c_scene
 {

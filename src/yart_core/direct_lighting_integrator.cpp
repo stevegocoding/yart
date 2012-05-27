@@ -22,17 +22,16 @@ void c_direct_lighting_integrator::request_samples(sampler_ptr sampler, c_sample
 }
 
 c_spectrum c_direct_lighting_integrator::compute_li(const scene_ptr scene, 
-	const renderer_ptr renderer, 
+	const c_renderer *renderer, 
 	const c_ray& ray, 
 	const c_intersection& isect, 
 	const c_sample *sample, 
-	c_rng& rng, 
-	pool_ptr mem_pool) const
+	c_rng& rng) const
 {
 	c_spectrum lo(0.0f); 
 
 	// Get the BSDF at the hit point
-	c_bsdf *bsdf = isect.get_bsdf(ray, mem_pool); 
+	c_bsdf *bsdf = isect.get_bsdf(ray); 
 	
 	// Reverse the ray direction for shading 
 	vector3f wo = -ray.d; 

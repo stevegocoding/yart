@@ -5,7 +5,8 @@
 #include "ray.h"
 #include "camera.h"
 #include "render_target.h"
-
+#include "scene.h"
+#include "integrator.h"
 
 c_sampler_renderer::c_sampler_renderer(sampler_ptr sampler, camera_ptr cam, surface_integrator_ptr surface_integrator, volume_integrator_ptr vol_integrator, bool vis_ids)
 	: m_sampler(sampler)
@@ -33,17 +34,42 @@ void c_sampler_renderer::render_scene(scene_ptr scene)
 
 	int num_pixel_samples = 0; 
 	int max_samples = m_sampler->get_max_num_samples(); 
-	samples_array_ptr samples_array = origin_sample->duplicate(max_samples); 
+	
+	ray_array_ptr rays(new c_ray[max_samples]);
 	spectrum_array_ptr ls(new c_spectrum[max_samples]); 
+	spectrum_array_ptr ts(new c_spectrum[max_samples]); 
+	isect_array_ptr isects(new c_intersection[max_samples]); 
+	samples_array_ptr samples_array = origin_sample->duplicate(max_samples); 
 	while ((num_pixel_samples = m_sampler->get_current_pixel_samples(samples_array, rng)) > 0)
 	{
 		for (int j = 0; j < num_pixel_samples; ++j)
 		{
-			c_ray r; 
-			m_camera->generate_ray(samples_array[j], &r); 
+			m_camera->generate_ray(samples_array[j], &rays[j]); 
 
-			// ls[j] = c_spectrum(red, green, blue); 
-			m_camera->get_render_target()->add_sample(samples_array[j], ls[j]);
+			ls[j] = render_ray(scene, rays[j], &samples_array[j], rng, &isects[j], &ts[j]); 
+
+			assert(ls[j].has_nan());
+		}
+		for (int j = 0; j < num_pixel_samples; ++j)
+		{
+			m_camera->get_render_target()->add_sample(samples_array[j], ls[j]); 
 		}
 	} 	
+}
+
+c_spectrum c_sampler_renderer::render_ray(scene_ptr scene, 
+	const c_ray& ray, 
+	const c_sample *sample, 
+	c_rng& rng, 
+	PARAM_OUT c_intersection *isect,
+	PARAM_OUT c_spectrum *l) const
+{
+	c_spectrum lo(0.0f); 
+
+	if (scene->query_intersection(ray, isect))
+	{
+		lo = m_surface_integrator->compute_li(scene, this, ray, *isect, sample, rng);
+	}
+	 
+	return c_spectrum(0.0f); 
 }

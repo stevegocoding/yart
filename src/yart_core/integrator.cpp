@@ -8,7 +8,7 @@
 #include "monte_carlo.h"
 
 c_spectrum estimate_direct_light_integral(const scene_ptr scene, 
-	const renderer_ptr render,
+	const c_renderer *render,
 	const light_ptr light, 
 	const point3f& p, 
 	const vector3f& normal,
@@ -83,7 +83,7 @@ c_spectrum estimate_direct_light_integral(const scene_ptr scene,
 }
 
 c_spectrum uniform_all_lights(const scene_ptr scene, 
-	const renderer_ptr renderer, 
+	const c_renderer *renderer, 
 	const point3f& p, 
 	const vector3f& normal, 
 	const vector3f& wo, 

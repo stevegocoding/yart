@@ -2,10 +2,10 @@
 #include "scene_obj.h"
 #include "shape.h"
 
-c_bsdf *c_intersection::get_bsdf(const c_ray& ray, pool_ptr bsdf_pool) const 
+c_bsdf *c_intersection::get_bsdf(const c_ray& ray) const 
 {
 	 assert(scene_obj); 
-	 c_bsdf *bsdf = scene_obj->get_bsdf(geom_dg, obj_to_world, bsdf_pool); 
+	 c_bsdf *bsdf = scene_obj->get_bsdf(geom_dg, obj_to_world); 
 	 return bsdf; 
 }
 
