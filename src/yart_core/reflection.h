@@ -9,19 +9,6 @@
 
 namespace 
 {
-	enum e_bxdf_type
-	{
-		bsdf_reflection = 1<<0, 
-		bsdf_transmission = 1<<1, 
-		bsdf_diffuse = 1<<2,
-        bsdf_glossy = 1<<3,
-		bsdf_specular = 1<<4, 
-        bsdf_all_types = bsdf_diffuse | bsdf_glossy | bsdf_specular, 
-        bsdf_all_reflection = bsdf_reflection | bsdf_all_types,
-        bsdf_all_transmission = bsdf_transmission | bsdf_all_types,
-        bsdf_all = bsdf_all_reflection | bsdf_all_transmission
-	};
-
 	static const uint32_t MAX_BxDFS = 8; 
 
     bool is_same_hemisphere(const vector3f& wi, const vector3f& wo)
@@ -34,6 +21,19 @@ namespace
         return fabs(w[z]);
     }
 }
+
+enum e_bxdf_type
+{
+	bsdf_reflection = 1<<0, 
+	bsdf_transmission = 1<<1, 
+	bsdf_diffuse = 1<<2,
+	bsdf_glossy = 1<<3,
+	bsdf_specular = 1<<4, 
+	bsdf_all_types = bsdf_diffuse | bsdf_glossy | bsdf_specular, 
+	bsdf_all_reflection = bsdf_reflection | bsdf_all_types,
+	bsdf_all_transmission = bsdf_transmission | bsdf_all_types,
+	bsdf_all = bsdf_all_reflection | bsdf_all_transmission
+};
 
 struct c_bsdf_sample_record
 { 

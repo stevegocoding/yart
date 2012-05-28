@@ -12,6 +12,9 @@ typedef cml::vector2f uv;
 class c_triangle_mesh_impl
 {
 public:
+	c_triangle_mesh_impl() {}
+	virtual ~c_triangle_mesh_impl() {}
+
 	virtual bool has_tengent() const = 0; 
     virtual bool has_normal() const = 0;
 	virtual bool has_uv(uint32_t uv_set = 0) const = 0; 
@@ -30,7 +33,7 @@ typedef boost::shared_ptr<c_triangle_mesh_impl> triangle_mesh_impl_ptr;
 class c_triangle_face_impl
 {
     virtual bool intersects(const c_ray& ray, 
-        PARAM_OUT float *t_hit, PARAM_OUT float *ray_epsilon, PARAM_OUT diff_geom_ptr& diff_geom) const = 0; 
+        PARAM_OUT float *t_hit, PARAM_OUT float *ray_epsilon, PARAM_OUT c_differential_geometry *geom_dg) const = 0; 
     
 }; 
 typedef boost::shared_ptr<c_triangle_face_impl> triangle_face_impl_ptr; 
@@ -53,6 +56,11 @@ public:
     {
         return m_impl->get_face(idx); 
     }
+
+	uint32_t get_num_faces() const 
+	{
+		return m_impl->get_num_faces();
+	}
 
     point3f get_vert(uint32_t idx) const 
     {
@@ -123,16 +131,16 @@ public:
     {}
     
 	virtual void get_shading_geometry(const c_transform& o2w, 
-		const c_differential_geometry& diff_geom, 
+		const c_differential_geometry& geom_dg, 
 		PARAM_OUT c_differential_geometry *shading_dg) const; 
 	
     virtual bool intersects(const c_ray& ray, 
-		PARAM_OUT float *t_hit, PARAM_OUT float *ray_epsilon, PARAM_OUT diff_geom_ptr& diff_geom) const; 
+		PARAM_OUT float *t_hit, PARAM_OUT float *ray_epsilon, PARAM_OUT c_differential_geometry *geom_dg) const; 
     
     void get_uv(float uv[3][2]) const;
 
-	uint32_t get_face_idx() const { return m_face_idx; } 
-    
+	uint32_t get_face_idx() const { return m_face_idx; }  
+	
 private:
     c_triangle_mesh *m_mesh;
 

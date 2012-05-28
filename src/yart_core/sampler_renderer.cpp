@@ -6,13 +6,20 @@
 #include "camera.h"
 #include "render_target.h"
 #include "scene.h"
+#include "intersection.h"
 #include "integrator.h"
+#include "display.h"
 
-c_sampler_renderer::c_sampler_renderer(sampler_ptr sampler, camera_ptr cam, surface_integrator_ptr surface_integrator, volume_integrator_ptr vol_integrator, bool vis_ids)
+c_sampler_renderer::c_sampler_renderer(sampler_ptr sampler, 
+	camera_ptr cam, 
+	surface_integrator_ptr surface_integrator, 
+	volume_integrator_ptr vol_integrator, 
+	c_display *display)
 	: m_sampler(sampler)
 	, m_camera(cam)
 	, m_surface_integrator(surface_integrator)
 	, m_volume_integrator(vol_integrator) 
+	, m_display(display)
 {
 	
 }
@@ -40,6 +47,8 @@ void c_sampler_renderer::render_scene(scene_ptr scene)
 	spectrum_array_ptr ts(new c_spectrum[max_samples]); 
 	isect_array_ptr isects(new c_intersection[max_samples]); 
 	samples_array_ptr samples_array = origin_sample->duplicate(max_samples); 
+	
+
 	while ((num_pixel_samples = m_sampler->get_current_pixel_samples(samples_array, rng)) > 0)
 	{
 		for (int j = 0; j < num_pixel_samples; ++j)
@@ -48,13 +57,15 @@ void c_sampler_renderer::render_scene(scene_ptr scene)
 
 			ls[j] = render_ray(scene, rays[j], &samples_array[j], rng, &isects[j], &ts[j]); 
 
-			assert(ls[j].has_nan());
-		}
-		for (int j = 0; j < num_pixel_samples; ++j)
-		{
+			assert(!ls[j].has_nan());
+	
 			m_camera->get_render_target()->add_sample(samples_array[j], ls[j]); 
 		}
-	} 	
+
+
+		m_display->update_display(m_camera->get_render_target()); 
+	}
+	
 }
 
 c_spectrum c_sampler_renderer::render_ray(scene_ptr scene, 
@@ -71,5 +82,5 @@ c_spectrum c_sampler_renderer::render_ray(scene_ptr scene,
 		lo = m_surface_integrator->compute_li(scene, this, ray, *isect, sample, rng);
 	}
 	 
-	return c_spectrum(0.0f); 
+	return lo; 
 }

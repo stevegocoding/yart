@@ -37,7 +37,7 @@ void c_triangle_face::get_uv(float uv[3][2]) const
 }
 
 bool c_triangle_face::intersects(const c_ray& ray, 
-    PARAM_OUT float *t_hit, PARAM_OUT float *ray_epsilon, PARAM_OUT diff_geom_ptr& diff_geom) const 
+    PARAM_OUT float *t_hit, PARAM_OUT float *ray_epsilon, PARAM_OUT c_differential_geometry *geom_dg) const 
 {
     triangle_face face = m_mesh->get_face(m_face_idx);
 
@@ -110,7 +110,7 @@ bool c_triangle_face::intersects(const c_ray& ray,
 	
 	// Fill in _DifferentialGeometry_ from triangle hit
 	point3f hit_p = ray.evaluate_t(t);
-	*diff_geom = c_differential_geometry(hit_p, dpdu, dpdv, vector3f(0,0,0), vector3f(0,0,0), tu, tv, this);
+	*geom_dg = c_differential_geometry(hit_p, dpdu, dpdv, vector3f(0,0,0), vector3f(0,0,0), tu, tv, this);
 	
 	*t_hit = t; 
 	*ray_epsilon = 1e-3f * *t_hit; 
@@ -119,12 +119,12 @@ bool c_triangle_face::intersects(const c_ray& ray,
 }
 
 void c_triangle_face::get_shading_geometry(const c_transform& o2w, 
-	const c_differential_geometry& diff_geom, 
+	const c_differential_geometry& geom_dg, 
 	PARAM_OUT c_differential_geometry *shading_dg) const 
 {
 	if (!m_mesh->has_normals() && !m_mesh->has_tengent())
 	{
-		*shading_dg = diff_geom;
+		*shading_dg = geom_dg;
 		return;
 	}
 	
@@ -138,7 +138,7 @@ void c_triangle_face::get_shading_geometry(const c_transform& o2w,
 	{ { uv[1][0] - uv[0][0], uv[2][0] - uv[0][0] },
 	{ uv[1][1] - uv[0][1], uv[2][1] - uv[0][1] } };
 
-	float C[2] = { diff_geom.u - uv[0][0], diff_geom.v - uv[0][1] };
+	float C[2] = { geom_dg.u - uv[0][0], geom_dg.v - uv[0][1] };
 	if (!solve_linear_system2x2(A, C, &b[1], &b[2])) {
 		// Handle degenerate parametric mapping
 		b[0] = b[1] = b[2] = 1.f/3.f;
@@ -164,7 +164,7 @@ void c_triangle_face::get_shading_geometry(const c_transform& o2w,
 		ns = normalize(ns); 
 	}
 	else 
-		ns = diff_geom.nn; 
+		ns = geom_dg.nn; 
 
 	if (m_mesh->has_tengent())
 	{
@@ -172,7 +172,7 @@ void c_triangle_face::get_shading_geometry(const c_transform& o2w,
 		ss = normalize(ss); 
 	}
 	else
-		ss = normalize(diff_geom.dpdu);
+		ss = normalize(geom_dg.dpdu);
 	
 	ts = cross(ss, ns); 
 	if (ts.length_squared() > 0.0f)
@@ -207,12 +207,12 @@ void c_triangle_face::get_shading_geometry(const c_transform& o2w,
 	
 	vector3f w_dndu = o2w.transform_vec3(dndu); 
 	vector3f w_dndv = o2w.transform_vec3(dndv); 
-	*shading_dg = c_differential_geometry(diff_geom.p, ss, ts, w_dndu, w_dndv, diff_geom.u, diff_geom.v, diff_geom.shape); 
+	*shading_dg = c_differential_geometry(geom_dg.p, ss, ts, w_dndu, w_dndv, geom_dg.u, geom_dg.v, geom_dg.shape); 
 	
-	shading_dg->dudx = diff_geom.dudx; 
-	shading_dg->dvdx = diff_geom.dvdx; 
-	shading_dg->dudy = diff_geom.dudy; 
-	shading_dg->dvdy = diff_geom.dvdy; 
-	shading_dg->dpdx = diff_geom.dpdx; 
-	shading_dg->dpdy = diff_geom.dpdy;
+	shading_dg->dudx = geom_dg.dudx; 
+	shading_dg->dvdx = geom_dg.dvdx; 
+	shading_dg->dudy = geom_dg.dudy; 
+	shading_dg->dvdy = geom_dg.dvdy; 
+	shading_dg->dpdx = geom_dg.dpdx; 
+	shading_dg->dpdy = geom_dg.dpdy;
 }

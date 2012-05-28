@@ -13,9 +13,9 @@ public:
     virtual ~c_shape() {}
 
     virtual bool intersects(const c_ray& ray, 
-        PARAM_OUT float *t_hit, PARAM_OUT float *ray_epsilon, PARAM_OUT diff_geom_ptr& diff_geom) const { return false; }
+        PARAM_OUT float *t_hit, PARAM_OUT float *ray_epsilon, PARAM_OUT c_differential_geometry *geom_dg) const { return false; }
 
-	virtual aabb_ptr calc_local_aabb() const { return aabb_ptr(); }
+	virtual c_aabb get_world_aabb(const c_transform& o2w) const { return c_aabb(); } 
 
 	virtual void apply_transform(const c_transform& t) {} 
 

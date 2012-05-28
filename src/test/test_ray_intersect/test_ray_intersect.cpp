@@ -1,7 +1,8 @@
-#include "../../yart_core/pch.h"
-#include "../../yart_core/transform.h"
-#include "../../yart_core/triangle_mesh_impl.h"
-#include "../../yart_core/scene_obj.h"
+#include "pch.h"
+#include "transform.h"
+#include "triangle_mesh_impl.h"
+#include "scene_primitive.h"
+#include "matte_material.h"
 
 #include "cml/cml.h"
 #include <iomanip>
@@ -169,6 +170,7 @@ void print_aiscene_info(std::ostream& os, const aiScene *scene)
 	
 int main(int argc, char **argv)
 {
+	/*
 	const aiScene *scene = aiImportFile("../data/models/cube.ply", aiProcess_Triangulate | aiProcess_MakeLeftHanded); 
 
 	aiLogStream stream; 
@@ -182,7 +184,8 @@ int main(int argc, char **argv)
 	// create the scene object 
 	c_transform o2w = make_translate(vector3f(0.0f, 0.0f,1.0f)); 
 	c_transform w2o = inverse_transform(o2w); 
-	scene_object_ptr mesh_obj = make_simple_scene_obj(w2o, o2w, mesh); 
+	material_ptr mat = make_matte_material(c_spectrum(0.8f, 0.8f, 0.8f), 0.0f); 
+	scene_object_ptr mesh_obj = make_simple_scene_obj(w2o, o2w, mesh, mat); 
 
 	print_aiscene_info(cout, scene);
 	
@@ -213,6 +216,7 @@ int main(int argc, char **argv)
 	
 	aiReleaseImport(scene);
 	aiDetachAllLogStreams();
+	*/ 
 	
 	return 0;
 }

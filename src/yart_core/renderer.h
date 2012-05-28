@@ -5,8 +5,8 @@
 class c_renderer
 {
 public:
-	c_renderer(); 
-	virtual ~c_renderer(); 
+	c_renderer() {}
+	virtual ~c_renderer() {} 
 
 	/**
 		Render one frame of the scene
@@ -29,7 +29,7 @@ public:
 	virtual c_spectrum render_ray(scene_ptr scene, 
 		const c_ray& ray, 
 		const c_sample *sample, 
-		const c_rng& rng, 
+		c_rng& rng, 
 		PARAM_OUT c_intersection *isect, 
 		PARAM_OUT c_spectrum *l) const = 0;
 	

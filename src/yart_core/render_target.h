@@ -54,6 +54,7 @@ public:
 	virtual void get_pixel_extent(int *x_start, int *x_end, int *y_start, int *y_end) const;
 	virtual pixels_buf_ptr get_pixels() { return m_pixels_buf; }
 	filter_table_ptr get_filter_table() { return m_filter_table; }
+	virtual void update_display() {}
 
 protected: 
 	filter_ptr m_filter;

@@ -1,7 +1,7 @@
 #include "direct_lighting_integrator.h"
 #include "geometry.h"
 #include "scene.h"
-#include "reflection.h"
+#include "intersection.h"
 
 void c_direct_lighting_integrator::request_samples(sampler_ptr sampler, c_sample *cam_sample, scene_ptr scene) 
 {

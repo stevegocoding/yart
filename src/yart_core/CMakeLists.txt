@@ -21,6 +21,8 @@ set(DEP_LIBS_RELEASE
 	)
 
 set(CORE_FILES
+	accel_structure.cpp
+	accel_structure.h
 	camera.cpp
 	camera.h
 	color.cpp
@@ -31,6 +33,8 @@ set(CORE_FILES
 	geometry.h
 	integrator.cpp
 	integrator.h
+	intersection.cpp
+	intersection.h
 	light.cpp
 	light.h
 	material.cpp

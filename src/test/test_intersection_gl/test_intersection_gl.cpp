@@ -5,10 +5,11 @@
 #include "cml/cml.h"
 #include <iomanip>
 #include <algorithm>
-#include "../../yart_core/ray.h"
-#include "../../yart_core/transform.h"
-#include "../../yart_core/triangle_mesh_impl.h"
-#include "../../yart_core/scene_obj.h"
+#include "ray.h"
+#include "transform.h"
+#include "triangle_mesh_impl.h"
+#include "scene_primitive.h"
+#include "matte_material.h"
 
 #include "assimp/assimp.h"
 #include "assimp/aiScene.h"
@@ -181,6 +182,7 @@ float view_angle_yz = 0.0f;
 
 void setup()
 {
+	/*
 	scene = aiImportFile("../data/models/cube.ply", aiProcess_Triangulate | aiProcess_MakeLeftHanded); 
 
 	aiLogStream stream; 
@@ -194,7 +196,8 @@ void setup()
 	// create the scene object 
 	c_transform o2w = make_translate(vector3f(0.0f, 0.0f,5.0f)) * make_scale(3.0f, 3.0f, 1.0f); 
 	c_transform w2o = inverse_transform(o2w); 
-	scene_object_ptr mesh_obj = make_simple_scene_obj(w2o, o2w, mesh); 
+	material_ptr mat = make_matte_material(c_spectrum(0.8f, 0.8f, 0.8f), 0.0f); 
+	scene_object_ptr mesh_obj = make_simple_scene_obj(w2o, o2w, mesh, mat); 
 
 	print_aiscene_info(cout, scene);
 
@@ -205,6 +208,8 @@ void setup()
 	assert(tri_mesh); 
 
 	tri = tri_mesh->get_triangle_face(face_idx); 
+	*/ 
+	
 }
 
 void cleanup()
@@ -299,8 +304,9 @@ void render_scene()
 
 	float t_hit = 0.0f;
 	float ray_eps = 0.0f; 
-	bool is_hit = tri->intersects(ray, &t_hit, &ray_eps, diff_geom_ptr()); 
+	// bool is_hit = tri->intersects(ray, &t_hit, &ray_eps, diff_geom_ptr()); 
 
+	/*
 	if (is_hit) 
 	{
 		vector3f hit_pt = ray.o + ray.d * t_hit;
@@ -318,6 +324,7 @@ void render_scene()
 	{
 		std::cout << "Missed!" << endl; 
 	}
+	*/
 
 	glPopMatrix(); 
 	glutSwapBuffers();      //swaps the front and back buffers

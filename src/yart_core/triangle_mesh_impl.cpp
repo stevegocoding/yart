@@ -90,7 +90,6 @@ void c_assimp_mesh_impl::apply_transform(const c_transform& t)
 	{
 		m_ai_mesh->mVertices[i] = aim * m_ai_mesh->mVertices[i]; 
 	}
-	
 }
 
 //////////////////////////////////////////////////////////////////////////

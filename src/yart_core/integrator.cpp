@@ -2,8 +2,7 @@
 
 #include "ray.h"
 #include "scene.h"
-#include "light.h"
-#include "reflection.h"
+
 #include "sampler.h"
 #include "monte_carlo.h"
 

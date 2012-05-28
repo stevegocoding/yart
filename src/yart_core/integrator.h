@@ -3,6 +3,8 @@
 #include "prerequisites.h" 
 #include "transform.h"
 #include "color.h"
+#include "reflection.h"
+#include "light.h"
 
 class c_integrator
 {
@@ -40,3 +42,16 @@ c_spectrum uniform_all_lights(const scene_ptr scene,
 	c_rng& rng,
 	const light_sample_record_array_ptr light_samples_record,
 	const bsdf_sample_record_array_ptr bsdf_samples_record); 
+
+c_spectrum estimate_direct_light_integral(const scene_ptr scene, 
+	const c_renderer *render,
+	const light_ptr light, 
+	const point3f& p, 
+	const vector3f& normal,
+	const vector3f& wo, 
+	float ray_eps,
+	const c_bsdf *bsdf,
+	c_rng& rng,
+	const c_light_sample& light_sample,
+	const c_bsdf_sample& bsdf_sample, 
+	e_bxdf_type bsdf_flags);

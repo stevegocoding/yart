@@ -11,7 +11,7 @@ public:
 		, m_sig(sig)
 	{}
 	
-	virtual c_bsdf *get_bsdf(const diff_geom_ptr geom_dg, const c_differential_geometry& shading_dg) const; 
+	virtual c_bsdf *get_bsdf(const c_differential_geometry& geom_dg, const c_differential_geometry& shading_dg) const; 
 				
 private:
  

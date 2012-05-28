@@ -27,3 +27,6 @@ private:
 	c_spectrum m_intensity;				// The intensity of the point light 
 	
 };
+
+
+light_ptr make_point_light(const c_transform& light_to_world, const c_spectrum& intensity);
