@@ -227,10 +227,10 @@ void c_wx_yart_frame::OnRenderResume( wxCommandEvent& event )
 
 c_wx_render_window::c_wx_render_window(wxWindow *parent)
 	: wxScrolledWindow(parent)
-	, m_res_x(400)
-	, m_res_y(400)
-	, m_sppx(1)
-	, m_sppy(1)
+	, m_res_x(100)
+	, m_res_y(100)
+	, m_sppx(4)
+	, m_sppy(4)
 	, m_bitmap(NULL)
 	, m_timer(NULL)
 	, m_render_thread(NULL)
@@ -267,10 +267,11 @@ void c_wx_render_window::init_renderer()
 	// Make Camera
 	//////////////////////////////////////////////////////////////////////////
 	matrix44f m;
-	cml::matrix_translation(m, vector3f(0,0,0));
+	cml::matrix_translation(m, vector3f(0.0f,0.0f,0.0f));
 	c_transform cam_to_world(m);
-	float wnd[4] = {-1.0f, 1.0f, -1.0f, 1.0f};
-	m_camera.reset(new c_perspective_camera(cam_to_world, wnd, 0, 0, 90, m_render_target));
+	//float wnd[4] = {-1.0f, 1.0f, -1.0f, 1.0f};
+	float wnd[4] = {-2.0f, 2.0f, -2.0f, 2.0f}; 
+	m_camera.reset(new c_perspective_camera(cam_to_world, wnd, 0, 0, 45, m_render_target));
 
 
 	//////////////////////////////////////////////////////////////////////////
@@ -294,7 +295,7 @@ void c_wx_render_window::init_renderer()
 
 void c_wx_render_window::setup_scene()
 {
-	const aiScene *scene = aiImportFile("../data/models/quad.ply", aiProcess_Triangulate | aiProcess_MakeLeftHanded); 
+	const aiScene *scene = aiImportFile("../data/models/bunny.ply", aiProcess_Triangulate | aiProcess_MakeLeftHanded); 
 
 	aiLogStream stream; 
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, NULL);
@@ -307,7 +308,7 @@ void c_wx_render_window::setup_scene()
 	// create the scene object 
 	std::vector<scene_primitive_ptr> prims;
 	material_ptr mat = make_matte_material(c_spectrum(1.0f, 1.0f, 1.0f), 0.0f); 
-	c_transform o2w = make_translate(vector3f(0.0f, 0.0f, 2.0f)); 
+	c_transform o2w = make_translate(vector3f(0.0f, -5.0f, 7.0f)) * make_scale(42.0f, 42.0f, 42.0f); 
 	c_transform w2o = inverse_transform(o2w); 
 	make_triangle_mesh_primitives(m_mesh, o2w, mat, prims); 
 	accel_structure_ptr accel = make_naive_accel_strcture(prims);
@@ -316,7 +317,7 @@ void c_wx_render_window::setup_scene()
 
 	//////////////////////////////////////////////////////////////////////////
 
-	c_transform l2w = make_translate(vector3f(0.0f, 0.0f, 1.0f));
+	c_transform l2w = make_translate(vector3f(1.5f, 1.5f, 4.0f));
 	light_ptr pt_light = make_point_light(l2w, c_spectrum(1.0f, 1.0f, 1.0f)); 
 	m_scene->add_light(pt_light); 
 }

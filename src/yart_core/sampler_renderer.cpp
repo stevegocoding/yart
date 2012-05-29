@@ -79,6 +79,7 @@ c_spectrum c_sampler_renderer::render_ray(scene_ptr scene,
 	if (scene->query_intersection(ray, isect))
 	{
 		lo = m_surface_integrator->compute_li(scene, this, ray, *isect, sample, rng);
+		// lo = c_spectrum(1.0f); 
 	}
 	 
 	return lo; 

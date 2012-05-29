@@ -31,8 +31,6 @@ c_bitmap_render_target::c_bitmap_render_target(int res_x, int res_y, filter_ptr 
 			*fp++ = m_filter->evaluate(fx, fy);
 		}
 	} 
-
-	
 }
 
 void c_bitmap_render_target::add_sample(const c_camera_sample& sample, const c_spectrum& radiance)

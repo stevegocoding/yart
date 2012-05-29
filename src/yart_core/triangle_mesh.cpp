@@ -109,6 +109,7 @@ bool c_triangle_face::intersects(const c_ray& ray,
 
 	
 	// Fill in _DifferentialGeometry_ from triangle hit
+	
 	point3f hit_p = ray.evaluate_t(t);
 	*geom_dg = c_differential_geometry(hit_p, dpdu, dpdv, vector3f(0,0,0), vector3f(0,0,0), tu, tv, this);
 	

@@ -17,9 +17,9 @@ c_ray c_transform::transform_ray(const c_ray& r) const
 {
     c_ray ret = r; 
     ret.o = transform_pt(r.o);
-    //ret.d = transform_vec3(r.d); 
+    ret.d = transform_vec3(r.d); 
 	
-	//ret.d.normalize();
+	ret.d.normalize();
 	
     return ret; 
 }
