@@ -32,7 +32,7 @@ public:
 
 	virtual void get_sample_extent(int *x_start, int *x_end, int *y_start, int *y_end) const = 0; 
 	virtual void get_pixel_extent(int *x_start, int *x_end, int *y_start, int *y_end) const = 0;
-	virtual pixels_buf_ptr get_pixels() = 0; 
+	virtual pixels_buf_ptr get_pixels() = 0;
 
 	int res_x() const { return m_resolution_x; }
 	int res_y() const { return m_resolution_y; }

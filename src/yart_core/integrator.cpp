@@ -29,7 +29,7 @@ c_spectrum estimate_direct_light_integral(const scene_ptr scene,
 	
 	c_occlusion_tester visibilty; 
 	c_spectrum li = light->sample_l(p, ray_eps, light_sample, &wi, &light_pdf, &visibilty); 
-	if (light_pdf > 0.0f && li.is_black())
+	if (light_pdf > 0.0f && !li.is_black())
 	{
 		c_spectrum f = bsdf->f(wo, wi, bsdf_flags); 
 		

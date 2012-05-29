@@ -317,7 +317,7 @@ void c_wx_render_window::update_display(render_target_ptr& render_target)
 			unsigned char r = pixel.l_rgb[0] * inv_w * 255; 
 			unsigned char g = pixel.l_rgb[1] * inv_w * 255; 
 			unsigned char b = pixel.l_rgb[2] * inv_w * 255;
-			
+
 			wxPen pen(wxColour(r, g, b));
 			bufferedDC.SetPen(pen); 
 			bufferedDC.DrawPoint(x, y); 

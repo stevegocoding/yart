@@ -1,5 +1,5 @@
 #include "reflection.h"
-#include "geometry.h"
+
 #include "monte_carlo.h"
 
 c_spectrum c_bxdf_base::sample_f(const vector3f& wo, vector3f *wi, float u1, float u2, float *pdf) const
@@ -58,7 +58,7 @@ float c_bxdf_base::eval_pdf(const vector3f& wo, const vector3f& wi) const
 
 
 c_bsdf::c_bsdf(const c_differential_geometry& shading_dg, const vector3f& ngeom, float eta)
-    : m_shading_dg(&shading_dg)
+    : m_shading_dg(shading_dg)
     , m_ng(ngeom)
 {
     // Build shading coordinates system

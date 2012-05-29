@@ -1,3 +1,7 @@
+#include <iomanip>
+#include <iostream>
+#include <fstream> 
+
 #include "wx_app.h"
 #include "pch.h"
 #include "color.h"
@@ -23,6 +27,31 @@
 #include "bg.xpm"
 
 typedef boost::scoped_array<c_spectrum> spectrum_array;
+
+void print_pixels(std::ostream& os, pixels_buf_ptr& pixels, int num_pixels_x, int num_pixels_y, int prec = 2, int width = 4)
+{
+	std::ios::fmtflags old_flags = os.flags(); 
+	os.setf(std::ios::left, std::ios::adjustfield); 
+
+	for (int y = 0; y < num_pixels_y; ++y)
+	{
+		for (int x = 0; x < num_pixels_x; ++x)
+		{
+			float inv_weight = 1 / (pixels[y * num_pixels_x + x].weighted_sum);
+			os << std::setprecision(prec) << std::setw(width) << std::setfill(' ') 
+				<< '('
+				<< pixels[y * num_pixels_x + x].l_rgb[0] * inv_weight << ',' 
+				<< pixels[y * num_pixels_x + x].l_rgb[1] * inv_weight << ',' 
+				<< pixels[y * num_pixels_x + x].l_rgb[2] * inv_weight << ')';
+
+			os << "\t"; 
+
+		}
+		os << std::endl; 
+	}
+	os.setf(old_flags); 
+}
+
 
 void c_render_thread::set_pixel(int x, int y, int red, int green, int blue)
 {
@@ -64,7 +93,8 @@ void *c_render_thread::Entry()
 
 	m_renderer->render_scene(m_scene); 
 	
-	
+	std::ofstream ofs("pixels.txt"); 
+	// print_pixels(ofs, m_render_target->get_pixels(), 64, 64); 
 	
 	return NULL; 
 }
@@ -197,8 +227,8 @@ void c_wx_yart_frame::OnRenderResume( wxCommandEvent& event )
 
 c_wx_render_window::c_wx_render_window(wxWindow *parent)
 	: wxScrolledWindow(parent)
-	, m_res_x(64)
-	, m_res_y(64)
+	, m_res_x(400)
+	, m_res_y(400)
 	, m_sppx(1)
 	, m_sppy(1)
 	, m_bitmap(NULL)
@@ -238,7 +268,6 @@ void c_wx_render_window::init_renderer()
 	//////////////////////////////////////////////////////////////////////////
 	matrix44f m;
 	cml::matrix_translation(m, vector3f(0,0,0));
-	c_transform world_to_cam(m); 
 	c_transform cam_to_world(m);
 	float wnd[4] = {-1.0f, 1.0f, -1.0f, 1.0f};
 	m_camera.reset(new c_perspective_camera(cam_to_world, wnd, 0, 0, 90, m_render_target));
@@ -265,7 +294,7 @@ void c_wx_render_window::init_renderer()
 
 void c_wx_render_window::setup_scene()
 {
-	const aiScene *scene = aiImportFile("../data/models/cube.ply", aiProcess_Triangulate | aiProcess_MakeLeftHanded); 
+	const aiScene *scene = aiImportFile("../data/models/quad.ply", aiProcess_Triangulate | aiProcess_MakeLeftHanded); 
 
 	aiLogStream stream; 
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, NULL);
@@ -277,8 +306,8 @@ void c_wx_render_window::setup_scene()
 
 	// create the scene object 
 	std::vector<scene_primitive_ptr> prims;
-	material_ptr mat = make_matte_material(c_spectrum(0.8f, 0.8f, 0.8f), 0.0f); 
-	c_transform o2w = make_translate(vector3f(0.0f, 0.0f,1.0f)); 
+	material_ptr mat = make_matte_material(c_spectrum(1.0f, 1.0f, 1.0f), 0.0f); 
+	c_transform o2w = make_translate(vector3f(0.0f, 0.0f, 2.0f)); 
 	c_transform w2o = inverse_transform(o2w); 
 	make_triangle_mesh_primitives(m_mesh, o2w, mat, prims); 
 	accel_structure_ptr accel = make_naive_accel_strcture(prims);
@@ -287,7 +316,7 @@ void c_wx_render_window::setup_scene()
 
 	//////////////////////////////////////////////////////////////////////////
 
-	c_transform l2w = make_translate(vector3f(3.0f, 3.0f, -3.0f));
+	c_transform l2w = make_translate(vector3f(0.0f, 0.0f, 1.0f));
 	light_ptr pt_light = make_point_light(l2w, c_spectrum(1.0f, 1.0f, 1.0f)); 
 	m_scene->add_light(pt_light); 
 }
@@ -375,12 +404,17 @@ void c_wx_render_window::update_display(render_target_ptr render_target)
 	{
 		for (int x = 0; x < res_x; ++x)
 		{
-			c_render_pixel pixel = pixels[y * res_x + x];
+			c_render_pixel& pixel = pixels[y * res_x + x];
 			float inv_w = 1.0f / pixel.weighted_sum; 
-			unsigned char r = pixel.l_rgb[0] * inv_w * 255; 
-			unsigned char g = pixel.l_rgb[1] * inv_w * 255; 
-			unsigned char b = pixel.l_rgb[2] * inv_w * 255;
-			
+			unsigned char r = pixel.l_rgb[0] * inv_w * 2550; 
+			unsigned char g = pixel.l_rgb[1] * inv_w * 2550; 
+			unsigned char b = pixel.l_rgb[2] * inv_w * 2550;
+
+			if (r != 0 || g != 0 || b != 0)
+			{
+				int a = 0; 
+			}
+
 			wxPen pen(wxColour(r, g, b));
 			bufferedDC.SetPen(pen); 
 			bufferedDC.DrawPoint(x, y); 

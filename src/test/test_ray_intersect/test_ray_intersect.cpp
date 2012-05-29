@@ -3,6 +3,9 @@
 #include "triangle_mesh_impl.h"
 #include "scene_primitive.h"
 #include "matte_material.h"
+#include "scene.h"
+#include "accel_structure.h"
+
 
 #include "cml/cml.h"
 #include <iomanip>
@@ -170,7 +173,7 @@ void print_aiscene_info(std::ostream& os, const aiScene *scene)
 	
 int main(int argc, char **argv)
 {
-	/*
+	
 	const aiScene *scene = aiImportFile("../data/models/cube.ply", aiProcess_Triangulate | aiProcess_MakeLeftHanded); 
 
 	aiLogStream stream; 
@@ -179,13 +182,18 @@ int main(int argc, char **argv)
 
 	// Create triangle mesh
 	triangle_mesh_impl_ptr mesh_impl = triangle_mesh_impl_ptr(new c_assimp_mesh_impl(scene->mMeshes[0])); 
-	shape_ptr mesh = triangle_mesh_ptr(new c_triangle_mesh(mesh_impl)); 
-	
+	triangle_mesh_ptr m_mesh = triangle_mesh_ptr(new c_triangle_mesh(mesh_impl)); 
+
 	// create the scene object 
-	c_transform o2w = make_translate(vector3f(0.0f, 0.0f,1.0f)); 
+	std::vector<scene_primitive_ptr> prims;
+	material_ptr mat = make_matte_material(c_spectrum(1.0f, 1.0f, 1.0f), 0.0f); 
+	c_transform o2w = make_translate(vector3f(-1.0f, 0.0f,3.0f)); 
 	c_transform w2o = inverse_transform(o2w); 
-	material_ptr mat = make_matte_material(c_spectrum(0.8f, 0.8f, 0.8f), 0.0f); 
-	scene_object_ptr mesh_obj = make_simple_scene_obj(w2o, o2w, mesh, mat); 
+	make_triangle_mesh_primitives(m_mesh, o2w, mat, prims); 
+	accel_structure_ptr accel = make_naive_accel_strcture(prims);
+
+	scene_ptr m_scene; 
+	m_scene.reset(new c_scene(accel)); 
 
 	print_aiscene_info(cout, scene);
 	
@@ -193,6 +201,7 @@ int main(int argc, char **argv)
 	ray.o = vector3f(0, 0, 0); 
 	ray.d = normalize(vector3f(0.8, -0.8, 0.1)); 
 	
+	/*
 	triangle_mesh_ptr tri_mesh = boost::dynamic_pointer_cast<c_triangle_mesh>(mesh_obj->get_geometry_shape()); 
 	assert(tri_mesh); 
 	
@@ -213,10 +222,11 @@ int main(int argc, char **argv)
 	{
 		std::cout << "Missed!" << endl; 
 	}
+	*/
 	
 	aiReleaseImport(scene);
 	aiDetachAllLogStreams();
-	*/ 
+	
 	
 	return 0;
 }

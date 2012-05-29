@@ -17,7 +17,7 @@ c_bitmap_render_target::c_bitmap_render_target(int res_x, int res_y, filter_ptr 
 	m_y_pixel_count = max(1, (int)ceilf(m_resolution_y * m_window[3] - m_y_pixel_start));
 	
 	// Allocate the memory for pixels 
-	m_pixels_buf = pixels_buf_ptr(new c_render_pixel[m_x_pixel_count * m_y_pixel_count]);
+	m_pixels_buf = pixels_buf_ptr(new c_render_pixel[m_x_pixel_count * m_y_pixel_count]); 
 
 	// Pre-compute the filter weight table
 	m_filter_table = filter_table_ptr(new float[FILTER_KERNEL_SIZE * FILTER_KERNEL_SIZE]);

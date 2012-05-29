@@ -61,10 +61,9 @@ void c_sampler_renderer::render_scene(scene_ptr scene)
 	
 			m_camera->get_render_target()->add_sample(samples_array[j], ls[j]); 
 		}
-
-
-		m_display->update_display(m_camera->get_render_target()); 
 	}
+
+	m_display->update_display(m_camera->get_render_target()); 
 	
 }
 

@@ -6,6 +6,7 @@
 #include "color.h"
 #include "math_utils.h" 
 #include "sampler.h"
+#include "geometry.h"
 
 namespace 
 {
@@ -130,7 +131,7 @@ public:
 
 	const c_differential_geometry *get_shading_dg() const
 	{
-		return m_shading_dg; 
+		return &m_shading_dg; 
 	}
 	
 private:
@@ -140,7 +141,7 @@ private:
 	std::vector<c_bxdf_base*> m_bxdf_vec; 
 
     // Shading differential geometry
-    const c_differential_geometry *m_shading_dg; 
+    c_differential_geometry m_shading_dg; 
     
     vector3f m_ng;
     vector3f m_nn; 

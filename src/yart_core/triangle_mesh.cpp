@@ -61,7 +61,7 @@ bool c_triangle_face::intersects(const c_ray& ray,
     float b1 = dot(d, s1) * inv_div;
     if (b1 < 0.0f || b1 > 1.0f)
         return false;
-
+	 
     // Compute the second barycentric coordinates 
     vector3f s2 = cross(d, e1); 
     float b2 = dot(ray.d, s2) * inv_div; 
