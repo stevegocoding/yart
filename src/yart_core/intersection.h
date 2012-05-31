@@ -13,6 +13,7 @@ struct c_intersection
 	}
 
 	c_bsdf *get_bsdf(const c_ray& ray) const; 
+
 	c_differential_geometry geom_dg;
 	const c_scene_primtive *scene_primitive; 
 	c_transform obj_to_world; 

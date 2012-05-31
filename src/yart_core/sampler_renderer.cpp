@@ -21,7 +21,8 @@ c_sampler_renderer::c_sampler_renderer(sampler_ptr sampler,
 	, m_volume_integrator(vol_integrator) 
 	, m_display(display)
 {
-	
+	int total_work = m_camera->get_render_target()->res_x() * m_camera->get_render_target()->res_y();
+	m_report.reset(new c_renderer_report(total_work)); 
 }
 
 c_sampler_renderer::~c_sampler_renderer()
@@ -47,7 +48,6 @@ void c_sampler_renderer::render_scene(scene_ptr scene)
 	spectrum_array_ptr ts(new c_spectrum[max_samples]); 
 	isect_array_ptr isects(new c_intersection[max_samples]); 
 	samples_array_ptr samples_array = origin_sample->duplicate(max_samples); 
-	
 
 	while ((num_pixel_samples = m_sampler->get_current_pixel_samples(samples_array, rng)) > 0)
 	{
@@ -61,10 +61,11 @@ void c_sampler_renderer::render_scene(scene_ptr scene)
 	
 			m_camera->get_render_target()->add_sample(samples_array[j], ls[j]); 
 		}
+		
+		m_report->update();
 	}
 
 	m_display->update_display(m_camera->get_render_target()); 
-	
 }
 
 c_spectrum c_sampler_renderer::render_ray(scene_ptr scene, 
@@ -79,7 +80,7 @@ c_spectrum c_sampler_renderer::render_ray(scene_ptr scene,
 	if (scene->query_intersection(ray, isect))
 	{
 		lo = m_surface_integrator->compute_li(scene, this, ray, *isect, sample, rng);
-		// lo = c_spectrum(1.0f); 
+		//lo = c_spectrum(1.0f); 
 	}
 	 
 	return lo; 

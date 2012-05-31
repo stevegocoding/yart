@@ -20,3 +20,13 @@ pool_ptr get_pool(size_t size)
 	else 
 		return it->second; 
 }
+
+void free_all_pool()
+{
+	size_pool_map_it it = g_pools_map.begin();
+	for (; it != g_pools_map.end(); ++it)
+	{
+		// it->second->free(
+		// it->second->free(); 
+	} 
+}

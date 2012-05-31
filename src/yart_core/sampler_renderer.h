@@ -2,6 +2,7 @@
 
 #include "prerequisites.h"
 #include "renderer.h"
+#include "renderer_report.h"
 
 class c_sampler_renderer : public c_renderer
 {
@@ -21,6 +22,8 @@ public:
 		c_rng& rng, 
 		PARAM_OUT c_intersection *isect,
 		PARAM_OUT c_spectrum *l) const;
+
+	renderer_report_ptr get_report() const { return m_report; }
 	
 private:
 	
@@ -29,4 +32,6 @@ private:
 	surface_integrator_ptr m_surface_integrator;
 	volume_integrator_ptr m_volume_integrator; 
 	c_display *m_display;
+
+	renderer_report_ptr m_report; 
 };

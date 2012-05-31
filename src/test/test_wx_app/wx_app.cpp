@@ -57,6 +57,7 @@ void c_render_thread::set_pixel(int x, int y, int red, int green, int blue)
 {
 }
 
+static int a = 0; 
 void *c_render_thread::Entry()
 {
 	//////////////////////////////////////////////////////////////////////////
@@ -87,13 +88,20 @@ void *c_render_thread::Entry()
 		// Update the window 
 		////////////////////////////////////////////////////////////////////////// 
 		m_render_window->update_display(m_render_target);
-		
 	} 
 	*/
+	dynamic_pointer_cast<c_sampler_renderer>(m_renderer)->get_report()->open_console_wnd(); 
 
 	m_renderer->render_scene(m_scene); 
+
 	
-	std::ofstream ofs("pixels.txt"); 
+	/*
+	int p = (int)dynamic_pointer_cast<c_sampler_renderer>(m_renderer)->get_report()->percentage();
+	wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, ID_RENDER_UPDATE); 
+	event.SetInt(p); 
+	m_render_window->GetParent()->GetEventHandler()->AddPendingEvent(event);
+	*/ 
+	
 	// print_pixels(ofs, m_render_target->get_pixels(), 64, 64); 
 	
 	return NULL; 
@@ -141,6 +149,7 @@ BEGIN_EVENT_TABLE(c_wx_yart_frame, wxFrame)
 	EVT_MENU(menu_render_resume, c_wx_yart_frame::OnRenderResume)
 	EVT_MENU(menu_file_quit, c_wx_yart_frame::OnQuit)
 	EVT_COMMAND(ID_RENDER_COMPLETED, wxEVT_RENDER, c_wx_yart_frame::OnRenderCompleted)
+	EVT_COMMAND(ID_RENDER_UPDATE, wxEVT_COMMAND_TEXT_UPDATED, c_wx_yart_frame::OnRenderUpdate)
 END_EVENT_TABLE()
 
 c_wx_yart_frame::c_wx_yart_frame(const wxPoint& pos, const wxSize& size)
@@ -223,14 +232,22 @@ void c_wx_yart_frame::OnRenderResume( wxCommandEvent& event )
 
 }
 
+void c_wx_yart_frame::OnRenderUpdate(wxCommandEvent& event)
+{
+	wxString percent = wxString::Format(wxT("%d%%"), event.GetInt()*100); 
+
+	wxGetApp().set_status_text(percent); 
+}
+
 ////////////////////////////////////////////////////////////////////////// 
+const aiScene *scene = NULL;
 
 c_wx_render_window::c_wx_render_window(wxWindow *parent)
 	: wxScrolledWindow(parent)
 	, m_res_x(100)
 	, m_res_y(100)
-	, m_sppx(4)
-	, m_sppy(4)
+	, m_sppx(1)
+	, m_sppy(1)
 	, m_bitmap(NULL)
 	, m_timer(NULL)
 	, m_render_thread(NULL)
@@ -242,7 +259,7 @@ c_wx_render_window::c_wx_render_window(wxWindow *parent)
 
 c_wx_render_window::~c_wx_render_window()
 {
-	
+	aiReleaseImport(scene); 
 }
 
 void c_wx_render_window::init_renderer()
@@ -286,6 +303,8 @@ void c_wx_render_window::init_renderer()
 	m_renderer.reset(new c_sampler_renderer(m_main_sampler, m_camera, m_direct_light_integrator, volume_integrator_ptr(), this)); 
 
 
+
+
 	//////////////////////////////////////////////////////////////////////////
 	// Setup Scene
 	//////////////////////////////////////////////////////////////////////////
@@ -295,7 +314,7 @@ void c_wx_render_window::init_renderer()
 
 void c_wx_render_window::setup_scene()
 {
-	const aiScene *scene = aiImportFile("../data/models/bunny.ply", aiProcess_Triangulate | aiProcess_MakeLeftHanded); 
+	scene = aiImportFile("../data/models/bunny.ply", aiProcess_Triangulate | aiProcess_MakeLeftHanded); 
 
 	aiLogStream stream; 
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, NULL);
@@ -308,7 +327,7 @@ void c_wx_render_window::setup_scene()
 	// create the scene object 
 	std::vector<scene_primitive_ptr> prims;
 	material_ptr mat = make_matte_material(c_spectrum(1.0f, 1.0f, 1.0f), 0.0f); 
-	c_transform o2w = make_translate(vector3f(0.0f, -5.0f, 7.0f)) * make_scale(42.0f, 42.0f, 42.0f); 
+	c_transform o2w = make_translate(vector3f(0.0f, -5.0f, 7.0f)) * make_scale(42.0f, 42.0f, 42.0f) * make_rotate_y(10)/* * make_rotate_y(10) */; 
 	c_transform w2o = inverse_transform(o2w); 
 	make_triangle_mesh_primitives(m_mesh, o2w, mat, prims); 
 	accel_structure_ptr accel = make_naive_accel_strcture(prims);
@@ -317,9 +336,13 @@ void c_wx_render_window::setup_scene()
 
 	//////////////////////////////////////////////////////////////////////////
 
-	c_transform l2w = make_translate(vector3f(1.5f, 1.5f, 4.0f));
-	light_ptr pt_light = make_point_light(l2w, c_spectrum(1.0f, 1.0f, 1.0f)); 
+	c_transform l2w = make_translate(vector3f(1.5f, 1.5f, -1.0f));
+	light_ptr pt_light = make_point_light(l2w, c_spectrum(0.0f, 1.0f, 1.0f)); 
 	m_scene->add_light(pt_light); 
+
+	l2w = make_translate(vector3f(-1.5f, 1.5f, -1.0f));
+	light_ptr pt_light_2 = make_point_light(l2w, c_spectrum(0.0f, 1.0f, 1.0f)); 
+	m_scene->add_light(pt_light_2); 
 }
 
 void c_wx_render_window::set_image(wxImage& image)
@@ -407,9 +430,9 @@ void c_wx_render_window::update_display(render_target_ptr render_target)
 		{
 			c_render_pixel& pixel = pixels[y * res_x + x];
 			float inv_w = 1.0f / pixel.weighted_sum; 
-			unsigned char r = pixel.l_rgb[0] * inv_w * 2550; 
-			unsigned char g = pixel.l_rgb[1] * inv_w * 2550; 
-			unsigned char b = pixel.l_rgb[2] * inv_w * 2550;
+			unsigned char r = pixel.l_rgb[0] * inv_w * 255; 
+			unsigned char g = pixel.l_rgb[1] * inv_w * 255; 
+			unsigned char b = pixel.l_rgb[2] * inv_w * 255;
 
 			if (r != 0 || g != 0 || b != 0)
 			{

@@ -49,7 +49,7 @@ uint32_t make_triangle_mesh_primitives(triangle_mesh_ptr mesh, const c_transform
 	uint32_t num_tris = mesh->get_num_faces(); 
 	for (uint32_t i = 0; i < num_tris; ++i)
 	{
-		triangle_face_ptr face = mesh->get_triangle_face(i);
+		triangle_face_ptr face = mesh->get_face(i);
 		scene_primitive_ptr prim = scene_primitive_ptr(new c_geometric_primtive(o2w, face, mat, 1));
 		primitives.push_back(prim); 
 	}

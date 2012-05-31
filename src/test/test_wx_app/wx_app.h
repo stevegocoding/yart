@@ -75,6 +75,7 @@ public:
 	void OnRenderCompleted( wxCommandEvent& event );
 	void OnRenderPause( wxCommandEvent& event );
 	void OnRenderResume( wxCommandEvent& event );
+	void OnRenderUpdate(wxCommandEvent& event);
 	//void OnOpenFile( wxCommandEvent& event );
 	//void OnSaveFile( wxCommandEvent& event );
 
@@ -101,6 +102,7 @@ public:
 
 	virtual void OnDraw(wxDC& dc);
 	void OnRenderCompleted( wxCommandEvent& event );
+
 	void OnTimerUpdate( wxTimerEvent& event );
 	// void OnNewPixel( wxCommandEvent& event );
 	

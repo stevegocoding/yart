@@ -257,6 +257,7 @@ void draw_triangle()
 {
 	glBegin(GL_TRIANGLES);
 	
+	/*
 	triangle_face face = mesh->get_face(face_idx);
 
 	point3f p1 = mesh->get_vert(face[0]);
@@ -269,6 +270,7 @@ void draw_triangle()
 	glVertex3f(p2[x], p2[y], -p2[z]);
 	glColor3f(1.0f, 1.0f, 1.0f); 
 	glVertex3f(p3[x], p3[y], -p3[z]);
+	*/
 
 	//glColor3f(1.0f, 1.0f, 1.0f); 
 	//glVertex3f(1, 1, 0);

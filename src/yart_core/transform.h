@@ -88,6 +88,9 @@ inline bool is_nan_vec(const vector3f& v)
 
 c_transform make_translate(const vector3f& trans);
 c_transform make_scale(float sx, float sy, float sz);
+c_transform make_rotate_x(float deg); 
+c_transform make_rotate_y(float deg);
+c_transform make_rotate_z(float deg); 
 c_transform inverse_transform(const c_transform& t); 
 c_transform make_perspective_proj(float fov, float near, float far); 
 void build_coord_system(const vector3f& v1, PARAM_OUT vector3f* v2, PARAM_OUT vector3f *v3);

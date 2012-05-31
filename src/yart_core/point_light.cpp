@@ -20,7 +20,9 @@ c_spectrum c_point_light::sample_l(const point3f& p, float p_eps, const c_light_
 	
 	*visibility = c_occlusion_tester(p, p_eps, m_light_pos, 0.0f); 
 
-	return m_intensity / dir.length_squared();
+	float att = dir.length();
+
+	return m_intensity;
 }
 
 c_spectrum c_point_light::compute_flux() const 

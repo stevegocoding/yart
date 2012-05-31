@@ -40,6 +40,31 @@ c_transform make_scale(float sx, float sy, float sz)
 	return c_transform(m, inv_m); 
 }
 
+c_transform make_rotate_x(float deg)
+{
+	matrix44f m, inv_m; 
+	matrix_rotate_about_local_x(m, cml::rad(deg)); 
+	matrix_rotate_about_local_x(inv_m, cml::rad(-deg)); 
+	return c_transform(m, inv_m); 
+}
+
+c_transform make_rotate_y(float deg)
+{
+	matrix44f m, inv_m; 
+	matrix_rotate_about_world_y(m, cml::rad(deg)); 
+	matrix_rotate_about_world_y(inv_m, cml::rad(-deg)); 
+	return c_transform(m, inv_m); 
+}
+
+c_transform make_rotate_z(float deg)
+{
+	matrix44f m, inv_m; 
+	matrix_rotate_about_local_z(m, cml::rad(deg)); 
+	matrix_rotate_about_local_z(inv_m, cml::rad(-deg)); 
+	return c_transform(m, inv_m); 
+}
+
+
 c_transform inverse_transform(const c_transform& t)
 {
 	return c_transform(t.get_inv_matrix(), t.get_matrix());

@@ -39,7 +39,9 @@ c_spectrum estimate_direct_light_integral(const scene_ptr scene,
 			// @TODO: Add light transimission
 			
 			if (light->is_delta())
+			{
 				ld += f * li * (abs(dot(wi, normal)) / light_pdf); 
+			}	
 			else 
 			{
 				bsdf_pdf = bsdf->eval_pdf(wo, wi, bsdf_flags); 
@@ -47,6 +49,15 @@ c_spectrum estimate_direct_light_integral(const scene_ptr scene,
 				ld += f * li *(abs(dot(wi, normal)) * weight / light_pdf); 
 			}	
 		}
+		/*
+		else
+		{	
+			if (f.is_black())
+				ld += c_spectrum(0.0f, 0.0f, 1.0f); 
+			else if (visibilty.is_occluded(scene)) 
+				ld += c_spectrum(1.0f, 0.0f, 0.0f); 
+		}		
+		*/
 	}
 	
 	// @TODO:
