@@ -44,7 +44,7 @@ c_bsdf *c_geometric_primtive::get_bsdf(const c_differential_geometry& geom_dg, c
 
 uint32_t make_triangle_mesh_primitives(triangle_mesh_ptr mesh, const c_transform& o2w, material_ptr mat, PARAM_OUT std::vector<scene_primitive_ptr>& primitives)
 {
-	mesh->apply_transform(o2w); 
+	// mesh->apply_transform(o2w); 
 
 	uint32_t num_tris = mesh->get_num_faces(); 
 	for (uint32_t i = 0; i < num_tris; ++i)

@@ -55,6 +55,8 @@ set(CORE_FILES
 	render_target.h
 	renderer.cpp
 	renderer.h
+	renderer_report.cpp
+	renderer_report.h
 	rng.cpp
 	rng.h
 	rt_main.cpp
@@ -62,8 +64,8 @@ set(CORE_FILES
 	sampler.h
 	scene.cpp
 	scene.h
-	scene_obj.cpp
-	scene_obj.h
+	scene_primitive.cpp
+	scene_primitive.h
 	shape.cpp
 	shape.h
 	transform.cpp

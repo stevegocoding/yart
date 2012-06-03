@@ -49,7 +49,7 @@ c_spectrum estimate_direct_light_integral(const scene_ptr scene,
 				ld += f * li *(abs(dot(wi, normal)) * weight / light_pdf); 
 			}	
 		}
-		/*
+		
 		else
 		{	
 			if (f.is_black())
@@ -57,7 +57,7 @@ c_spectrum estimate_direct_light_integral(const scene_ptr scene,
 			else if (visibilty.is_occluded(scene)) 
 				ld += c_spectrum(1.0f, 0.0f, 0.0f); 
 		}		
-		*/
+		
 	}
 	
 	// @TODO:

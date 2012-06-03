@@ -161,7 +161,7 @@ bool c_assimp_face_impl::intersects_impl(const c_ray& ray,
 	*geom_dg = c_differential_geometry(hit_p, aivec3_to_cmlvec3(dpdu), aivec3_to_cmlvec3(dpdv), vector3f(0,0,0), vector3f(0,0,0), tu, tv, NULL);
 	
 	*t_hit = t; 
-	*ray_epsilon = 1e-1f * *t_hit; 
+	*ray_epsilon = 1e-3f * *t_hit; 
 	//*ray_epsilon = 0.0f; 
 
     return true; 

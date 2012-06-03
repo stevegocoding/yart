@@ -93,4 +93,5 @@ c_transform make_rotate_y(float deg);
 c_transform make_rotate_z(float deg); 
 c_transform inverse_transform(const c_transform& t); 
 c_transform make_perspective_proj(float fov, float near, float far); 
+c_transform make_look_at_lh(const point3f& pos, const point3f& look, const vector3f& up); 
 void build_coord_system(const vector3f& v1, PARAM_OUT vector3f* v2, PARAM_OUT vector3f *v3);

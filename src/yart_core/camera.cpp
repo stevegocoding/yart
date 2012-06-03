@@ -36,7 +36,7 @@ c_perspective_camera::c_perspective_camera(
 	float focal_d, 
 	float fov, 
 	render_target_ptr& film)
-	: super(cam_to_world, make_perspective_proj(fov, 0.1f, 1000.0f), screen_wnd, lensr, focal_d, film)
+	: super(cam_to_world, make_perspective_proj(fov, 1e-2f, 1000.0f), screen_wnd, lensr, focal_d, film)
 {
 	//vector3f right = m_raster_to_camera.transform_pt(vector3f(1,0,0));
 	//vector3f left = m_raster_to_camera.transform_pt(vector3f());
