@@ -30,3 +30,17 @@ void free_all_pool()
 		// it->second->free(); 
 	} 
 }
+
+//////////////////////////////////////////////////////////////////////////
+
+// Memory Allocation Functions
+void *AllocAligned(size_t size) {
+	return _aligned_malloc(size, L1_CACHE_LINE_SIZE);
+
+}
+
+
+void FreeAligned(void *ptr) {
+	if (!ptr) return;
+	_aligned_free(ptr);
+}
