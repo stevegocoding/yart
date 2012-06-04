@@ -5,8 +5,6 @@
 #include "reflection.h"
 #include "geometry.h"
 
-#include "memory_arena.h"
-
 using namespace std;
 
 c_fixed_size_mem_pool *bsdf_pool = NULL; 
@@ -71,6 +69,7 @@ int main(int argc, char **argv)
 		// raw_pool.free(buf);
 	}
 	*/
+	
 	while (work++ < totoal_work)
 	{
 		char *buf = (char*)mem_arena.Alloc(sizeof(c_bsdf)); 

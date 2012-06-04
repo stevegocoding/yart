@@ -236,12 +236,12 @@ void c_wx_yart_frame::OnRenderUpdate(wxCommandEvent& event)
 }
 
 ////////////////////////////////////////////////////////////////////////// 
-const aiScene *scene = NULL;
+const aiScene *ai_scene = NULL;
 
 c_wx_render_window::c_wx_render_window(wxWindow *parent)
 	: wxScrolledWindow(parent)
-	, m_res_x(640)
-	, m_res_y(480)
+	, m_res_x(100)
+	, m_res_y(100)
 	, m_sppx(2)
 	, m_sppy(2)
 	, m_bitmap(NULL)

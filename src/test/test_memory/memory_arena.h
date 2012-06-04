@@ -3,7 +3,7 @@
 
 using namespace std;
 
-#define L1_CACHE_LINE_SIZE 64; 
+#define L1_CACHE_LINE_SIZE 64
 
 void *AllocAligned(size_t size);
 template <typename T> T *AllocAligned(uint32_t count) {
