@@ -42,7 +42,7 @@ public:
 		Operators
 	*/ 
 	// ---------------------------------------------------------------------
-	c_transform operator*(const c_transform& tr) const;
+	c_transform operator*(const c_transform& tr) const; 
 	inline vector3f transform_pt(const vector3f& pt) const;
 	inline vector3f transform_vec3(const vector3f& vec) const; 
 

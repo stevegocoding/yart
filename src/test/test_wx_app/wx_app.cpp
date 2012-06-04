@@ -13,16 +13,12 @@
 #include "render_target.h"
 #include "direct_lighting_integrator.h"
 #include "sampler_renderer.h"
-#include "triangle_mesh_impl.h"
 #include "scene_primitive.h"
 #include "scene.h"
 #include "point_light.h"
 #include "matte_material.h"
 #include "accel_structure.h"
-
-#include "assimp/assimp.h"
-#include "assimp/aiScene.h"
-#include "assimp/aiPostProcess.h"
+#include "assimp_loader.h"
 
 #include "bg.xpm"
 
@@ -259,7 +255,6 @@ c_wx_render_window::c_wx_render_window(wxWindow *parent)
 
 c_wx_render_window::~c_wx_render_window()
 {
-	aiReleaseImport(scene); 
 }
 
 void c_wx_render_window::init_renderer()
@@ -314,29 +309,24 @@ void c_wx_render_window::init_renderer()
 
 void c_wx_render_window::setup_scene()
 {
-	scene = aiImportFile("../data/models/cube.ply", aiProcess_Triangulate | aiProcess_MakeLeftHanded); 
+	std::vector<triangle_mesh_ptr> meshes; 
+	assimp_import_scene("../data/models/cube.ply", &ai_scene); 
+	assimp_load_meshes(ai_scene, meshes);
+	assimp_release_scene(ai_scene);
 
-	aiLogStream stream; 
-	stream = aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, NULL);
-	aiAttachLogStream(&stream);
-
-	// Create triangle mesh
-	triangle_mesh_impl_ptr mesh_impl = triangle_mesh_impl_ptr(new c_assimp_mesh_impl(scene->mMeshes[0])); 
-	m_mesh = triangle_mesh_ptr(new c_triangle_mesh(mesh_impl)); 
-
-	// create the scene object 
+	// Make the scene primitives
 	std::vector<scene_primitive_ptr> prims;
 	material_ptr mat = make_matte_material(c_spectrum(1.0f, 1.0f, 1.0f), 0.0f); 
 	c_transform o2w = make_translate(vector3f(0.0f, -5.0f, 1.0f)) * make_scale(42.0f, 42.0f, 42.0f); 
 	c_transform w2o = inverse_transform(o2w); 
-	make_triangle_mesh_primitives(m_mesh, o2w, mat, prims); 
+	make_triangle_mesh_primitives(meshes[0], o2w, mat, prims); 
 	accel_structure_ptr accel = make_naive_accel_strcture(prims);
 
-	m_scene.reset(new c_scene(accel)); 
+	m_scene.reset(new c_scene(meshes, lights_array(), accel)); 
 
 	//////////////////////////////////////////////////////////////////////////
 
-	/*
+	/* 
 	c_transform l2w = make_translate(vector3f(0.0f, 1.0f, -1.7f));
 	light_ptr pt_light = make_point_light(l2w, c_spectrum(1.0f, 1.0f, 1.0f)); 
 	m_scene->add_light(pt_light); 

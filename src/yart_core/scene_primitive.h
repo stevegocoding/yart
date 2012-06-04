@@ -23,15 +23,14 @@ class c_geometric_primtive : public c_scene_primtive
 	typedef c_scene_primtive super; 
 
 public: 
-	c_geometric_primtive(const c_transform& o2w, shape_ptr shape, material_ptr mat, uint32_t prim_id);
+	c_geometric_primtive(const c_transform& o2w, const c_shape *shape, material_ptr mat, uint32_t prim_id);
 
 	virtual c_aabb get_world_aabb() const; 
 	virtual bool intersects(const c_ray& ray, PARAM_OUT c_intersection *isect) const; 
 	virtual c_bsdf* get_bsdf(const c_differential_geometry& geom_dg, const c_transform& o2w) const; 
 
 private: 
-
-	shape_ptr m_shape; 
+	const c_shape *m_shape; 
 	material_ptr m_material; 
 	c_transform m_object_to_world; 
 };

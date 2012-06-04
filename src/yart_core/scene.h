@@ -4,13 +4,21 @@
 #include "prerequisites.h"
 #include "transform.h"
 
-typedef std::vector<light_ptr> lights_list; 
+typedef std::vector<light_ptr> lights_array; 
+typedef std::vector<triangle_mesh_ptr> meshes_array;
 
 class c_scene
 {
 public:
-	c_scene(accel_structure_ptr accel_structure = accel_structure_ptr())
-		: m_accel_structure(accel_structure)
+	c_scene(accel_structure_ptr accel = accel_structure_ptr())
+		: m_accel_structure(accel)
+	{
+	}
+
+	c_scene(meshes_array& meshes, lights_array& lights, accel_structure_ptr accel)
+		: m_meshes(meshes)
+		, m_lights(lights)
+		, m_accel_structure(accel)
 	{
 	}
 
@@ -38,6 +46,7 @@ private:
 	
 	accel_structure_ptr m_accel_structure;
 	
-	mutable lights_list m_lights; 
-
+	mutable lights_array m_lights; 
+	mutable meshes_array m_meshes; 
+	
 };

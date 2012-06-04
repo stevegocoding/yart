@@ -2,96 +2,99 @@
 
 #include "prerequisites.h"
 #include "transform.h"
-#include "geometry.h"
-#include "shape.h" 
+#include "shape.h"
 
-class c_triangle_face_impl
-{
-public: 
-	virtual bool intersects_impl(const c_ray& ray, 
-		PARAM_OUT float *t_hit, 
-		PARAM_OUT float *ray_epsilon, 
-		PARAM_OUT c_differential_geometry *geom_dg) const = 0; 
-
-	virtual void get_shading_geometry_impl(const c_transform& o2w, 
-		const c_differential_geometry& geom_dg, 
-		PARAM_OUT c_differential_geometry *shading_dg) const = 0; 
-
-}; 
-typedef boost::shared_ptr<c_triangle_face_impl> triangle_face_impl_ptr; 
-
-class c_triangle_mesh_impl
-{
-public:
-	c_triangle_mesh_impl() {}
-	virtual ~c_triangle_mesh_impl() {}
-
-	virtual bool has_tengent() const = 0; 
-    virtual bool has_normal() const = 0;
-	virtual bool has_uv(uint32_t uv_set = 0) const = 0; 
-    virtual uint32_t get_num_verts() const = 0;
-    virtual uint32_t get_num_faces() const = 0;
-	virtual void apply_transform(const c_transform& t) = 0;
-	virtual const c_triangle_face_impl* get_face_impl(uint32_t face_idx) const = 0;
-	
-};
-typedef boost::shared_ptr<c_triangle_mesh_impl> triangle_mesh_impl_ptr; 
-
-////////////////////////////////////////////////////////////////////////// 
+typedef vector2f uv;
+typedef vector3i tri_indices;
+typedef std::vector<point3f> vertices_array; 
+typedef std::vector<vector3f> normals_array; 
+typedef std::vector<vector3f> tangents_array;
+typedef std::vector<uv> uvs_array; 
+typedef std::vector<tri_indices> face_indices_array;
 
 class c_triangle_mesh
 {
-	typedef std::vector<triangle_face_ptr> triangles_array;
-	
 public: 
-    c_triangle_mesh(triangle_mesh_impl_ptr mesh_impl)
-		: m_impl(mesh_impl)
-    {
-		allocate_triangles();
-	} 
+	c_triangle_mesh(const vertices_array& verts, 
+		const normals_array& normals, 
+		const tangents_array& tangents,
+		const uvs_array& uvs,
+		const face_indices_array& indices); 
 
-	virtual void apply_transform(const c_transform& t) 
-	{
-		m_impl->apply_transform(t); 
-	}
- 
-	uint32_t get_num_faces() const 
+	uint32_t get_num_verts() const 
 	{ 
-		return m_impl->get_num_faces(); 
+		return m_num_verts;
 	}
-	
-	triangle_face_ptr get_face(uint32_t face_idx) const 
+
+	uint32_t get_num_faces() const
 	{
-		assert(face_idx < get_num_faces());
-		return m_triangles[face_idx]; 
+		return m_num_faces; 
+	}
+
+	bool has_normal() const 
+	{
+		return m_has_normal; 
+	}
+
+	bool has_tangent() const
+	{
+		return m_has_tangent; 
+	}
+
+	bool has_uvs() const 
+	{
+		return m_has_uv;
+	}
+
+	const c_triangle_face* get_triangle_face(uint32_t face_idx) const 
+	{
+		assert(face_idx < m_num_faces);
+		return &m_triangles[face_idx];
 	}
 
 private: 
+	vertices_array m_verts;
+	normals_array m_normals;
+	tangents_array m_tangents; 
+	uvs_array m_uvs; 
+	face_indices_array m_faces_indices; 
 
-	void allocate_triangles(); 
+	std::vector<c_triangle_face> m_triangles;
 
-    triangle_mesh_impl_ptr m_impl; 
-	triangles_array m_triangles; 
+	uint32_t m_num_verts;
+	uint32_t m_num_faces; 
+	
+	bool m_has_normal;
+	bool m_has_tangent; 
+	bool m_has_uv;
 
+	friend class c_triangle_face; 
 };
 
-typedef boost::shared_ptr<c_triangle_mesh> triangle_mesh_ptr; 
+//////////////////////////////////////////////////////////////////////////
 
 class c_triangle_face : public c_shape
 {
-public: 
-    c_triangle_face(const c_triangle_face_impl *face_impl = NULL)
-		: m_face_impl(face_impl)
-	{}
-    
+public:
+	c_triangle_face(c_triangle_mesh *mesh, int face_idx)
+		: m_mesh(mesh)
+	{
+		m_tri_face = (int*)&m_mesh->m_faces_indices[face_idx];
+	}
+
 	virtual void get_shading_geometry(const c_transform& o2w, 
 		const c_differential_geometry& geom_dg, 
 		PARAM_OUT c_differential_geometry *shading_dg) const; 
-	
-    virtual bool intersects(const c_ray& ray, 
-		PARAM_OUT float *t_hit, PARAM_OUT float *ray_epsilon, PARAM_OUT c_differential_geometry *geom_dg) const; 
+
+	virtual bool intersects(const c_ray& ray, 
+		PARAM_OUT float *t_hit, 
+		PARAM_OUT float *ray_epsilon, 
+		PARAM_OUT c_differential_geometry *geom_dg) const; 
 	
 private:
+	void get_uv(float uv[3][2]) const; 
 
-	const c_triangle_face_impl *m_face_impl;
-}; 
+	c_triangle_mesh *m_mesh;
+	int *m_tri_face;
+};
+

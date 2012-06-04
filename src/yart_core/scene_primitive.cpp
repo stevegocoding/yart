@@ -5,11 +5,11 @@
 #include "material.h"
 #include "intersection.h"
 
-c_geometric_primtive::c_geometric_primtive(const c_transform& o2w, shape_ptr shape, material_ptr mat, uint32_t prim_id)
+c_geometric_primtive::c_geometric_primtive(const c_transform& o2w, const c_shape *shape, material_ptr mat, uint32_t prim_id)
 	: super(prim_id)
 	, m_object_to_world(o2w)
 	, m_shape(shape)
-	, m_material(mat) 
+	, m_material(mat)
 {
 }
 
@@ -44,12 +44,10 @@ c_bsdf *c_geometric_primtive::get_bsdf(const c_differential_geometry& geom_dg, c
 
 uint32_t make_triangle_mesh_primitives(triangle_mesh_ptr mesh, const c_transform& o2w, material_ptr mat, PARAM_OUT std::vector<scene_primitive_ptr>& primitives)
 {
-	// mesh->apply_transform(o2w); 
-
 	uint32_t num_tris = mesh->get_num_faces(); 
 	for (uint32_t i = 0; i < num_tris; ++i)
 	{
-		triangle_face_ptr face = mesh->get_face(i);
+		const c_triangle_face *face = mesh->get_triangle_face(i);
 		scene_primitive_ptr prim = scene_primitive_ptr(new c_geometric_primtive(o2w, face, mat, 1));
 		primitives.push_back(prim); 
 	}

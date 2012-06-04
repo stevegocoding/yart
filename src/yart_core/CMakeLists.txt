@@ -76,10 +76,8 @@ set(GEO_FILES
 	sphere.cpp
 	triangle_mesh.h
 	triangle_mesh.cpp
-	triangle_mesh_impl.h
-	triangle_mesh_impl.cpp
-	assimp_api_wrap.h
-	assimp_api_wrap.cpp
+	assimp_loader.h
+	assimp_loader.cpp
 	)
 set(INTEGRATORS_FILES
 	direct_lighting_integrator.cpp

@@ -3,7 +3,6 @@
 #include <assert.h>
 #include "prerequisites.h"
 #include "triangle_mesh.h"
-#include "assimp_api_wrap.h"
 
 class c_assimp_face_impl; 
 typedef std::vector<c_assimp_face_impl> assimp_face_impl_array; 

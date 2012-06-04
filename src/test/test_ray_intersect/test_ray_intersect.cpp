@@ -1,11 +1,9 @@
 #include "pch.h"
 #include "transform.h"
-#include "triangle_mesh_impl.h"
 #include "scene_primitive.h"
 #include "matte_material.h"
 #include "scene.h"
 #include "accel_structure.h"
-
 
 #include "cml/cml.h"
 #include <iomanip>
@@ -127,6 +125,7 @@ void print_vector3d_row(std::ostream& os, const cml::vector3d& vec, int prec = 4
 	os.setf(old_flags); 
 }
 
+/*
 void print_aiscene_info(std::ostream& os, const aiScene *scene)
 {
 	assert(scene); 
@@ -170,9 +169,11 @@ void print_aiscene_info(std::ostream& os, const aiScene *scene)
 		}
 	}
 }
+*/
 	
 int main(int argc, char **argv)
 {
+	/*
 	
 	const aiScene *scene = aiImportFile("../data/models/cube.ply", aiProcess_Triangulate | aiProcess_MakeLeftHanded); 
 
@@ -201,7 +202,7 @@ int main(int argc, char **argv)
 	ray.o = vector3f(0, 0, 0); 
 	ray.d = normalize(vector3f(0.8, -0.8, 0.1)); 
 	
-	/*
+	
 	triangle_mesh_ptr tri_mesh = boost::dynamic_pointer_cast<c_triangle_mesh>(mesh_obj->get_geometry_shape()); 
 	assert(tri_mesh); 
 	
@@ -222,11 +223,11 @@ int main(int argc, char **argv)
 	{
 		std::cout << "Missed!" << endl; 
 	}
-	*/
 	
 	aiReleaseImport(scene);
 	aiDetachAllLogStreams();
 	
+	*/
 	
 	return 0;
 }

@@ -124,7 +124,6 @@ public:
 	surface_integrator_ptr m_direct_light_integrator; 
 	renderer_ptr m_renderer;
 	scene_ptr m_scene; 
-	triangle_mesh_ptr m_mesh; 
 
 	uint32_t m_res_x; 
 	uint32_t m_res_y; 

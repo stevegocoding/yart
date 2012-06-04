@@ -7,7 +7,6 @@
 #include <algorithm>
 #include "ray.h"
 #include "transform.h"
-#include "triangle_mesh_impl.h"
 #include "scene_primitive.h"
 #include "matte_material.h"
 
@@ -128,6 +127,7 @@ void print_vector3d_row(std::ostream& os, const cml::vector3d& vec, int prec = 4
 	os.setf(old_flags); 
 }
 
+/*
 void print_aiscene_info(std::ostream& os, const aiScene *scene)
 {
 	assert(scene); 
@@ -171,6 +171,7 @@ void print_aiscene_info(std::ostream& os, const aiScene *scene)
 		}
 	}
 }
+*/ 
 
 c_ray ray; 
 triangle_face_ptr tri; 
