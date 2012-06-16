@@ -92,6 +92,7 @@ int main(int argc, char **argv)
 
 	float screen_wnd[4] = {-1.3333f, 1.3333f, -1.0f, 1.0f}; 
 	
+	/*
 	c_transform camera_to_screen = make_perspective_proj(90.0f, 1.0f, 2.0f); 
 	c_transform screen_to_raster = 
 		make_scale((float)(res_x), 
@@ -123,6 +124,11 @@ int main(int argc, char **argv)
 	vector3f p2(320.0f, 240.0f, 0.0f); 
 	vector3f proj_p2 = raster_to_camera.transform_pt(p2); 
 	print_vector3f_col(cout, proj_p2); 
+	*/
+	
+	matrix44f mat;
+	matrix_translation(mat, vector3f(1.0f, 2.0f, 3.0f)); 
+	print_matrix(cout, mat);
 	
 	return 0;
 }

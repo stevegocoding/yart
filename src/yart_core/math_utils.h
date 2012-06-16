@@ -70,5 +70,26 @@ inline float clamp(float val, float low, float high)
             return val;
 }
 
+inline int floor2int(float val)
+{
+	return (int)floorf(val); 
+}
+
+inline int round2int(float val)
+{
+	return floor2int(val + 0.5f); 
+}
+
+inline float log2(float x)
+{
+	static float inv_log2 = 1.f / logf(2.0f);
+	return logf(x) * inv_log2; 
+}
+
+inline int log2int(float val)
+{
+	return floor2int(log2(val));
+}
+
 bool solve_linear_system2x2(const float A[2][2], 
 	const float B[2], float *x0, float *x1);

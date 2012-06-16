@@ -7,7 +7,7 @@ set(GEO_DIR geometry)
 set(INTEGRATORS_DIR integrators)
 set(LIGHTS_DIR lights)
 set(RENDERERS_DIR renderers)
-
+set(ACCELERATORS_DIR accelerators)
 
 # Dependencies
 set(DEP_LIBS_DEBUG
@@ -111,6 +111,11 @@ set(MATERIAL_FILES
 	matte_material.h
 	)
 
+set(ACCELERATOR_FILES
+	kd_accel.cpp
+	kd_accel.h
+	)
+
 add_definitions(-DUNICODE)
 
 source_group("core" FILES ${CORE_FILES})
@@ -121,6 +126,7 @@ source_group("renderers" FILES ${RENDERER_FILES})
 source_group("samplers" FILES ${SAMPLER_FILES})
 source_group("filters" FILES ${FILTER_FILES})
 source_group("materials" FILES ${MATERIAL_FILES})
+source_group("accelerators" FILES ${ACCELERATOR_FILES})
 
 set(SRC_FILES 
 	${CORE_FILES} 
@@ -131,6 +137,7 @@ set(SRC_FILES
 	${SAMPLER_FILES}
 	${FILTER_FILES}
 	${MATERIAL_FILES}
+	${ACCELERATOR_FILES}
 	)
 
 add_library(${LIB_TARGET} ${SRC_FILES})

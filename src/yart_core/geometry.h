@@ -63,6 +63,24 @@ public:
 				pt[z] >= pt_min[z] && pt[z] <= pt_max[z]);
 	}
 	
-private:
+	float surface_area() const 
+	{
+		vector3f d = pt_max - pt_min; 
+		return 2.0f * (d[x] * d[y] + d[x] * d[z] + d[y] * d[z]);
+	}
+
+	int max_extend() const 
+	{
+		vector3f d = pt_max - pt_min; 
+		if (d[x] > d[y] && d[x] > d[z])
+			return 0; 
+		else if (d[y] > d[z])
+			return 1; 
+		else 
+			return 2;
+	}
+
 	point3f pt_min, pt_max; 
 };
+
+c_aabb union_aabb(const c_aabb& b1, const c_aabb& b2); 

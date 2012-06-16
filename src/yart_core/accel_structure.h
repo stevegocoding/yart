@@ -6,6 +6,8 @@
 
 class c_accel_structure : public c_scene_primtive 
 {
+	
+	
 public:
 	c_accel_structure() {} 
 
@@ -16,8 +18,8 @@ public:
 	}
 
 protected: 
-	typedef std::vector<scene_primitive_ptr> scene_primitives_vec; 
-	scene_primitives_vec m_scene_primitives;
+	typedef std::vector<scene_primitive_ptr> scene_prims_array; 
+	scene_prims_array m_scene_primitives;
 };
 
 //////////////////////////////////////////////////////////////////////////
